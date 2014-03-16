@@ -1,6 +1,5 @@
 # built application files
 *.apk
-*.ap_
 
 # files for the dex VM
 *.dex
@@ -11,6 +10,8 @@
 # generated files
 bin/
 gen/
+apk/
+builds/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -27,3 +28,12 @@ proguard/
 *.ipr
 *.iws
 .idea/
+.DS_Store
+
+# Android Studio files (intelli J, Gradle)
+.gradle
+build/
+.idea
+*.iml
+*.ipr
+*.iws

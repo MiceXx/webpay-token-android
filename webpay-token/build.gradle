@@ -1,0 +1,38 @@
+apply plugin: 'android-library'
+apply plugin: 'android-test'
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion "19.0.1"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 18
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    sourceSets {
+        instrumentTest.setRoot('src/test')
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:+'
+    compile 'jp.webpay:webpay-java:1.1.2'
+    compile 'org.projectlombok:lombok:1.12.6'
+
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.robolectric:robolectric:2.3-SNAPSHOT'
+    testCompile 'com.squareup:fest-android:1.0.+'
+    instrumentTestCompile 'junit:junit:4.11'
+    instrumentTestCompile 'org.robolectric:robolectric:2.3-SNAPSHOT'
+    instrumentTestCompile 'com.squareup:fest-android:1.0.+'
+}
