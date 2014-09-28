@@ -11,6 +11,31 @@ public class RawCard {
     private String name;
     private String cvc;
 
+    public RawCard number(String number) {
+        this.number = number;
+        return this;
+    }
+
+    public RawCard expYear(Integer expYear) {
+        this.expYear = expYear;
+        return this;
+    }
+
+    public RawCard expMonth(Integer expMonth) {
+        this.expMonth = expMonth;
+        return this;
+    }
+
+    public RawCard name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public RawCard cvc(String cvc) {
+        this.cvc = cvc;
+        return this;
+    }
+
     public JSONObject toJson() {
         JSONObject card = new JSONObject();
         try {

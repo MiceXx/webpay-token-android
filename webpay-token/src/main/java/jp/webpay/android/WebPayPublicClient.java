@@ -1,10 +1,7 @@
 package jp.webpay.android;
 
 import android.net.Uri;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -14,22 +11,17 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Communicate with WebPay server using Apache HTTP client
   */
 class WebPayPublicClient {
-    private final String scheme;
-    private final String authority;
+    private final Uri baseUri;
     private final String apiKey;
 
-    WebPayPublicClient(String scheme, String authority, String apiKey) {
-        this.scheme = scheme;
-        this.authority = authority;
+    WebPayPublicClient(Uri baseUri, String apiKey) {
+        this.baseUri = baseUri;
         this.apiKey = apiKey;
     }
 
@@ -44,10 +36,8 @@ class WebPayPublicClient {
      * @throws IOException
      */
     Result request(String method, String path, Map<String, String> queryParams, String jsonBody) throws IOException {
-        Uri.Builder builder = new Uri.Builder()
-                .scheme(scheme)
-                .encodedAuthority(authority)
-                .path(path);
+        Uri.Builder builder = baseUri.buildUpon()
+                .appendPath(path);
         for (Map.Entry<String, String> entry : queryParams.entrySet()) {
             builder.appendQueryParameter(entry.getKey(), entry.getValue());
         }
@@ -63,6 +53,7 @@ class WebPayPublicClient {
         } else {
             throw new IllegalArgumentException("method must be GET or POST");
         }
+        request.setHeader("Authorization", "Bearer " + apiKey);
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
 

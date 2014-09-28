@@ -1,5 +1,6 @@
 package jp.webpay.android;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import jp.webpay.android.model.RawCard;
@@ -13,10 +14,7 @@ import java.util.HashMap;
 
 public class WebPay {
 
-    private static final String WEBPAY_SCHEMA = "https";
-    private static final String WEBPAY_AUTHORITY = "api.webpay.jp";
-    private static final String WEBPAY_VERSION = "/v1";
-
+    private static final Uri BASE_URI = Uri.parse("https://api.webpay.jp/v1");
     private final WebPayPublicClient client;
     private WebPayListener listener;
 
@@ -26,7 +24,7 @@ public class WebPay {
     }
 
     public WebPay(String publishableKey) {
-        client = new WebPayPublicClient(WEBPAY_SCHEMA, WEBPAY_AUTHORITY, publishableKey);
+        client = new WebPayPublicClient(BASE_URI, publishableKey);
     }
 
     public void setListener(WebPayListener listener) {
@@ -62,7 +60,7 @@ public class WebPay {
                 JSONObject json = rawCard.toJson();
                 WebPayPublicClient.Result result = null;
                 try {
-                    result = client.request("POST", WEBPAY_VERSION + "/tokens", new HashMap<String, String>(), json.toString());
+                    result = client.request("POST", "tokens", new HashMap<String, String>(), json.toString());
                 } catch (IOException e) {
                     return new TaskResult<Token>(e);
                 }

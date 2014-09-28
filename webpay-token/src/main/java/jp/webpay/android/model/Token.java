@@ -1,6 +1,5 @@
 package jp.webpay.android.model;
 
-import jp.webpay.android.WebPay;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,7 +7,7 @@ public class Token {
     public final String id, object;
     public final Boolean livemode;
     public final StoredCard card;
-    public final Long timestamp;
+    public final Long created;
     public final Boolean used;
 
     public static Token fromJson(JSONObject json) throws JSONException {
@@ -21,12 +20,12 @@ public class Token {
                 json.getBoolean("used"));
     }
 
-    Token(String id, String object, Boolean livemode, StoredCard card, Long timestamp, Boolean used) {
+    Token(String id, String object, Boolean livemode, StoredCard card, Long created, Boolean used) {
         this.id = id;
         this.object = object;
         this.livemode = livemode;
         this.card = card;
-        this.timestamp = timestamp;
+        this.created = created;
         this.used = used;
     }
 }
