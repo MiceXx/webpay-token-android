@@ -25,6 +25,4 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:19.+'
-    compile 'jp.webpay:webpay-java:1.1.2'
-    compile 'org.projectlombok:lombok:1.12.6'
 }
