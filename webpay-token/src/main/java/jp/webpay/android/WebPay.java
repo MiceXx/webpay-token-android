@@ -2,84 +2,130 @@ package jp.webpay.android;
 
 import android.os.AsyncTask;
 
-import jp.webpay.android.model.Card;
-import jp.webpay.api.WebPayClient;
-import jp.webpay.model.Token;
-import jp.webpay.request.CardRequest;
-import jp.webpay.exception.*;
-import lombok.Setter;
+import jp.webpay.android.model.RawCard;
+import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.model.Token;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class WebPay {
 
-    @Setter private String publishableKey;
-    @Setter private Card card;
-    @Setter private WebPayListener listener;
+    private static final String WEBPAY_SCHEMA = "https";
+    private static final String WEBPAY_AUTHORITY = "api.webpay.jp";
+    private static final String WEBPAY_VERSION = "/v1";
 
-    public WebPay() {}
+    private final WebPayPublicClient client;
+    private WebPayListener listener;
 
-    public WebPay(WebPayListener listener) {
+    public WebPay(String publishableKey, WebPayListener listener) {
+        this(publishableKey);
         this.setListener(listener);
-    }
-
-    public WebPay(WebPayListener listener, String publishableKey) {
-        this.setListener(listener);
-        this.setPublishableKey(publishableKey);
     }
 
     public WebPay(String publishableKey) {
-        this.setPublishableKey(publishableKey);
+        client = new WebPayPublicClient(WEBPAY_SCHEMA, WEBPAY_AUTHORITY, publishableKey);
     }
 
-    public void createToken() {
-        new CreateTokenTask().execute();
+    public void setListener(WebPayListener listener) {
+        this.listener = listener;
     }
 
-    public void createToken(Card card, WebPayListener listener) {
-        this.setCard(card);
-        this.setListener(listener);
-        createToken();
+    public void createToken(RawCard rawCard) {
+        createToken(rawCard, this.listener);
     }
 
+    public void createToken(RawCard rawCard, WebPayListener listener) {
+        new CreateTokenTask(rawCard, listener).execute();
+    }
 
-    public class CreateTokenTask extends AsyncTask<Void, Void, Token> {
+    private class CreateTokenTask extends AsyncTask<Void, Void, TaskResult<Token>> {
+        private final RawCard rawCard;
+        private final WebPayListener listener;
 
-        @Override
-        protected void onPreExecute() {
+        private CreateTokenTask(RawCard rawCard, WebPayListener listener) {
+            if (rawCard == null) {
+                throw new IllegalArgumentException("card must not be nil");
+            }
+            if (listener == null) {
+                throw new IllegalArgumentException("listener must not be nil");
+            }
+            this.rawCard = rawCard;
+            this.listener = listener;
         }
 
         @Override
-        protected Token doInBackground(Void... params) {
-            WebPayClient client = new WebPayClient(publishableKey);
-            CardRequest request = new CardRequest().number(card.getNumber()).expMonth(card.getExpMonth()).expYear(card.getExpYear()).cvc(Integer.valueOf(card.getCvc())).name(card.getName());
+        protected TaskResult<Token> doInBackground(Void... params) {
             try {
-                return client.tokens.create(request);
+                JSONObject json = rawCard.toJson();
+                WebPayPublicClient.Result result = null;
+                try {
+                    result = client.request("POST", WEBPAY_VERSION + "/tokens", new HashMap<String, String>(), json.toString());
+                } catch (IOException e) {
+                    return new TaskResult<Token>(e);
+                }
+                if (result.statusCode >= 200 && result.statusCode < 300) {
+                    try {
+                        Token token = Token.fromJson(new JSONObject(result.responseBody));
+                        return new TaskResult<Token>(token);
+                    } catch (JSONException e) {
+                        return new TaskResult<Token>(e);
+                    }
+                } else {
+                    try {
+                        ErrorResponse error = ErrorResponse.fromJson(result.statusCode, new JSONObject(result.responseBody));
+                        return new TaskResult<Token>(error);
+                    } catch (JSONException e) {
+                        return new TaskResult<Token>(e);
+                    }
+                }
+            } catch (RuntimeException e) {
+                return new TaskResult<Token>(e);
             }
-            catch (CardException e) {
-                listener.onErrorCreatingToken();
-            }
-            catch (AuthenticationException e) {
-                listener.onErrorCreatingToken();
-            }
-            catch (ApiConnectionException e) {
-                listener.onErrorCreatingToken();
-            }
-            catch (InvalidRequestException e) {
-                listener.onErrorCreatingToken();
-            }
-            catch (APIException e) {
-                listener.onErrorCreatingToken();
-            }
-            return null;
         }
 
         @Override
         protected void onCancelled() {
-            listener.onErrorCreatingToken();
+            listener.onErrorCreatingToken(new RuntimeException("Communication task is not expected to be cancelled"));
         }
 
         @Override
-        protected void onPostExecute(Token token) {
-            listener.onCreateToken(null);
+        protected void onPostExecute(TaskResult<Token> result) {
+            if (result.model != null) {
+                listener.onCreateToken(result.model);
+            } else if (result.error != null) {
+                listener.onErrorCreatingToken(new ErrorResponseException(result.error));
+            } else if (result.cause != null) {
+                listener.onErrorCreatingToken(result.cause);
+            } else {
+                throw new AssertionError("Incomplete result");
+            }
+        }
+    }
+
+    private class TaskResult<T> {
+        private final T model;
+        private final ErrorResponse error;
+        private final Throwable cause;
+
+        private TaskResult(T model) {
+            this.model = model;
+            this.error = null;
+            this.cause = null;
+        }
+
+        private TaskResult(ErrorResponse error) {
+            this.model = null;
+            this.error = error;
+            this.cause = null;
+        }
+
+        private TaskResult(Throwable cause) {
+            this.model = null;
+            this.error = null;
+            this.cause = cause;
         }
     }
 }
