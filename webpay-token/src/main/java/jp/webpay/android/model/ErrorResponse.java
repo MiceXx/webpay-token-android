@@ -1,5 +1,6 @@
 package jp.webpay.android.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ErrorResponse {
@@ -9,13 +10,14 @@ public class ErrorResponse {
      */
     public final String type, causedBy, code, message, param;
 
-    public static ErrorResponse fromJson(int statusCode, JSONObject json) {
+    public static ErrorResponse fromJson(int statusCode, JSONObject json) throws JSONException {
+        JSONObject error = json.getJSONObject("error");
         return new ErrorResponse(statusCode,
-                json.optString("type", null),
-                json.optString("caused_by", null),
-                json.optString("code", null),
-                json.optString("message", null),
-                json.optString("param", null));
+                error.optString("type", null),
+                error.optString("caused_by", null),
+                error.optString("code", null),
+                error.optString("message", null),
+                error.optString("param", null));
     }
 
     public ErrorResponse(int statusCode, String type, String causedBy, String code, String message, String param) {
