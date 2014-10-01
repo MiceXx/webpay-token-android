@@ -42,7 +42,7 @@ class WebPayPublicClient {
      */
     Result request(String method, String path, Map<String, String> queryParams, String jsonBody) throws IOException {
         Uri.Builder builder = baseUri.buildUpon()
-                .appendPath(path);
+                .appendEncodedPath(path);
         for (Map.Entry<String, String> entry : queryParams.entrySet()) {
             builder.appendQueryParameter(entry.getKey(), entry.getValue());
         }

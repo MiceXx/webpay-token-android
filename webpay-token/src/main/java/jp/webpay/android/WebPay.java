@@ -1,8 +1,10 @@
 package jp.webpay.android;
 
+import android.accounts.Account;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import jp.webpay.android.model.AccountAvailability;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.model.Token;
@@ -16,43 +18,29 @@ public class WebPay {
 
     private static final Uri BASE_URI = Uri.parse("https://api.webpay.jp/v1");
     private final WebPayPublicClient client;
-    private WebPayListener listener;
-
-    public WebPay(String publishableKey, WebPayListener listener) {
-        this(publishableKey);
-        this.setListener(listener);
-    }
 
     public WebPay(String publishableKey) {
         client = new WebPayPublicClient(BASE_URI, publishableKey);
-    }
-
-    public void setListener(WebPayListener listener) {
-        this.listener = listener;
     }
 
     public void setLanguage(String language) {
         client.setLanguage(language);
     }
 
-    public void createToken(RawCard rawCard) {
-        createToken(rawCard, this.listener);
-    }
-
-    public void createToken(RawCard rawCard, WebPayListener listener) {
+    public void createToken(RawCard rawCard, WebPayListener<Token> listener) {
         new CreateTokenTask(rawCard, listener).execute();
     }
 
     private class CreateTokenTask extends AsyncTask<Void, Void, TaskResult<Token>> {
         private final RawCard rawCard;
-        private final WebPayListener listener;
+        private final WebPayListener<Token> listener;
 
-        private CreateTokenTask(RawCard rawCard, WebPayListener listener) {
+        private CreateTokenTask(RawCard rawCard, WebPayListener<Token> listener) {
             if (rawCard == null) {
-                throw new IllegalArgumentException("card must not be nil");
+                throw new IllegalArgumentException("card must not be null");
             }
             if (listener == null) {
-                throw new IllegalArgumentException("listener must not be nil");
+                throw new IllegalArgumentException("listener must not be null");
             }
             this.rawCard = rawCard;
             this.listener = listener;
@@ -90,17 +78,79 @@ public class WebPay {
 
         @Override
         protected void onCancelled() {
-            listener.onErrorCreatingToken(new RuntimeException("Communication task is not expected to be cancelled"));
+            listener.onException(new RuntimeException("Communication task is not expected to be cancelled"));
         }
 
         @Override
         protected void onPostExecute(TaskResult<Token> result) {
             if (result.model != null) {
-                listener.onCreateToken(result.model);
+                listener.onCreate(result.model);
             } else if (result.error != null) {
-                listener.onErrorCreatingToken(new ErrorResponseException(result.error));
+                listener.onException(new ErrorResponseException(result.error));
             } else if (result.cause != null) {
-                listener.onErrorCreatingToken(result.cause);
+                listener.onException(result.cause);
+            } else {
+                throw new AssertionError("Incomplete result");
+            }
+        }
+    }
+
+    public void retrieveAvailability(WebPayListener<AccountAvailability> listener) {
+        new RetrieveAvailabilityTask(listener).execute();
+    }
+
+    private class RetrieveAvailabilityTask extends AsyncTask<Void, Void, TaskResult<AccountAvailability>> {
+        private final WebPayListener<AccountAvailability> listener;
+
+        private RetrieveAvailabilityTask(WebPayListener<AccountAvailability> listener) {
+            if (listener == null) {
+                throw new IllegalArgumentException("listener must not be null");
+            }
+            this.listener = listener;
+        }
+
+        @Override
+        protected TaskResult<AccountAvailability> doInBackground(Void... params) {
+            try {
+                WebPayPublicClient.Result result = null;
+                try {
+                    result = client.request("GET", "account/availability", new HashMap<String, String>(), null);
+                } catch (IOException e) {
+                    return new TaskResult<AccountAvailability>(e);
+                }
+                if (result.statusCode >= 200 && result.statusCode < 300) {
+                    try {
+                        AccountAvailability availability = AccountAvailability.fromJson(new JSONObject(result.responseBody));
+                        return new TaskResult<AccountAvailability>(availability);
+                    } catch (JSONException e) {
+                        return new TaskResult<AccountAvailability>(e);
+                    }
+                } else {
+                    try {
+                        ErrorResponse error = ErrorResponse.fromJson(result.statusCode, new JSONObject(result.responseBody));
+                        return new TaskResult<AccountAvailability>(error);
+                    } catch (JSONException e) {
+                        return new TaskResult<AccountAvailability>(e);
+                    }
+                }
+            } catch (RuntimeException e) {
+                return new TaskResult<AccountAvailability>(e);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            listener.onException(new RuntimeException("Communication task is not expected to be cancelled"));
+        }
+
+        @Override
+        protected void onPostExecute(TaskResult<AccountAvailability> result) {
+            if (result.model != null) {
+                listener.onCreate(result.model);
+            } else if (result.error != null) {
+                listener.onException(new ErrorResponseException(result.error));
+            } else if (result.cause != null) {
+                listener.onException(result.cause);
             } else {
                 throw new AssertionError("Incomplete result");
             }

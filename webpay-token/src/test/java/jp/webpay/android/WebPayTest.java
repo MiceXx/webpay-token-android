@@ -1,9 +1,6 @@
 package jp.webpay.android;
 
-import jp.webpay.android.model.ErrorResponse;
-import jp.webpay.android.model.RawCard;
-import jp.webpay.android.model.StoredCard;
-import jp.webpay.android.model.Token;
+import jp.webpay.android.model.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -13,7 +10,6 @@ import org.apache.http.message.BasicHeader;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.codehaus.plexus.util.IOUtil;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,7 +27,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 @Config(manifest = "./src/main/AndroidManifest.xml", emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
@@ -63,6 +59,21 @@ public class WebPayTest {
                     "    \"cvc_check\": \"pass\",\n"+
                     "    \"last4\": \"0123\"\n"+
                     "  }\n"+
+                    "}",
+                    new BasicHeader("Content-Type", "application/json"));
+
+    private final HttpResponse availabilityResponse =
+            new TestHttpResponse(200, "{\n" +
+                    "  \"currencies_supported\": [\n" +
+                    "    \"jpy\"\n" +
+                    "  ],\n" +
+                    "  \"card_types_supported\": [\n" +
+                    "    \"Visa\",\n" +
+                    "    \"MasterCard\",\n" +
+                    "    \"JCB\",\n" +
+                    "    \"American Express\",\n" +
+                    "    \"Diners Club\"\n" +
+                    "  ]\n" +
                     "}",
                     new BasicHeader("Content-Type", "application/json"));
 
@@ -223,15 +234,15 @@ public class WebPayTest {
     protected Token createToken(RawCard card) throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
         final Token[] result = new Token[1];
-        WebPayListener listener = new WebPayListener() {
+        WebPayListener<Token> listener = new WebPayListener<Token>() {
             @Override
-            public void onCreateToken(Token token) {
+            public void onCreate(Token token) {
                 result[0] = token;
                 latch.countDown();
             }
 
             @Override
-            public void onErrorCreatingToken(Throwable cause) {
+            public void onException(Throwable cause) {
                 fail("Error is not acceptable " + cause.getMessage());
             }
         };
@@ -243,14 +254,14 @@ public class WebPayTest {
     protected Throwable createTokenThenError(RawCard card) throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
         final Throwable[] result = new Throwable[1];
-        WebPayListener listener = new WebPayListener() {
+        WebPayListener<Token> listener = new WebPayListener<Token>() {
             @Override
-            public void onCreateToken(Token token) {
+            public void onCreate(Token token) {
                 fail("Token response is not acceptable");
             }
 
             @Override
-            public void onErrorCreatingToken(Throwable cause) {
+            public void onException(Throwable cause) {
                 result[0] = cause;
                 latch.countDown();
             }
@@ -259,4 +270,83 @@ public class WebPayTest {
         latch.await(1, TimeUnit.SECONDS);
         return result[0];
     }
+
+    @Test
+    public void retrieveAvailabilityReturnsAccountAvailability() throws Exception {
+        Robolectric.addPendingHttpResponse(availabilityResponse);
+        AccountAvailability availability = retrieveAvailabilityThenSuccess();
+        assertThat(availability.currenciesSupported, contains("jpy"));
+        assertThat(availability.cardTypesSupported, contains("Visa", "MasterCard", "JCB", "American Express", "Diners Club"));
+    }
+
+    @Test
+    public void retrieveAvailabilityRequestsCorrectPath() throws Exception {
+        Robolectric.addPendingHttpResponse(availabilityResponse);
+        retrieveAvailabilityThenSuccess();
+        HttpRequest request = Robolectric.getSentHttpRequest(0);
+        assertEquals("GET", request.getRequestLine().getMethod());
+        assertEquals("https://api.webpay.jp/v1/account/availability", request.getRequestLine().getUri());
+        assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
+    }
+
+    @Test
+    public void retrieveAvailabilityHandlesServerError() throws Exception {
+        Robolectric.addPendingHttpResponse(serverErrorResponse);
+        Throwable throwable = retrieveAvailabilityThenError();
+        assertThat(throwable, instanceOf(ErrorResponseException.class));
+        ErrorResponse error = ((ErrorResponseException) throwable).getResponse();
+        assertEquals(error.statusCode, 500);
+        assertEquals(error.message, "API server is currently unavailable");
+        assertEquals(error.causedBy, "service");
+        assertEquals(error.param, null);
+        assertEquals(error.type, "api_error");
+        assertEquals(error.code, null);
+    }
+
+    @Test
+    public void retrieveAvailabilityRaiseErrorForNullListener() throws Exception {
+        thrown.expect(IllegalArgumentException.class);
+        webpay.retrieveAvailability(null);
+    }
+
+    protected AccountAvailability retrieveAvailabilityThenSuccess() throws Exception {
+        final CountDownLatch latch = new CountDownLatch(1);
+        final AccountAvailability[] result = new AccountAvailability[1];
+        WebPayListener<AccountAvailability> listener = new WebPayListener<AccountAvailability>() {
+            @Override
+            public void onCreate(AccountAvailability availability) {
+                result[0] = availability;
+                latch.countDown();
+            }
+
+            @Override
+            public void onException(Throwable cause) {
+                fail("Error is not acceptable " + cause.getMessage());
+            }
+        };
+        webpay.retrieveAvailability(listener);
+        latch.await(1, TimeUnit.SECONDS);
+        return result[0];
+    }
+
+    protected Throwable retrieveAvailabilityThenError() throws Exception {
+        final CountDownLatch latch = new CountDownLatch(1);
+        final Throwable[] result = new Throwable[1];
+        WebPayListener<AccountAvailability> listener = new WebPayListener<AccountAvailability>() {
+            @Override
+            public void onCreate(AccountAvailability availability) {
+                fail("AccountAvailability response is not acceptable");
+            }
+
+            @Override
+            public void onException(Throwable cause) {
+                result[0] = cause;
+                latch.countDown();
+            }
+        };
+        webpay.retrieveAvailability(listener);
+        latch.await(1, TimeUnit.SECONDS);
+        return result[0];
+    }
+
 }
