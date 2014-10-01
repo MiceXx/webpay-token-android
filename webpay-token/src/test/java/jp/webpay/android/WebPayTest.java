@@ -138,6 +138,20 @@ public class WebPayTest {
     }
 
     @Test
+    public void createTokenSendsRequestInSpecifiedLanguage() throws Exception {
+        Robolectric.addPendingHttpResponse(tokenResponse);
+        createToken(testCard);
+        HttpRequest request = Robolectric.getSentHttpRequest(0);
+        assertEquals("en", request.getFirstHeader("Accept-Language").getValue());
+
+        Robolectric.addPendingHttpResponse(tokenResponse);
+        this.webpay.setLanguage("ja");
+        createToken(testCard);
+        request = Robolectric.getSentHttpRequest(1);
+        assertEquals("ja", request.getFirstHeader("Accept-Language").getValue());
+    }
+
+    @Test
     public void createTokenReturnsCardErrorResponse() throws Exception {
         Robolectric.addPendingHttpResponse(cardErrorResponse);
         Throwable throwable = createTokenThenError(testCard);
@@ -174,7 +188,6 @@ public class WebPayTest {
         assertThat(throwable, instanceOf(JSONException.class));
         assertEquals(throwable.getMessage(), "Expected literal value at character 1 of {:}");
     }
-
 
     @Test
     public void createTokenReturnsConnectionError() throws Exception {

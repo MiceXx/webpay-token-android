@@ -19,10 +19,15 @@ import java.util.Map;
 class WebPayPublicClient {
     private final Uri baseUri;
     private final String apiKey;
+    private String language = "en";
 
     WebPayPublicClient(Uri baseUri, String apiKey) {
         this.baseUri = baseUri;
         this.apiKey = apiKey;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     /**
@@ -53,6 +58,7 @@ class WebPayPublicClient {
         } else {
             throw new IllegalArgumentException("method must be GET or POST");
         }
+        request.setHeader("Accept-Language", language);
         request.setHeader("Authorization", "Bearer " + apiKey);
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -70,6 +76,10 @@ class WebPayPublicClient {
         } finally {
             httpClient.getConnectionManager().shutdown();
         }
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     static class Result {

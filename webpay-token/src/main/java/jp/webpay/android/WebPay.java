@@ -31,6 +31,10 @@ public class WebPay {
         this.listener = listener;
     }
 
+    public void setLanguage(String language) {
+        client.setLanguage(language);
+    }
+
     public void createToken(RawCard rawCard) {
         createToken(rawCard, this.listener);
     }
