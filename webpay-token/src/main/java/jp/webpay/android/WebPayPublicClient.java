@@ -35,18 +35,13 @@ class WebPayPublicClient {
      * The caller should take care of exceptions
      * @param method        "GET" or "POST"
      * @param path          request path starts from /v*
-     * @param queryParams   query parameters
      * @param jsonBody      json-format body string used only in "POST".
      * @return              pair of response code and body if request completed
      * @throws IOException
      */
-    Result request(String method, String path, Map<String, String> queryParams, String jsonBody) throws IOException {
+    Result request(String method, String path, String jsonBody) throws IOException {
         Uri.Builder builder = baseUri.buildUpon()
                 .appendEncodedPath(path);
-        for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-            builder.appendQueryParameter(entry.getKey(), entry.getValue());
-        }
-
         HttpRequestBase request;
         if (method.equals("GET")) {
             request = new HttpGet(builder.build().toString());

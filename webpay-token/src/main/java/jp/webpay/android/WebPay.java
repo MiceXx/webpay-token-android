@@ -1,18 +1,15 @@
 package jp.webpay.android;
 
-import android.accounts.Account;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import jp.webpay.android.model.AccountAvailability;
-import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.Token;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class WebPay {
 
@@ -27,114 +24,76 @@ public class WebPay {
         client.setLanguage(language);
     }
 
-    public void createToken(RawCard rawCard, WebPayListener<Token> listener) {
-        new CreateTokenTask(rawCard, listener).execute();
-    }
-
-    private class CreateTokenTask extends AsyncTask<Void, Void, TaskResult<Token>> {
-        private final RawCard rawCard;
-        private final WebPayListener<Token> listener;
-
-        private CreateTokenTask(RawCard rawCard, WebPayListener<Token> listener) {
-            if (rawCard == null) {
-                throw new IllegalArgumentException("card must not be null");
-            }
-            if (listener == null) {
-                throw new IllegalArgumentException("listener must not be null");
-            }
-            this.rawCard = rawCard;
-            this.listener = listener;
+    public void createToken(final RawCard rawCard, WebPayListener<Token> listener) {
+        if (rawCard == null) {
+            throw new IllegalArgumentException("rawCard must not be null");
         }
-
-        @Override
-        protected TaskResult<Token> doInBackground(Void... params) {
-            try {
-                JSONObject json = rawCard.toJson();
-                WebPayPublicClient.Result result = null;
-                try {
-                    result = client.request("POST", "tokens", new HashMap<String, String>(), json.toString());
-                } catch (IOException e) {
-                    return new TaskResult<Token>(e);
-                }
-                if (result.statusCode >= 200 && result.statusCode < 300) {
-                    try {
-                        Token token = Token.fromJson(new JSONObject(result.responseBody));
-                        return new TaskResult<Token>(token);
-                    } catch (JSONException e) {
-                        return new TaskResult<Token>(e);
-                    }
-                } else {
-                    try {
-                        ErrorResponse error = ErrorResponse.fromJson(result.statusCode, new JSONObject(result.responseBody));
-                        return new TaskResult<Token>(error);
-                    } catch (JSONException e) {
-                        return new TaskResult<Token>(e);
-                    }
-                }
-            } catch (RuntimeException e) {
-                return new TaskResult<Token>(e);
+        new RequestTask<Token>(listener) {
+            @Override
+            WebPayPublicClient.Result sendRequest() throws IOException {
+                return client.request("POST", "tokens", rawCard.toJson().toString());
             }
-        }
 
-        @Override
-        protected void onCancelled() {
-            listener.onException(new RuntimeException("Communication task is not expected to be cancelled"));
-        }
-
-        @Override
-        protected void onPostExecute(TaskResult<Token> result) {
-            if (result.model != null) {
-                listener.onCreate(result.model);
-            } else if (result.error != null) {
-                listener.onException(new ErrorResponseException(result.error));
-            } else if (result.cause != null) {
-                listener.onException(result.cause);
-            } else {
-                throw new AssertionError("Incomplete result");
+            @Override
+            Token parseResponse(JSONObject json) throws JSONException {
+                return Token.fromJson(json);
             }
-        }
+        }.execute();
     }
 
     public void retrieveAvailability(WebPayListener<AccountAvailability> listener) {
-        new RetrieveAvailabilityTask(listener).execute();
+        new RequestTask<AccountAvailability>(listener) {
+            @Override
+            WebPayPublicClient.Result sendRequest() throws IOException {
+                return client.request("GET", "account/availability", null);
+            }
+
+            @Override
+            AccountAvailability parseResponse(JSONObject json) throws JSONException {
+                return AccountAvailability.fromJson(json);
+            }
+        }.execute();
     }
 
-    private class RetrieveAvailabilityTask extends AsyncTask<Void, Void, TaskResult<AccountAvailability>> {
-        private final WebPayListener<AccountAvailability> listener;
+    private abstract static class RequestTask<T> extends AsyncTask<Void, Void, TaskResult<T>> {
+        private final WebPayListener<T> listener;
 
-        private RetrieveAvailabilityTask(WebPayListener<AccountAvailability> listener) {
+        private RequestTask(WebPayListener<T> listener) {
             if (listener == null) {
                 throw new IllegalArgumentException("listener must not be null");
             }
             this.listener = listener;
         }
 
+        abstract WebPayPublicClient.Result sendRequest() throws IOException;
+
+        abstract T parseResponse(JSONObject json) throws JSONException;
+
         @Override
-        protected TaskResult<AccountAvailability> doInBackground(Void... params) {
+        protected TaskResult<T> doInBackground(Void... params) {
             try {
                 WebPayPublicClient.Result result = null;
                 try {
-                    result = client.request("GET", "account/availability", new HashMap<String, String>(), null);
+                    result = sendRequest();
                 } catch (IOException e) {
-                    return new TaskResult<AccountAvailability>(e);
+                    return new TaskResult<T>(e);
                 }
                 if (result.statusCode >= 200 && result.statusCode < 300) {
                     try {
-                        AccountAvailability availability = AccountAvailability.fromJson(new JSONObject(result.responseBody));
-                        return new TaskResult<AccountAvailability>(availability);
+                        return new TaskResult<T>(parseResponse(new JSONObject(result.responseBody)));
                     } catch (JSONException e) {
-                        return new TaskResult<AccountAvailability>(e);
+                        return new TaskResult<T>(e);
                     }
                 } else {
                     try {
                         ErrorResponse error = ErrorResponse.fromJson(result.statusCode, new JSONObject(result.responseBody));
-                        return new TaskResult<AccountAvailability>(error);
+                        return new TaskResult<T>(error);
                     } catch (JSONException e) {
-                        return new TaskResult<AccountAvailability>(e);
+                        return new TaskResult<T>(e);
                     }
                 }
             } catch (RuntimeException e) {
-                return new TaskResult<AccountAvailability>(e);
+                return new TaskResult<T>(e);
             }
         }
 
@@ -144,7 +103,7 @@ public class WebPay {
         }
 
         @Override
-        protected void onPostExecute(TaskResult<AccountAvailability> result) {
+        protected void onPostExecute(TaskResult<T> result) {
             if (result.model != null) {
                 listener.onCreate(result.model);
             } else if (result.error != null) {
@@ -157,7 +116,7 @@ public class WebPay {
         }
     }
 
-    private class TaskResult<T> {
+    private static class TaskResult<T> {
         private final T model;
         private final ErrorResponse error;
         private final Throwable cause;
