@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">webpay-token-android</string>
+
+    <!-- dialog_card layout -->
+    <string name="card_cancel">Cancel</string>
+    <string name="card_cvc">CVC</string>
+    <string name="card_expiry">Expiry</string>
+    <string name="card_expiry_separator">/</string>
+    <string name="card_name">Name</string>
+    <string name="card_number">Number</string>
+    <string name="card_payment_info_title">Payment info</string>
+    <string name="card_send">Pay with card</string>
+    <string name="card_we_accept">We accept</string>
+
+    <string name="token_fragment_open_dialog">Pay with card</string>
 </resources>
