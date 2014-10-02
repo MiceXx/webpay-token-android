@@ -13,4 +13,7 @@
     <string name="card_we_accept">We accept</string>
 
     <string name="token_fragment_open_dialog">Pay with card</string>
+    <string name="error_title">Failed to register payment info</string>
+    <string name="tokenize_error_title">Failed to register payment information</string>
+    <string name="tokenize_error_message">This application unexpectedly failed to save your payment information. Please retry and contact the developer if still fails.</string>
 </resources>

@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">webpay-token-android</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="no_token">Token is not generated yet</string>
+    <string name="token_generated">Generated token id: %1$s</string>
+    <string name="token_cancelled">You cancelled purchasing: %1$s</string>
     <string name="action_settings">Settings</string>
 
 </resources>

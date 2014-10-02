@@ -6,9 +6,18 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
 import jp.webpay.android.WebPay;
+import jp.webpay.android.WebPayListener;
+import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.model.RawCard;
+import jp.webpay.android.model.Token;
 
 /**
  * This class is only used from WebPayTokenFragment to create tokens. This
@@ -17,8 +26,10 @@ import jp.webpay.android.WebPay;
  */
 public class CardDialogFragment extends DialogFragment {
     private static final String ARG_PUBLISHABLE_KEY = "publishableKey";
+    private static final String TAG = "webpay:CardDialogFragment";
     private WebPay mWebPay;
     private WebPayTokenCompleteListener mListener;
+    private Throwable mLastException;
 
     /**
      * Use this factory method to create a new instance of
@@ -58,16 +69,39 @@ public class CardDialogFragment extends DialogFragment {
                 .setTitle(R.string.card_payment_info_title)
                 .setPositiveButton(R.string.card_send, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onTokenCreated(null);
+                        // This is placeholder.
+                        // Do nothing here and override button's onClick listener
+                        // so that the dialog does not dismiss until a token is
+                        // successfully generated.
+                        // See AlertController.mButtonHandler
+                        // http://stackoverflow.com/questions/13746412/prevent-dialogfragment-from-dismissing-when-button-is-clicked
                     }
                 })
                 .setNegativeButton(R.string.card_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onCancelled(null);
+                        mListener.onCancelled(mLastException);
                     }
                 });
 
         return builder.create();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        final AlertDialog dialog = (AlertDialog) getDialog();
+        if (dialog == null)
+            return;
+
+        // override default on-click listener not to dismiss automatically
+        Button sendButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendCardInfoToWebPay();
+            }
+        });
     }
 
     @Override
@@ -84,5 +118,64 @@ public class CardDialogFragment extends DialogFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void sendCardInfoToWebPay() {
+        final Dialog dialog = getDialog();
+        String cvc = ((EditText) dialog.findViewById(R.id.cardCvcField)).getText().toString();
+        String expMonth = ((EditText) dialog.findViewById(R.id.cardExpiryMonthField)).getText().toString();
+        String expYear = ((EditText) dialog.findViewById(R.id.cardExpiryYearField)).getText().toString();
+        String name = ((EditText) dialog.findViewById(R.id.cardNameField)).getText().toString();
+        String number = ((EditText) dialog.findViewById(R.id.cardNumberField)).getText().toString();
+
+        RawCard card = new RawCard()
+                .cvc(cvc)
+                .name(name)
+                .number(number);
+        // invalid number inputs are ignored and checked in other place
+        try {
+            card.expMonth(Integer.valueOf(expMonth));
+        } catch (NumberFormatException ignored) {
+        }
+        try {
+            card.expYear(Integer.valueOf(expYear));
+        } catch (NumberFormatException ignored) {
+        }
+        mWebPay.createToken(card, new WebPayListener<Token>() {
+            @Override
+            public void onCreate(Token result) {
+                dialog.dismiss();
+                mListener.onTokenCreated(result);
+            }
+
+            @Override
+            public void onException(Throwable cause) {
+                mLastException = cause;
+                Log.i(TAG, "exception while creating a token", cause);
+                showWebPayErrorAlert(cause);
+            }
+        });
+
+    }
+
+    private void showWebPayErrorAlert(Throwable cause) {
+        String message = null;
+        if (cause instanceof ErrorResponseException) {
+            ErrorResponse response = ((ErrorResponseException) cause).getResponse();
+            if (response.causedBy.equals("buyer")) {
+                message = response.message;
+            }
+        }
+
+        if (message == null) {
+            message = getString(R.string.tokenize_error_message);
+        }
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.tokenize_error_title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.yes, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
