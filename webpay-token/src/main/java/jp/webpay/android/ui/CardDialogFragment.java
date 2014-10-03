@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
 import jp.webpay.android.WebPay;
@@ -18,6 +17,7 @@ import jp.webpay.android.WebPayListener;
 import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.Token;
+import jp.webpay.android.ui.field.BaseCardField;
 
 /**
  * This class is only used from WebPayTokenFragment to create tokens. This
@@ -121,30 +121,16 @@ public class CardDialogFragment extends DialogFragment {
     }
 
     private void sendCardInfoToWebPay() {
-        final Dialog dialog = getDialog();
-        String cvc = ((EditText) dialog.findViewById(R.id.cardCvcField)).getText().toString();
-        String expMonth = ((EditText) dialog.findViewById(R.id.cardExpiryMonthField)).getText().toString();
-        String expYear = ((EditText) dialog.findViewById(R.id.cardExpiryYearField)).getText().toString();
-        String name = ((EditText) dialog.findViewById(R.id.cardNameField)).getText().toString();
-        String number = ((EditText) dialog.findViewById(R.id.cardNumberField)).getText().toString();
+        RawCard card = createValidCardFromForm();
+        if (card == null) {
+            return;
+        }
+        Log.v(TAG, card.toJson().toString());
 
-        RawCard card = new RawCard()
-                .cvc(cvc)
-                .name(name)
-                .number(number);
-        // invalid number inputs are ignored and checked in other place
-        try {
-            card.expMonth(Integer.valueOf(expMonth));
-        } catch (NumberFormatException ignored) {
-        }
-        try {
-            card.expYear(Integer.valueOf(expYear));
-        } catch (NumberFormatException ignored) {
-        }
         mWebPay.createToken(card, new WebPayListener<Token>() {
             @Override
             public void onCreate(Token result) {
-                dialog.dismiss();
+                getDialog().dismiss();
                 mListener.onTokenCreated(result);
             }
 
@@ -155,7 +141,25 @@ public class CardDialogFragment extends DialogFragment {
                 showWebPayErrorAlert(cause);
             }
         });
+    }
 
+    /**
+     * Collect values on the form and return card
+     * @return card that contains input information, null if one of fields is invalid
+     */
+    private RawCard createValidCardFromForm() {
+        Dialog dialog = getDialog();
+        RawCard card = new RawCard();
+
+        int fieldIds[] = new int[]{R.id.cardCvcField, R.id.cardExpiryField, R.id.cardNameField, R.id.cardNumberField};
+        for (int fieldId : fieldIds) {
+            BaseCardField field = (BaseCardField) dialog.findViewById(fieldId);
+            if (!field.validate())
+                return null;
+            field.updateCard(card);
+        }
+
+        return card;
     }
 
     private void showWebPayErrorAlert(Throwable cause) {

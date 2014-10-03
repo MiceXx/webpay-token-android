@@ -34,11 +34,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/card_number"/>
 
-        <EditText
+        <jp.webpay.android.ui.field.NumberField
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardNumberField"
-                android:inputType="number"/>
+                android:id="@+id/cardNumberField"/>
     </TableRow>
 
     <TableRow
@@ -50,29 +49,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/card_expiry"/>
 
-        <LinearLayout
+        <jp.webpay.android.ui.field.ExpiryField
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/cardExpiryMonthField"
-                    android:inputType="number"
-                    android:layout_weight="1"/>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/card_expiry_separator"/>
-
-            <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/cardExpiryYearField"
-                    android:inputType="number"
-                    android:layout_weight="1"/>
-        </LinearLayout>
+                android:id="@+id/cardExpiryField"/>
     </TableRow>
 
     <TableRow
@@ -84,11 +64,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/card_name"/>
 
-        <EditText
+        <jp.webpay.android.ui.field.NameField
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardNameField"
-                android:inputType="textPersonName"/>
+                android:id="@+id/cardNameField"/>
     </TableRow>
 
     <TableRow
@@ -100,11 +79,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/card_cvc"/>
 
-        <EditText
+        <jp.webpay.android.ui.field.CvcField
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardCvcField"
-                android:inputType="numberPassword"/>
+                android:id="@+id/cardCvcField"/>
     </TableRow>
 
 </TableLayout>
