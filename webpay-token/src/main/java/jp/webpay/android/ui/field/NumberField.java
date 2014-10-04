@@ -7,9 +7,14 @@ import jp.webpay.android.R;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.validator.CardNumberValidator;
 
+import javax.xml.validation.Validator;
+import java.util.regex.Pattern;
+
 public class NumberField extends MultiColumnCardField {
     public static final String SEPARATOR = " ";
     private String mValidNumber;
+    private OnCardTypeChangeListener mOnCardTypeChangeListener;
+    private String mCurrentCardType;
 
     public NumberField(Context context) {
         super(context, SEPARATOR);
@@ -64,10 +69,50 @@ public class NumberField extends MultiColumnCardField {
                 }
             }
         }
-        return builder.toString();
+        String visibleText = builder.toString();
+        notifyCardTypeChange(visibleText);
+        return visibleText;
+    }
+
+    private String expectCardType(String number) {
+        if (Pattern.matches("4[0-9].*", number)) {
+            return "Visa";
+        }
+        if (Pattern.matches("3[47].*", number)) {
+            return "American Express";
+        }
+        if (Pattern.matches("5[1-5].*", number)) {
+            return "MasterCard";
+        }
+        if (Pattern.matches("3[0689].*", number)) {
+            return "Diners Club";
+        }
+        if (Pattern.matches("35.*", number)) {
+            return "JCB";
+        }
+        return null;
+    }
+
+    private void notifyCardTypeChange(String number) {
+        String cardType = expectCardType(number);
+        boolean isSame = mCurrentCardType == null ? cardType == null : mCurrentCardType.equals(cardType);
+        if (!isSame) {
+            mCurrentCardType = cardType;
+            if (mOnCardTypeChangeListener != null) {
+                mOnCardTypeChangeListener.onCardTypeChange(cardType);
+            }
+        }
     }
 
     public String getValidNumber() {
         return mValidNumber;
+    }
+
+    public void setOnCardTypeChangeListener(OnCardTypeChangeListener mListener) {
+        this.mOnCardTypeChangeListener = mListener;
+    }
+
+    public static interface OnCardTypeChangeListener {
+        public void onCardTypeChange(String cardType);
     }
 }

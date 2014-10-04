@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
 import jp.webpay.android.WebPay;
@@ -18,17 +19,27 @@ import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.Token;
 import jp.webpay.android.ui.field.BaseCardField;
+import jp.webpay.android.ui.field.NumberField;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * This class is only used from WebPayTokenFragment to create tokens. This
  * dialog is responsible for accept card information, validate it, creating
  * token and handling errors.
  */
-public class CardDialogFragment extends DialogFragment {
+public class CardDialogFragment extends DialogFragment implements NumberField.OnCardTypeChangeListener {
     private static final String ARG_PUBLISHABLE_KEY = "publishableKey";
     private static final String TAG = "webpay:CardDialogFragment";
+    private static final Map<String, Integer> CARD_TYPE_TO_DRAWABLE = new HashMap<String, Integer>() {{
+        put("Visa", R.drawable.card_visa);
+        put("American Express", R.drawable.card_amex);
+        put("MasterCard", R.drawable.card_master);
+        put("JCB", R.drawable.card_jcb);
+        put("Diners Club", R.drawable.card_diners);
+    }};
     private WebPay mWebPay;
     private WebPayTokenCompleteListener mListener;
     private Throwable mLastException;
@@ -104,6 +115,8 @@ public class CardDialogFragment extends DialogFragment {
                 sendCardInfoToWebPay();
             }
         });
+
+        ((NumberField)dialog.findViewById(R.id.cardNumberField)).setOnCardTypeChangeListener(this);
     }
 
     @Override
@@ -192,5 +205,15 @@ public class CardDialogFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.yes, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    @Override
+    public void onCardTypeChange(String cardType) {
+        ImageView icon = (ImageView) getDialog().findViewById(R.id.cardNumberTypeIcon);
+        if (cardType == null) {
+            icon.setImageDrawable(null);
+        } else {
+            icon.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
+        }
     }
 }
