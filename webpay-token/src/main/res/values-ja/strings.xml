@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">webpay-token-android</string>
     <!-- dialog_card layout -->
     <string name="card_cancel">キャンセル</string>
     <string name="card_cvc">CVC</string>
@@ -13,6 +14,9 @@
     <string name="card_we_accept">対応ブランド</string>
 
     <string name="field_error_default">カードを再度ご確認ください。</string>
+    <string name="field_expiry_hint">MM / YYYY</string>
+    <string name="field_name_hint">TARO YAMADA</string>
+    <string name="field_number_hint">1234 5678 9012 3456</string>
 
     <string name="token_fragment_open_dialog">カードで支払う</string>
     <string name="token_fragment_token_generated">支払い情報入力済み</string>

@@ -1,5 +1,6 @@
 package jp.webpay.android.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -103,6 +104,9 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         }
     }
 
+    // using "null" for inflate is correct according to
+    // http://developer.android.com/guide/topics/ui/dialogs.html#CustomLayout
+    @SuppressLint("InflateParams")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
