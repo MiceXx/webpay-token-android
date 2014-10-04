@@ -27,9 +27,12 @@ import jp.webpay.android.ui.field.NumberField;
 import java.util.*;
 
 /**
- * This class is only used from WebPayTokenFragment to create tokens. This
- * dialog is responsible for accept card information, validate it, creating
- * token and handling errors.
+ * This class is to create tokens from users input. WebPayTokenFragment is recommended for most users, but
+ * you can use this for better UX. This dialog is responsible for accept card information, validate it,
+ * creating token and handling errors.
+ * <p>
+ * Activities that contain this fragment (and not contain {@link jp.webpay.android.ui.WebPayTokenFragment})
+ * must implement the {@link jp.webpay.android.ui.WebPayTokenCompleteListener} interface to handle results.
  */
 public class CardDialogFragment extends DialogFragment implements NumberField.OnCardTypeChangeListener {
     private static final String ARG_PUBLISHABLE_KEY = "publishableKey";
@@ -48,14 +51,16 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     private ArrayList<CardType> mSupportedCardTypes;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Use this factory method to create a new instance of this fragment
+     * using the provided parameters.
      * <p>
-     * This is private, not intended to be called by other than
-     * {@link jp.webpay.android.ui.WebPayTokenFragment}.
+     * {@link jp.webpay.android.ui.WebPayTokenFragment} will give an idea
+     * about how to use this class.
      *
      * @param publishableKey        WebPay publishable key to generate token
-     * @param supportedCardTypes    supported card types retrieved from availability API. nullable.
+     * @param supportedCardTypes    supported card types retrieved from availability API. Use
+     *                              {@link WebPay#retrieveAvailability(jp.webpay.android.WebPayListener)}.
+     *                              Pass null if you do not need to show and check supported card types.
      * @return A new instance of dialog fragment
      */
     public static CardDialogFragment newInstance(String publishableKey, List<CardType> supportedCardTypes) {
@@ -152,8 +157,18 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         super.onAttach(activity);
         try {
             mListener = (WebPayTokenCompleteListener) getParentFragment();
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Parent fragment must implement WebPayTokenCompleteListener");
+        } catch (ClassCastException ignored) {
+            mListener = null;
+        }
+        if (mListener == null) {
+            try {
+                mListener = (WebPayTokenCompleteListener) activity;
+            } catch (ClassCastException ignored) {
+                mListener = null;
+            }
+        }
+        if (mListener == null) {
+            throw new IllegalStateException("Activity or parent fragment must implement WebPayTokenCompleteListener");
         }
     }
 
