@@ -13,4 +13,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <!--
+        This FrameLayout is a placeholder for the WebPay token button and will be provided
+        by a fragment at runtime.
+    -->
+    <FrameLayout
+            android:id="@+id/webpay_token_button_fragment"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
 </RelativeLayout>

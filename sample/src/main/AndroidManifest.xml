@@ -18,8 +18,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="jp.webpay.android.ui.WebPayTokenActivity" android:configChanges="keyboardHidden|orientation" />
     </application>
 
 </manifest>
