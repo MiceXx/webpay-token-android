@@ -1,7 +1,13 @@
 package jp.webpay.android.model;
 
+import jp.webpay.android.validator.CardNumberValidator;
+import jp.webpay.android.validator.CvcValidator;
+import jp.webpay.android.validator.ExpiryValidator;
+import jp.webpay.android.validator.NameValidator;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class RawCard {
 
@@ -50,5 +56,25 @@ public class RawCard {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean cvcIsValid() {
+        return CvcValidator.isValid(cvc);
+    }
+
+    public boolean expiryIsValid() {
+        return ExpiryValidator.isValid(expMonth, expYear);
+    }
+
+    public boolean nameIsValid() {
+        return NameValidator.isValid(name);
+    }
+
+    public boolean numberIsValid() {
+        return CardNumberValidator.isValid(number);
+    }
+
+    public boolean numberIsValid(List<String> cardTypes) {
+        return CardNumberValidator.isValid(number, cardTypes);
     }
 }
