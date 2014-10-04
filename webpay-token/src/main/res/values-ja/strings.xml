@@ -3,6 +3,7 @@
     <!-- dialog_card layout -->
     <string name="card_cancel">キャンセル</string>
     <string name="card_cvc">CVC</string>
+    <string name="card_cvc_help_description">CVCの場所を説明する画像を表示します</string>
     <string name="card_expiry">有効期限</string>
     <string name="card_name">カード名義</string>
     <string name="card_number">カード番号</string>

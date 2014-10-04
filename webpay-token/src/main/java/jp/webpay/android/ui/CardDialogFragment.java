@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
@@ -117,6 +118,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         });
 
         ((NumberField)dialog.findViewById(R.id.cardNumberField)).setOnCardTypeChangeListener(this);
+        onCardTypeChange(null); // initialize
     }
 
     @Override
@@ -215,5 +217,27 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         } else {
             icon.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
         }
+
+        ImageButton helpButton = (ImageButton) getDialog().findViewById(R.id.cardCvcHelpButton);
+        if ("American Express".equals(cardType)) {
+            helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc_amex));
+        } else {
+            helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc));
+        }
+    }
+
+    private View.OnClickListener cvcHelpListener(final int drawableId) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageView descriptionImageView = new ImageView(getActivity());
+                descriptionImageView.setImageDrawable(getResources().getDrawable(drawableId));
+                new AlertDialog.Builder(getActivity())
+                        .setView(descriptionImageView)
+                        .setPositiveButton(android.R.string.yes, null)
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
+            }
+        };
     }
 }

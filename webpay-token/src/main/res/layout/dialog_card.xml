@@ -89,6 +89,15 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/cardCvcField"/>
+
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cardCvcHelpButton"
+                android:clickable="false"
+                android:src="@android:drawable/ic_menu_help"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/card_cvc_help_description"/>
     </TableRow>
 
 </TableLayout>
