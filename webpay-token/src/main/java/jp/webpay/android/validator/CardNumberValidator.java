@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class CardNumberValidator {
     private static final List<String> ALL_CARD_TYPES =
             Arrays.asList("Visa", "MasterCard", "JCB", "American Express", "Diners Club");
-    private static final List<Character> SEPARATORS = Arrays.asList(' ', '-');
+    private static final char SEPARATOR = '-';
     private static final Map<String, Pattern> CARD_TYPE_REGEXP = new HashMap<String, Pattern>();
     static {
         CARD_TYPE_REGEXP.put("Visa", Pattern.compile("\\A4[0-9]{12}(?:[0-9]{3})?\\z"));
@@ -31,7 +31,7 @@ public class CardNumberValidator {
 
     /**
      * Validate that the number is acceptable as an account number of card types supported by WebPay
-     * @param number    Card number composed of digits, space and hyphens.
+     * @param number    Card number composed of digits and hyphens.
      * @return true if card number is valid
      */
     public static boolean isValid(String number) {
@@ -61,9 +61,8 @@ public class CardNumberValidator {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < number.length(); i++) {
             char ch = number.charAt(i);
-            if (SEPARATORS.contains(ch)) {
+            if (ch == SEPARATOR)
                 continue;
-            }
             if (ch >= '0' && ch <= '9') {
                 builder.append(ch);
                 continue;

@@ -23,7 +23,7 @@ public class CardNumberValidatorTest {
     public void testIsValidSanitizesNumber() throws Exception {
         assertTrue(CardNumberValidator.isValid("4242424242424242"));
         assertTrue(CardNumberValidator.isValid("4242-4242-4242-4242"));
-        assertTrue(CardNumberValidator.isValid("4242 4242 4242 4242"));
+        assertFalse(CardNumberValidator.isValid("4242 4242 4242 4242"));
         assertFalse(CardNumberValidator.isValid("4242\n424242424242"));
         assertFalse(CardNumberValidator.isValid("４242424242424242"));
     }
