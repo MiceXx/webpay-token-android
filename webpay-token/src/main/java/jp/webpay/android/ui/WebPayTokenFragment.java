@@ -32,6 +32,7 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
     private WebPayTokenCompleteListener mListener;
     private String mPublishableKey;
     private List<CardType> mCardTypesSupported;
+    private Button mOpenButton;
 
     /**
      * Use this factory method to create a new instance of
@@ -70,8 +71,8 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_web_pay_token, container, false);
-        Button openButton = (Button)view.findViewById(R.id.open_dialog_button);
-        openButton.setOnClickListener(new View.OnClickListener() {
+        mOpenButton = (Button)view.findViewById(R.id.open_dialog_button);
+        mOpenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // cardTypesSupported is best-effort. Continue even if null.
@@ -105,6 +106,7 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
     @Override
     public void onTokenCreated(Token token) {
         mListener.onTokenCreated(token);
+        mOpenButton.setText(R.string.token_fragment_token_generated);
     }
 
     @Override

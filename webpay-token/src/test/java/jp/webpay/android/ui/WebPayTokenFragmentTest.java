@@ -102,6 +102,7 @@ public class WebPayTokenFragmentTest {
         generateTokenFromForm();
 
         assertFalse(dialog.isShowing());
+        assertEquals(getString(R.string.token_fragment_token_generated), openDialogButton.getText());
         assertEquals("tok_3ybc93ckR01qeKx", activity.getLastToken().id);
     }
 

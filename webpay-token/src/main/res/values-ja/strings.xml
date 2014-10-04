@@ -15,6 +15,7 @@
     <string name="field_error_default">カードを再度ご確認ください。</string>
 
     <string name="token_fragment_open_dialog">カードで支払う</string>
+    <string name="token_fragment_token_generated">支払い情報入力済み</string>
     <string name="tokenize_error_title">支払い情報が登録できませんでした</string>
     <string name="tokenize_error_message">
         支払い情報が予期しない理由で保存できませんでした。もう一度試して、なお失敗する場合は開発者にお問い合わせください。
