@@ -34,71 +34,6 @@ import static org.hamcrest.Matchers.*;
 public class WebPayTest {
     private WebPay webpay;
 
-    private RawCard testCard = new RawCard()
-            .number("4242-4242-4242-0123")
-            .expMonth(8)
-            .expYear(2020)
-            .name("TEST USER")
-            .cvc("012");
-
-    private final HttpResponse tokenResponse =
-            new TestHttpResponse(201, "{\n"+
-                    "  \"id\": \"tok_3ybc93ckR01qeKx\",\n"+
-                    "  \"object\": \"token\",\n"+
-                    "  \"livemode\": false,\n"+
-                    "  \"created\": 1396007350,\n"+
-                    "  \"used\": false,\n"+
-                    "  \"card\": {\n"+
-                    "    \"object\": \"card\",\n"+
-                    "    \"exp_year\": 2020,\n"+
-                    "    \"exp_month\": 8,\n"+
-                    "    \"fingerprint\": \"0000000000000000000000000000000000000000\",\n"+
-                    "    \"name\": \"TEST USER\",\n"+
-                    "    \"country\": \"JP\",\n"+
-                    "    \"type\": \"Visa\",\n"+
-                    "    \"cvc_check\": \"pass\",\n"+
-                    "    \"last4\": \"0123\"\n"+
-                    "  }\n"+
-                    "}",
-                    new BasicHeader("Content-Type", "application/json"));
-
-    private final HttpResponse availabilityResponse =
-            new TestHttpResponse(200, "{\n" +
-                    "  \"currencies_supported\": [\n" +
-                    "    \"jpy\"\n" +
-                    "  ],\n" +
-                    "  \"card_types_supported\": [\n" +
-                    "    \"Visa\",\n" +
-                    "    \"MasterCard\",\n" +
-                    "    \"JCB\",\n" +
-                    "    \"American Express\",\n" +
-                    "    \"Diners Club\"\n" +
-                    "  ]\n" +
-                    "}",
-                    new BasicHeader("Content-Type", "application/json"));
-
-    private final HttpResponse cardErrorResponse =
-            new TestHttpResponse(402, "{\n" +
-                    "  \"error\": {\n" +
-                    "    \"message\": \"The security code provided is invalid. For Visa, MasterCard, JCB, and Diners Club, enter the last 3 digits on the back of your card. For American Express, enter the 4 digits printed above your number.\",\n" +
-                    "    \"caused_by\": \"buyer\",\n" +
-                    "    \"param\": \"cvc\",\n" +
-                    "    \"type\": \"card_error\",\n" +
-                    "    \"code\": \"invalid_cvc\"\n" +
-                    "  }\n" +
-                    "}",
-                    new BasicHeader("Content-Type", "application/json"));
-
-    private final HttpResponse serverErrorResponse =
-            new TestHttpResponse(500, "{\n" +
-                    "  \"error\": {\n" +
-                    "    \"type\": \"api_error\",\n" +
-                    "    \"caused_by\": \"service\",\n" +
-                    "    \"message\": \"API server is currently unavailable\"\n" +
-                    "  }\n" +
-                    "}",
-                    new BasicHeader("Content-Type", "application/json"));
-
     @Before
     public void prepareWebPay() {
         webpay = new WebPay("test_public_dummykey");
@@ -109,8 +44,8 @@ public class WebPayTest {
 
     @Test
     public void createTokenReturnsTokenObject() throws Exception {
-        Robolectric.addPendingHttpResponse(tokenResponse);
-        Token token = createToken(testCard);
+        Robolectric.addPendingHttpResponse(ApiSample.tokenResponse);
+        Token token = createToken(ApiSample.testCard);
         assertEquals("tok_3ybc93ckR01qeKx", token.id);
         assertEquals("token", token.object);
         assertEquals(false, token.livemode);
@@ -130,7 +65,7 @@ public class WebPayTest {
 
     @Test
     public void createTokenSendCorrectRequest() throws Exception {
-        Robolectric.addPendingHttpResponse(tokenResponse);
+        Robolectric.addPendingHttpResponse(ApiSample.tokenResponse);
         String rawCardBodyString = "{\"card\":{" +
                 "\"number\":\"4242-4242-4242-0123\"," +
                 "\"cvc\":\"012\"," +
@@ -138,7 +73,7 @@ public class WebPayTest {
                 "\"exp_month\":8," +
                 "\"exp_year\":2020" +
                 "}}";
-        createToken(testCard);
+        createToken(ApiSample.testCard);
         HttpRequest request = Robolectric.getSentHttpRequest(0);
         assertEquals("POST", request.getRequestLine().getMethod());
         assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
@@ -150,22 +85,22 @@ public class WebPayTest {
 
     @Test
     public void createTokenSendsRequestInSpecifiedLanguage() throws Exception {
-        Robolectric.addPendingHttpResponse(tokenResponse);
-        createToken(testCard);
+        Robolectric.addPendingHttpResponse(ApiSample.tokenResponse);
+        createToken(ApiSample.testCard);
         HttpRequest request = Robolectric.getSentHttpRequest(0);
         assertEquals("en", request.getFirstHeader("Accept-Language").getValue());
 
-        Robolectric.addPendingHttpResponse(tokenResponse);
+        Robolectric.addPendingHttpResponse(ApiSample.tokenResponse);
         this.webpay.setLanguage("ja");
-        createToken(testCard);
+        createToken(ApiSample.testCard);
         request = Robolectric.getSentHttpRequest(1);
         assertEquals("ja", request.getFirstHeader("Accept-Language").getValue());
     }
 
     @Test
     public void createTokenReturnsCardErrorResponse() throws Exception {
-        Robolectric.addPendingHttpResponse(cardErrorResponse);
-        Throwable throwable = createTokenThenError(testCard);
+        Robolectric.addPendingHttpResponse(ApiSample.cardErrorResponse);
+        Throwable throwable = createTokenThenError(ApiSample.testCard);
         assertThat(throwable, instanceOf(ErrorResponseException.class));
         ErrorResponse error = ((ErrorResponseException) throwable).getResponse();
         assertEquals(error.statusCode, 402);
@@ -178,8 +113,8 @@ public class WebPayTest {
 
     @Test
     public void createTokenReturnsServerErrorResponse() throws Exception {
-        Robolectric.addPendingHttpResponse(serverErrorResponse);
-        Throwable throwable = createTokenThenError(testCard);
+        Robolectric.addPendingHttpResponse(ApiSample.serverErrorResponse);
+        Throwable throwable = createTokenThenError(ApiSample.testCard);
         assertThat(throwable, instanceOf(ErrorResponseException.class));
         ErrorResponse error = ((ErrorResponseException) throwable).getResponse();
         assertEquals(error.statusCode, 500);
@@ -195,7 +130,7 @@ public class WebPayTest {
         TestHttpResponse response = new TestHttpResponse(201, "{:}",
                 new BasicHeader("Content-Type", "application/json"));
         Robolectric.addPendingHttpResponse(response);
-        Throwable throwable = createTokenThenError(testCard);
+        Throwable throwable = createTokenThenError(ApiSample.testCard);
         assertThat(throwable, instanceOf(JSONException.class));
         assertEquals(throwable.getMessage(), "Expected literal value at character 1 of {:}");
     }
@@ -214,7 +149,7 @@ public class WebPayTest {
             }
         };
         Robolectric.addPendingHttpResponse(response);
-        Throwable throwable = createTokenThenError(testCard);
+        Throwable throwable = createTokenThenError(ApiSample.testCard);
         assertThat(throwable, instanceOf(IOException.class));
         assertEquals(throwable.getMessage(), "Test exception");
     }
@@ -228,7 +163,7 @@ public class WebPayTest {
     @Test
     public void createTokenRaiseErrorForNullListener() throws Exception {
         thrown.expect(IllegalArgumentException.class);
-        webpay.createToken(testCard, null);
+        webpay.createToken(ApiSample.testCard, null);
     }
 
     protected Token createToken(RawCard card) throws Exception {
@@ -273,7 +208,7 @@ public class WebPayTest {
 
     @Test
     public void retrieveAvailabilityReturnsAccountAvailability() throws Exception {
-        Robolectric.addPendingHttpResponse(availabilityResponse);
+        Robolectric.addPendingHttpResponse(ApiSample.availabilityResponse);
         AccountAvailability availability = retrieveAvailabilityThenSuccess();
         assertThat(availability.currenciesSupported, contains("jpy"));
         assertThat(availability.cardTypesSupported, contains("Visa", "MasterCard", "JCB", "American Express", "Diners Club"));
@@ -281,7 +216,7 @@ public class WebPayTest {
 
     @Test
     public void retrieveAvailabilityRequestsCorrectPath() throws Exception {
-        Robolectric.addPendingHttpResponse(availabilityResponse);
+        Robolectric.addPendingHttpResponse(ApiSample.availabilityResponse);
         retrieveAvailabilityThenSuccess();
         HttpRequest request = Robolectric.getSentHttpRequest(0);
         assertEquals("GET", request.getRequestLine().getMethod());
@@ -291,7 +226,7 @@ public class WebPayTest {
 
     @Test
     public void retrieveAvailabilityHandlesServerError() throws Exception {
-        Robolectric.addPendingHttpResponse(serverErrorResponse);
+        Robolectric.addPendingHttpResponse(ApiSample.serverErrorResponse);
         Throwable throwable = retrieveAvailabilityThenError();
         assertThat(throwable, instanceOf(ErrorResponseException.class));
         ErrorResponse error = ((ErrorResponseException) throwable).getResponse();

@@ -130,8 +130,8 @@ public class CardDialogFragment extends DialogFragment {
         mWebPay.createToken(card, new WebPayListener<Token>() {
             @Override
             public void onCreate(Token result) {
-                getDialog().dismiss();
                 mListener.onTokenCreated(result);
+                getDialog().dismiss();
             }
 
             @Override
