@@ -8,7 +8,6 @@ import jp.webpay.android.model.CardType;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.validator.CardNumberValidator;
 
-import javax.xml.validation.Validator;
 import java.util.regex.Pattern;
 
 public class NumberField extends MultiColumnCardField {

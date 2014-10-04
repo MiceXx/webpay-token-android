@@ -8,9 +8,9 @@ import java.util.TimeZone;
 import static org.junit.Assert.*;
 
 public class ExpiryValidatorTest {
-    private Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
-    private int currentYear = calendar.get(Calendar.YEAR);
-    private int currentMonth = calendar.get(Calendar.MONTH) + 1;
+    private final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
+    private final int currentYear = calendar.get(Calendar.YEAR);
+    private final int currentMonth = calendar.get(Calendar.MONTH) + 1;
 
     @Test
     public void testIsValidChecksRange() throws Exception {

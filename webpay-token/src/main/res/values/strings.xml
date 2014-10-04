@@ -6,7 +6,6 @@
     <string name="card_cvc">CVC</string>
     <string name="card_cvc_help_description">Show help image indicating CVC location</string>
     <string name="card_expiry">Expiry</string>
-    <string name="card_expiry_separator">/</string>
     <string name="card_name">Name</string>
     <string name="card_number">Number</string>
     <string name="card_number_type_icon_description">Brand of this number</string>

@@ -3,7 +3,6 @@ package jp.webpay.android;
 import jp.webpay.android.model.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.message.BasicHeader;
@@ -40,7 +39,7 @@ public class WebPayTest {
     }
 
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public final ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void createTokenReturnsTokenObject() throws Exception {

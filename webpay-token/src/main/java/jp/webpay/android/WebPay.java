@@ -72,7 +72,7 @@ public class WebPay {
         @Override
         protected TaskResult<T> doInBackground(Void... params) {
             try {
-                WebPayPublicClient.Result result = null;
+                WebPayPublicClient.Result result;
                 try {
                     result = sendRequest();
                 } catch (IOException e) {

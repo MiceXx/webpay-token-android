@@ -76,7 +76,6 @@ public class ExpiryField extends MultiColumnCardField {
         // "08 / 1" -> "08 / 201" (other than 2)
         // "08 / 2014" -> "08 / 2014" (as is)
         // "08 / 12014" -> "08 / 2012"
-        StringBuilder builder = new StringBuilder();
         String pair[] = parseToPair(current);
         String month = pair[0];
         String year = pair[1];
