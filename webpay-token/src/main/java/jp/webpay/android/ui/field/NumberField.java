@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.InputType;
 import android.util.AttributeSet;
 import jp.webpay.android.R;
+import jp.webpay.android.model.CardType;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.validator.CardNumberValidator;
 
@@ -14,7 +15,7 @@ public class NumberField extends MultiColumnCardField {
     public static final String SEPARATOR = " ";
     private String mValidNumber;
     private OnCardTypeChangeListener mOnCardTypeChangeListener;
-    private String mCurrentCardType;
+    private CardType mCurrentCardType;
 
     public NumberField(Context context) {
         super(context, SEPARATOR);
@@ -74,27 +75,27 @@ public class NumberField extends MultiColumnCardField {
         return visibleText;
     }
 
-    private String expectCardType(String number) {
+    private CardType expectCardType(String number) {
         if (Pattern.matches("4[0-9].*", number)) {
-            return "Visa";
+            return CardType.VISA;
         }
         if (Pattern.matches("3[47].*", number)) {
-            return "American Express";
+            return CardType.AMERICAN_EXPRESS;
         }
         if (Pattern.matches("5[1-5].*", number)) {
-            return "MasterCard";
+            return CardType.MASTERCARD;
         }
         if (Pattern.matches("3[0689].*", number)) {
-            return "Diners Club";
+            return CardType.DINERS_CLUB;
         }
         if (Pattern.matches("35.*", number)) {
-            return "JCB";
+            return CardType.JCB;
         }
         return null;
     }
 
     private void notifyCardTypeChange(String number) {
-        String cardType = expectCardType(number);
+        CardType cardType = expectCardType(number);
         boolean isSame = mCurrentCardType == null ? cardType == null : mCurrentCardType.equals(cardType);
         if (!isSame) {
             mCurrentCardType = cardType;
@@ -113,6 +114,6 @@ public class NumberField extends MultiColumnCardField {
     }
 
     public static interface OnCardTypeChangeListener {
-        public void onCardTypeChange(String cardType);
+        public void onCardTypeChange(CardType cardType);
     }
 }

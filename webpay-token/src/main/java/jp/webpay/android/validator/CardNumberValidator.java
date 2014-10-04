@@ -1,5 +1,7 @@
 package jp.webpay.android.validator;
 
+import jp.webpay.android.model.CardType;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -17,16 +19,14 @@ import java.util.regex.Pattern;
  * </ul>
  */
 public class CardNumberValidator {
-    private static final List<String> ALL_CARD_TYPES =
-            Arrays.asList("Visa", "MasterCard", "JCB", "American Express", "Diners Club");
     private static final char SEPARATOR = '-';
-    private static final Map<String, Pattern> CARD_TYPE_REGEXP = new HashMap<String, Pattern>();
+    private static final Map<CardType, Pattern> CARD_TYPE_REGEXP = new HashMap<CardType, Pattern>();
     static {
-        CARD_TYPE_REGEXP.put("Visa", Pattern.compile("\\A4[0-9]{12}(?:[0-9]{3})?\\z"));
-        CARD_TYPE_REGEXP.put("American Express", Pattern.compile("\\A3[47][0-9]{13}\\z"));
-        CARD_TYPE_REGEXP.put("MasterCard", Pattern.compile("\\A5[1-5][0-9]{14}\\z"));
-        CARD_TYPE_REGEXP.put("JCB", Pattern.compile("\\A(?:2131|1800|35\\d{3})\\d{11}\\z"));
-        CARD_TYPE_REGEXP.put("Diners Club", Pattern.compile("\\A3(?:0[0-5]|[68][0-9])[0-9]{11}\\z"));
+        CARD_TYPE_REGEXP.put(CardType.VISA, Pattern.compile("\\A4[0-9]{12}(?:[0-9]{3})?\\z"));
+        CARD_TYPE_REGEXP.put(CardType.AMERICAN_EXPRESS, Pattern.compile("\\A3[47][0-9]{13}\\z"));
+        CARD_TYPE_REGEXP.put(CardType.MASTERCARD, Pattern.compile("\\A5[1-5][0-9]{14}\\z"));
+        CARD_TYPE_REGEXP.put(CardType.JCB, Pattern.compile("\\A(?:2131|1800|35\\d{3})\\d{11}\\z"));
+        CARD_TYPE_REGEXP.put(CardType.DINERS_CLUB, Pattern.compile("\\A3(?:0[0-5]|[68][0-9])[0-9]{11}\\z"));
     }
 
     /**
@@ -35,7 +35,7 @@ public class CardNumberValidator {
      * @return true if card number is valid
      */
     public static boolean isValid(String number) {
-        return isValid(number, ALL_CARD_TYPES);
+        return isValid(number, Arrays.asList(CardType.values()));
     }
 
     /**
@@ -44,7 +44,7 @@ public class CardNumberValidator {
      * @param cardTypes    List of available card types
      * @return true if card number is valid
      */
-    public static boolean isValid(String number, List<String> cardTypes) {
+    public static boolean isValid(String number, List<CardType> cardTypes) {
         if (cardTypes == null)
             return false;
 
@@ -90,8 +90,8 @@ public class CardNumberValidator {
         return (s1 + s2) % 10 == 0;
     }
 
-    private static boolean matchNumberRegexp(String number, List<String> cardTypes) {
-        for (String cardType : cardTypes) {
+    private static boolean matchNumberRegexp(String number, List<CardType> cardTypes) {
+        for (CardType cardType : cardTypes) {
             Pattern pattern = CARD_TYPE_REGEXP.get(cardType);
             if (pattern == null)
                 continue;

@@ -58,7 +58,7 @@ public class WebPayTest {
         assertEquals("0000000000000000000000000000000000000000", card.fingerprint);
         assertEquals("TEST USER", card.name);
         assertEquals("JP", card.country);
-        assertEquals("Visa", card.type);
+        assertEquals(CardType.VISA, card.type);
         assertEquals("pass", card.cvcCheck);
         assertEquals("0123", card.last4);
     }
@@ -211,7 +211,8 @@ public class WebPayTest {
         Robolectric.addPendingHttpResponse(ApiSample.availabilityResponse);
         AccountAvailability availability = retrieveAvailabilityThenSuccess();
         assertThat(availability.currenciesSupported, contains("jpy"));
-        assertThat(availability.cardTypesSupported, contains("Visa", "MasterCard", "JCB", "American Express", "Diners Club"));
+        assertThat(availability.cardTypesSupported,
+                contains(CardType.VISA, CardType.MASTERCARD, CardType.JCB, CardType.AMERICAN_EXPRESS, CardType.DINERS_CLUB));
     }
 
     @Test

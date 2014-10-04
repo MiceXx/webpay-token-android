@@ -74,7 +74,7 @@ public class RawCard {
         return CardNumberValidator.isValid(number);
     }
 
-    public boolean numberIsValid(List<String> cardTypes) {
+    public boolean numberIsValid(List<CardType> cardTypes) {
         return CardNumberValidator.isValid(number, cardTypes);
     }
 }

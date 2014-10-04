@@ -4,7 +4,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StoredCard {
-    public final String object, fingerprint, name, country, type, cvcCheck, last4;
+    public final String object;
+    public final String fingerprint;
+    public final String name;
+    public final String country;
+    public final CardType type;
+    public final String cvcCheck;
+    public final String last4;
     public final Integer expYear, expMonth;
 
     public static StoredCard fromJson(JSONObject json) throws JSONException {
@@ -15,13 +21,13 @@ public class StoredCard {
                 json.getString("fingerprint"),
                 json.getString("name"),
                 json.getString("country"),
-                json.getString("type"),
+                CardType.byName(json.getString("type")),
                 json.getString("cvc_check"),
                 json.getString("last4"));
     }
 
     StoredCard(String object, Integer expYear, Integer expMonth, String fingerprint,
-                      String name, String country, String type, String cvcCheck, String last4) {
+                      String name, String country, CardType type, String cvcCheck, String last4) {
         this.object = object;
         this.fingerprint = fingerprint;
         this.name = name;

@@ -16,6 +16,7 @@ import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
 import jp.webpay.android.WebPay;
 import jp.webpay.android.WebPayListener;
+import jp.webpay.android.model.CardType;
 import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.Token;
@@ -23,7 +24,6 @@ import jp.webpay.android.ui.field.BaseCardField;
 import jp.webpay.android.ui.field.NumberField;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -34,12 +34,12 @@ import java.util.Map;
 public class CardDialogFragment extends DialogFragment implements NumberField.OnCardTypeChangeListener {
     private static final String ARG_PUBLISHABLE_KEY = "publishableKey";
     private static final String TAG = "webpay:CardDialogFragment";
-    private static final Map<String, Integer> CARD_TYPE_TO_DRAWABLE = new HashMap<String, Integer>() {{
-        put("Visa", R.drawable.card_visa);
-        put("American Express", R.drawable.card_amex);
-        put("MasterCard", R.drawable.card_master);
-        put("JCB", R.drawable.card_jcb);
-        put("Diners Club", R.drawable.card_diners);
+    private static final Map<CardType, Integer> CARD_TYPE_TO_DRAWABLE = new HashMap<CardType, Integer>() {{
+        put(CardType.VISA, R.drawable.card_visa);
+        put(CardType.AMERICAN_EXPRESS, R.drawable.card_amex);
+        put(CardType.MASTERCARD, R.drawable.card_master);
+        put(CardType.JCB, R.drawable.card_jcb);
+        put(CardType.DINERS_CLUB, R.drawable.card_diners);
     }};
     private WebPay mWebPay;
     private WebPayTokenCompleteListener mListener;
@@ -210,7 +210,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     }
 
     @Override
-    public void onCardTypeChange(String cardType) {
+    public void onCardTypeChange(CardType cardType) {
         ImageView icon = (ImageView) getDialog().findViewById(R.id.cardNumberTypeIcon);
         if (cardType == null) {
             icon.setImageDrawable(null);
@@ -219,7 +219,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         }
 
         ImageButton helpButton = (ImageButton) getDialog().findViewById(R.id.cardCvcHelpButton);
-        if ("American Express".equals(cardType)) {
+        if (CardType.AMERICAN_EXPRESS.equals(cardType)) {
             helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc_amex));
         } else {
             helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc));
