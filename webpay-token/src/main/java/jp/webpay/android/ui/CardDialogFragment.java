@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
 import jp.webpay.android.WebPay;
@@ -23,8 +24,7 @@ import jp.webpay.android.model.Token;
 import jp.webpay.android.ui.field.BaseCardField;
 import jp.webpay.android.ui.field.NumberField;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is only used from WebPayTokenFragment to create tokens. This
@@ -33,6 +33,7 @@ import java.util.Map;
  */
 public class CardDialogFragment extends DialogFragment implements NumberField.OnCardTypeChangeListener {
     private static final String ARG_PUBLISHABLE_KEY = "publishableKey";
+    private static final String ARG_SUPPORTED_CARD_TYPES = "supportedCardTypes";
     private static final String TAG = "webpay:CardDialogFragment";
     private static final Map<CardType, Integer> CARD_TYPE_TO_DRAWABLE = new HashMap<CardType, Integer>() {{
         put(CardType.VISA, R.drawable.card_visa);
@@ -44,6 +45,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     private WebPay mWebPay;
     private WebPayTokenCompleteListener mListener;
     private Throwable mLastException;
+    private ArrayList<CardType> mSupportedCardTypes;
 
     /**
      * Use this factory method to create a new instance of
@@ -52,13 +54,23 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
      * This is private, not intended to be called by other than
      * {@link jp.webpay.android.ui.WebPayTokenFragment}.
      *
-     * @param publishableKey WebPay publishable key to generate token
+     * @param publishableKey        WebPay publishable key to generate token
+     * @param supportedCardTypes    supported card types retrieved from availability API. nullable.
      * @return A new instance of dialog fragment
      */
-    public static CardDialogFragment newInstance(String publishableKey) {
+    public static CardDialogFragment newInstance(String publishableKey, List<CardType> supportedCardTypes) {
         CardDialogFragment fragment = new CardDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PUBLISHABLE_KEY, publishableKey);
+
+        if (supportedCardTypes != null) {
+            String typeNames[] = new String[supportedCardTypes.size()];
+            for (int i = 0; i < supportedCardTypes.size(); i++) {
+                typeNames[i] = supportedCardTypes.get(i).toString();
+            }
+            args.putStringArray(ARG_SUPPORTED_CARD_TYPES, typeNames);
+        }
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,8 +82,20 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String publishableKey = getArguments().getString(ARG_PUBLISHABLE_KEY);
+        Bundle arguments = getArguments();
+        String publishableKey = arguments.getString(ARG_PUBLISHABLE_KEY);
         mWebPay = new WebPay(publishableKey);
+
+        String typeNames[] = arguments.getStringArray(ARG_SUPPORTED_CARD_TYPES);
+        mSupportedCardTypes = new ArrayList<CardType>();
+        if (typeNames == null) {
+            // allow all brands if no specification
+            mSupportedCardTypes.addAll(Arrays.asList(CardType.values()));
+        } else {
+            for (String name : typeNames) {
+                mSupportedCardTypes.add(CardType.valueOf(name));
+            }
+        }
     }
 
     @Override
@@ -119,6 +143,8 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
 
         ((NumberField)dialog.findViewById(R.id.cardNumberField)).setOnCardTypeChangeListener(this);
         onCardTypeChange(null); // initialize
+
+        showAvailableCardTypes();
     }
 
     @Override
@@ -135,6 +161,15 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void showAvailableCardTypes() {
+        LinearLayout iconList = (LinearLayout)getDialog().findViewById(R.id.cardTypeIconList);
+        for (CardType cardType : mSupportedCardTypes) {
+            ImageView view = new ImageView(getActivity());
+            view.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
+            iconList.addView(view);
+        }
     }
 
     private void sendCardInfoToWebPay() {

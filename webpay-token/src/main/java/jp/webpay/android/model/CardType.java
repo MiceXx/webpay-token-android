@@ -1,5 +1,9 @@
 package jp.webpay.android.model;
 
+/**
+ * This enum represents card types (brands) that WebPay supports.
+ * Changing the name breaks compatibility, be careful.
+ */
 public enum CardType {
     VISA("Visa"),
     MASTERCARD("MasterCard"),

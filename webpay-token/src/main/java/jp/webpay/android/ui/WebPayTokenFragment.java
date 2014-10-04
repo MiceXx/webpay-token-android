@@ -8,7 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import jp.webpay.android.R;
+import jp.webpay.android.WebPay;
+import jp.webpay.android.WebPayListener;
+import jp.webpay.android.model.AccountAvailability;
+import jp.webpay.android.model.CardType;
 import jp.webpay.android.model.Token;
+
+import java.util.List;
 
 /**
  * A fragment to create WebPay client-side token.
@@ -25,6 +31,7 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
 
     private WebPayTokenCompleteListener mListener;
     private String mPublishableKey;
+    private List<CardType> mCardTypesSupported;
 
     /**
      * Use this factory method to create a new instance of
@@ -56,6 +63,7 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
             throw new IllegalArgumentException("WebPayTokenFragment requires publishableKey to present. " +
                     "You can find the key starts with \"test_public_\" in WebPay settings page.");
         }
+        retrieveAvailability();
     }
 
     @Override
@@ -66,7 +74,8 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CardDialogFragment fragment = CardDialogFragment.newInstance(mPublishableKey);
+                // cardTypesSupported is best-effort. Continue even if null.
+                CardDialogFragment fragment = CardDialogFragment.newInstance(mPublishableKey, mCardTypesSupported);
                 fragment.show(getChildFragmentManager(), CARD_DIALOG_FRAGMENT_TAG);
             }
         });
@@ -101,5 +110,20 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
     @Override
     public void onCancelled(Throwable throwable) {
         mListener.onCancelled(throwable);
+    }
+
+    private void retrieveAvailability() {
+        new WebPay(mPublishableKey).retrieveAvailability(new WebPayListener<AccountAvailability>() {
+            @Override
+            public void onCreate(AccountAvailability result) {
+                mCardTypesSupported = result.cardTypesSupported;
+            }
+
+            @Override
+            public void onException(Throwable cause) {
+                // ignore failures
+                // card types supported is not necessary for creating a token
+            }
+        });
     }
 }

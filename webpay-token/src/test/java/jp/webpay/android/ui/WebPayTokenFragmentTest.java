@@ -2,8 +2,10 @@ package jp.webpay.android.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import jp.webpay.android.ApiSample;
 import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
@@ -18,6 +20,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowAlertDialog;
+import org.robolectric.shadows.ShadowLinearLayout;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -41,6 +44,8 @@ public class WebPayTokenFragmentTest {
 
     @Before
     public void setUp() throws Exception {
+        Robolectric.addPendingHttpResponse(ApiSample.availabilityVMResponse);
+
         activity = Robolectric.buildActivity(FragmentContainerActivity.class).create().visible().start().get();
         latch = new CountDownLatch(1);
         activity.setLatch(latch);
@@ -56,6 +61,17 @@ public class WebPayTokenFragmentTest {
     public void testFragmentPlacesPayButtonOnActivity() throws Exception {
         assertNotNull(fragment);
         assertEquals(getString(R.string.token_fragment_open_dialog), openDialogButton.getText());
+    }
+
+    @Test
+    public void testFragmentShowsAvailableCardTypesFromApi() throws Exception {
+        LinearLayout layout = (LinearLayout) dialog.findViewById(R.id.cardTypeIconList);
+        assertEquals(2, layout.getChildCount());
+
+        HttpRequest request = Robolectric.getSentHttpRequest(0);
+        assertEquals("GET", request.getRequestLine().getMethod());
+        assertEquals("https://api.webpay.jp/v1/account/availability", request.getRequestLine().getUri());
+        assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
     }
 
     @Test
@@ -83,7 +99,7 @@ public class WebPayTokenFragmentTest {
                 "\"exp_month\":7," +
                 "\"exp_year\":" + (currentYear + 1) +
                 "}}";
-        HttpRequest request = Robolectric.getSentHttpRequest(0);
+        HttpRequest request = Robolectric.getSentHttpRequest(1);
         assertEquals("POST", request.getRequestLine().getMethod());
         assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
         assertEquals("application/json", request.getFirstHeader("Content-Type").getValue());
@@ -102,7 +118,7 @@ public class WebPayTokenFragmentTest {
         Robolectric.addPendingHttpResponse(ApiSample.tokenResponse);
         generateTokenFromForm();
 
-        HttpRequest request = Robolectric.getSentHttpRequest(0);
+        HttpRequest request = Robolectric.getSentHttpRequest(1);
         assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
         assertEquals("ja", request.getFirstHeader("Accept-Language").getValue());
     }

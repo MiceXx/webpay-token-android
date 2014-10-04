@@ -49,6 +49,18 @@ public class ApiSample {
                     "}",
                     new BasicHeader("Content-Type", "application/json"));
 
+    public static final HttpResponse availabilityVMResponse =
+            new TestHttpResponse(200, "{\n" +
+                    "  \"currencies_supported\": [\n" +
+                    "    \"jpy\"\n" +
+                    "  ],\n" +
+                    "  \"card_types_supported\": [\n" +
+                    "    \"Visa\",\n" +
+                    "    \"MasterCard\"\n" +
+                    "  ]\n" +
+                    "}",
+                    new BasicHeader("Content-Type", "application/json"));
+
     public static final HttpResponse cardErrorResponse =
             new TestHttpResponse(402, "{\n" +
                     "  \"error\": {\n" +
