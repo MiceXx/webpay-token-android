@@ -19,6 +19,8 @@ import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.Token;
 import jp.webpay.android.ui.field.BaseCardField;
 
+import java.util.Locale;
+
 /**
  * This class is only used from WebPayTokenFragment to create tokens. This
  * dialog is responsible for accept card information, validate it, creating
@@ -127,6 +129,7 @@ public class CardDialogFragment extends DialogFragment {
         }
         Log.v(TAG, card.toJson().toString());
 
+        updateRequestLanguage();
         mWebPay.createToken(card, new WebPayListener<Token>() {
             @Override
             public void onCreate(Token result) {
@@ -141,6 +144,14 @@ public class CardDialogFragment extends DialogFragment {
                 showWebPayErrorAlert(cause);
             }
         });
+    }
+
+    private void updateRequestLanguage() {
+        if (getResources().getConfiguration().locale.getISO3Language().equals("jpn")) {
+            mWebPay.setLanguage("ja");
+        } else {
+            mWebPay.setLanguage("en");
+        }
     }
 
     /**

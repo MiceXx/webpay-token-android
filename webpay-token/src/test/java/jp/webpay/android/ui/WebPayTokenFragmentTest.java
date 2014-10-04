@@ -20,6 +20,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowAlertDialog;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -87,8 +88,23 @@ public class WebPayTokenFragmentTest {
         assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
         assertEquals("application/json", request.getFirstHeader("Content-Type").getValue());
         assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
+        assertEquals("en", request.getFirstHeader("Accept-Language").getValue());
         String requestBody = IOUtil.toString(((HttpPost) request).getEntity().getContent(), "UTF-8");
         assertEquals(rawCardBodyString, requestBody);
+    }
+
+    @Test
+    @Config(qualifiers = "ja-normal-port-hdpi")
+    public void testFragmentUsesUILanguage() throws Exception {
+        shadowOf(activity.getResources().getConfiguration()).setLocale(new Locale("ja"));
+        assertEquals("カードで支払う", openDialogButton.getText());
+
+        Robolectric.addPendingHttpResponse(ApiSample.tokenResponse);
+        generateTokenFromForm();
+
+        HttpRequest request = Robolectric.getSentHttpRequest(0);
+        assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
+        assertEquals("ja", request.getFirstHeader("Accept-Language").getValue());
     }
 
     @Test
