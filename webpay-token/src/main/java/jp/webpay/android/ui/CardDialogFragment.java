@@ -146,7 +146,9 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
             }
         });
 
-        ((NumberField)dialog.findViewById(R.id.cardNumberField)).setOnCardTypeChangeListener(this);
+        NumberField numberField = (NumberField) dialog.findViewById(R.id.cardNumberField);
+        numberField.setOnCardTypeChangeListener(this);
+        numberField.setCardTypesSupported(mSupportedCardTypes);
         onCardTypeChange(null); // initialize
 
         showAvailableCardTypes();

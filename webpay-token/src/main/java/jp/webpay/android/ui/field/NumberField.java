@@ -8,6 +8,7 @@ import jp.webpay.android.model.CardType;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.validator.CardNumberValidator;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class NumberField extends MultiColumnCardField {
@@ -15,6 +16,7 @@ public class NumberField extends MultiColumnCardField {
     private String mValidNumber;
     private OnCardTypeChangeListener mOnCardTypeChangeListener;
     private CardType mCurrentCardType;
+    private List<CardType> mCardTypesSupported;
 
     public NumberField(Context context) {
         super(context, SEPARATOR);
@@ -39,7 +41,7 @@ public class NumberField extends MultiColumnCardField {
     @Override
     protected boolean validateCurrentValue() {
         String value = getText().toString().replace(SEPARATOR, "");
-        if (CardNumberValidator.isValid(value)) {
+        if (CardNumberValidator.isValid(value, mCardTypesSupported)) {
             mValidNumber = value;
             return true;
         } else {
@@ -110,6 +112,10 @@ public class NumberField extends MultiColumnCardField {
 
     public void setOnCardTypeChangeListener(OnCardTypeChangeListener mListener) {
         this.mOnCardTypeChangeListener = mListener;
+    }
+
+    public void setCardTypesSupported(List<CardType> cardTypesSupported) {
+        this.mCardTypesSupported = cardTypesSupported;
     }
 
     public static interface OnCardTypeChangeListener {

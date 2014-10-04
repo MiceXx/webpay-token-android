@@ -10,6 +10,7 @@ import jp.webpay.android.ApiSample;
 import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
 import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.ui.field.NumberField;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpPost;
 import org.codehaus.plexus.util.IOUtil;
@@ -72,6 +73,24 @@ public class WebPayTokenFragmentTest {
         assertEquals("GET", request.getRequestLine().getMethod());
         assertEquals("https://api.webpay.jp/v1/account/availability", request.getRequestLine().getUri());
         assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
+    }
+
+    @Test
+    public void testFragmentHandleNotSupportedCardTypeAsInvalid() throws Exception {
+        LinearLayout layout = (LinearLayout) dialog.findViewById(R.id.cardTypeIconList);
+        assertEquals(2, layout.getChildCount());
+
+        NumberField numberField = (NumberField) dialog.findViewById(R.id.cardNumberField);
+
+        numberField.setText("4242424242424242"); // Visa is ok
+        numberField.clearFocus();
+        assertEquals("4242 4242 4242 4242", numberField.getText().toString());
+        assertNull(numberField.getError());
+
+        numberField.setText("3530111333300000"); // JCB is unacceptable
+        numberField.clearFocus();
+        assertEquals("3530 1113 3330 0000", numberField.getText().toString());
+        assertThat(numberField.getError().toString(), containsString("Incorrect"));
     }
 
     @Test
