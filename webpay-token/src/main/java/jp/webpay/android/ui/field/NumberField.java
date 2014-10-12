@@ -8,6 +8,7 @@ import jp.webpay.android.model.CardType;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.validator.CardNumberValidator;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -57,6 +58,15 @@ public class NumberField extends MultiColumnCardField {
 
     @Override
     protected String formatVisibleText(String current) {
+        CardType cardType = expectCardType(current);
+        List<Integer> separatorIndex;
+        if (cardType == CardType.AMERICAN_EXPRESS
+                || cardType == CardType.DINERS_CLUB) {
+            separatorIndex = Arrays.asList(4, 10);
+        } else {
+            separatorIndex = Arrays.asList(4, 8, 12);
+        }
+
         StringBuilder builder = new StringBuilder();
         int validChars = 0;
         for (int i = 0; i < current.length(); i++) {
@@ -66,7 +76,8 @@ public class NumberField extends MultiColumnCardField {
                 validChars += 1;
                 if (validChars >= 16)
                     break;
-                if (validChars % 4 == 0) {
+
+                if (separatorIndex.contains(validChars)) {
                     builder.append(SEPARATOR);
                 }
             }

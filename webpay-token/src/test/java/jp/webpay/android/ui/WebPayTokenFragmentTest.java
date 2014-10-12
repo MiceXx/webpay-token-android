@@ -87,9 +87,9 @@ public class WebPayTokenFragmentTest {
         assertEquals("4242 4242 4242 4242", numberField.getText().toString());
         assertNull(numberField.getError());
 
-        numberField.setText("3530111333300000"); // JCB is unacceptable
+        numberField.setText("378282246310005"); // amex is unacceptable
         numberField.clearFocus();
-        assertEquals("3530 1113 3330 0000", numberField.getText().toString());
+        assertEquals("3782 822463 10005", numberField.getText().toString());
         assertThat(numberField.getError().toString(), containsString("Incorrect"));
     }
 
