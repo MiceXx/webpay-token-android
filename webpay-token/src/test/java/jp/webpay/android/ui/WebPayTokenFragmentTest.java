@@ -13,7 +13,7 @@ import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.ui.field.NumberField;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpPost;
-import org.codehaus.plexus.util.IOUtil;
+import org.apache.maven.artifact.ant.shaded.IOUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
