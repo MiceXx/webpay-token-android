@@ -3,7 +3,7 @@ package jp.webpay.android.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.widget.LinearLayout;
-import jp.webpay.android.R;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +11,11 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.junit.Assert.*;
+import jp.webpay.android.R;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 // This test is to check that Activities can directly use CardDialogFragment.
 // Test logic and other behaviors in WebPayTokenFragmentTest.
@@ -43,8 +47,9 @@ public class CardDialogFragmentTest {
     public void testFragmentCallbackOnCancel() throws Exception {
         assertFalse(activity.isCancelled());
         assertTrue(dialogFragment.isAdded());
+        assertTrue(dialog.isShowing());
         dialog.getButton(Dialog.BUTTON_NEGATIVE).performClick();
         assertTrue(activity.isCancelled());
-        assertFalse(dialogFragment.isAdded());
+        assertFalse(dialog.isShowing());
     }
 }
