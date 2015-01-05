@@ -293,12 +293,10 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageView descriptionImageView = new ImageView(getActivity());
-                descriptionImageView.setImageDrawable(getResources().getDrawable(drawableId));
+                View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_cvc_help, null);
+                ((ImageView) view.findViewById(R.id.cvc_help)).setImageDrawable(getResources().getDrawable(drawableId));
                 new AlertDialog.Builder(getActivity())
-                        .setView(descriptionImageView)
-                        .setPositiveButton(android.R.string.yes, null)
-                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setView(view)
                         .show();
             }
         };
