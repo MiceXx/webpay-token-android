@@ -14,6 +14,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
 import jp.webpay.android.WebPay;
@@ -24,8 +31,6 @@ import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.Token;
 import jp.webpay.android.ui.field.BaseCardField;
 import jp.webpay.android.ui.field.NumberField;
-
-import java.util.*;
 
 /**
  * This class is to create tokens from users input. WebPayTokenFragment is recommended for most users, but
@@ -113,7 +118,6 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         builder.setView(inflater.inflate(R.layout.dialog_card, null))
-                .setTitle(R.string.card_payment_info_title)
                 .setPositiveButton(R.string.card_send, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // This is placeholder.
