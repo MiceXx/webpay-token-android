@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
+
 import jp.webpay.android.R;
 import jp.webpay.android.model.RawCard;
 
@@ -42,6 +43,15 @@ public abstract class BaseCardField extends EditText
         }
     }
 
+    @Override
+    public void setError(CharSequence error) {
+        if (error == null) {
+            setTextColor(getResources().getColor(android.R.color.black));
+        } else {
+            setTextColor(getResources().getColor(R.color.error_text));
+        }
+    }
+
     /**
      * Validate the current value and update {@code mValidFoo} in subclass.
      * Show error message on the field if invalid.
@@ -50,7 +60,7 @@ public abstract class BaseCardField extends EditText
      */
     public boolean validate() {
         mValid = validateCurrentValue();
-        if (mValid) {
+        if (mValid || getText().toString().equals("")) {
             setError(null);
         } else {
             setError(getResources().getString(R.string.field_error_default));

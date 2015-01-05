@@ -2,15 +2,10 @@ package jp.webpay.android.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import jp.webpay.android.ApiSample;
-import jp.webpay.android.ErrorResponseException;
-import jp.webpay.android.R;
-import jp.webpay.android.model.ErrorResponse;
-import jp.webpay.android.ui.field.NumberField;
+
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.maven.artifact.ant.shaded.IOUtil;
@@ -21,15 +16,24 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowAlertDialog;
-import org.robolectric.shadows.ShadowLinearLayout;
 
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import jp.webpay.android.ApiSample;
+import jp.webpay.android.ErrorResponseException;
+import jp.webpay.android.R;
+import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.ui.field.NumberField;
+
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
 
 @Config(manifest = "./src/main/AndroidManifest.xml", emulateSdk = 18)
@@ -85,12 +89,12 @@ public class WebPayTokenFragmentTest {
         numberField.setText("4242424242424242"); // Visa is ok
         numberField.clearFocus();
         assertEquals("4242 4242 4242 4242", numberField.getText().toString());
-        assertNull(numberField.getError());
+        assertEquals(numberField.getCurrentTextColor(), activity.getResources().getColor(android.R.color.black));
 
         numberField.setText("378282246310005"); // amex is unacceptable
         numberField.clearFocus();
         assertEquals("3782 822463 10005", numberField.getText().toString());
-        assertThat(numberField.getError().toString(), containsString("Incorrect"));
+        assertEquals(numberField.getCurrentTextColor(), activity.getResources().getColor(R.color.error_text));
     }
 
     @Test
