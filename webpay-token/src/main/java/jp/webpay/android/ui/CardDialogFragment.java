@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -114,10 +114,8 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     @SuppressLint("InflateParams")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        builder.setView(inflater.inflate(R.layout.dialog_card, null))
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.WebPayDialogTheme));
+        builder.setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_card, null))
                 .setPositiveButton(R.string.card_send, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // This is placeholder.
@@ -194,7 +192,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
             ImageView view = new ImageView(getActivity());
             view.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, 0, 10, 0);
+            lp.setMargins(0, 0, 5, 0);
             view.setLayoutParams(lp);
             iconList.addView(view);
         }
@@ -295,7 +293,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
             public void onClick(View v) {
                 View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_cvc_help, null);
                 ((ImageView) view.findViewById(R.id.cvc_help)).setImageDrawable(getResources().getDrawable(drawableId));
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.WebPayDialogTheme))
                         .setView(view)
                         .show();
             }

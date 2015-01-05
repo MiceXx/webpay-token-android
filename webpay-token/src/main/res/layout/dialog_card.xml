@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1">
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,6 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/cardNumberField"
+                android:layout_centerVertical="true"
                 android:contentDescription="@string/card_number_type_icon_description"/>
         </RelativeLayout>
 
@@ -117,6 +118,7 @@
                         android:clickable="false"
                         android:src="@android:drawable/ic_menu_help"
                         android:background="@android:color/transparent"
+                        android:layout_centerVertical="true"
                         android:contentDescription="@string/card_cvc_help_description"/>
 
                 </RelativeLayout>
