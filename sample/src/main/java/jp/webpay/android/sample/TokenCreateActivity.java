@@ -18,7 +18,7 @@ public class TokenCreateActivity extends FragmentActivity implements WebPayToken
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_token_create);
 
-        WebPayTokenFragment tokenFragment = WebPayTokenFragment.newInstance("test_secret_eHn4TTgsGguBcW764a2KA8Yd");
+        WebPayTokenFragment tokenFragment = WebPayTokenFragment.newInstance("test_public_19DdUs78k2lV8PO8ZCaYX3JT");
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.webpay_token_button_fragment, tokenFragment)
                 .commit();
