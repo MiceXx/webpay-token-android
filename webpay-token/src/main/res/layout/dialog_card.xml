@@ -101,7 +101,7 @@
                         android:layout_alignRight="@id/cardCvcField"
                         android:id="@+id/cardCvcHelpButton"
                         android:clickable="false"
-                        android:src="@android:drawable/ic_menu_help"
+                        android:src="@drawable/cvc_help_button"
                         android:background="@android:color/transparent"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="4dp"
