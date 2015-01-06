@@ -264,10 +264,8 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         }
 
         new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.tokenize_error_title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.yes, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
 
