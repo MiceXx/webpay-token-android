@@ -188,6 +188,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
 
     private void showAvailableCardTypes() {
         LinearLayout iconList = (LinearLayout)getDialog().findViewById(R.id.cardTypeIconList);
+        iconList.removeAllViews();
         for (CardType cardType : mSupportedCardTypes) {
             ImageView view = new ImageView(getActivity());
             view.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
