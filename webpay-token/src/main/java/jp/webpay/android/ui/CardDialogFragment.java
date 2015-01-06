@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -115,23 +114,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.WebPayDialogTheme));
-        builder.setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_card, null))
-                .setPositiveButton(R.string.card_send, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // This is placeholder.
-                        // Do nothing here and override button's onClick listener
-                        // so that the dialog does not dismiss until a token is
-                        // successfully generated.
-                        // See AlertController.mButtonHandler
-                        // http://stackoverflow.com/questions/13746412/prevent-dialogfragment-from-dismissing-when-button-is-clicked
-                    }
-                })
-                .setNegativeButton(R.string.card_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onCancelled(mLastException);
-                    }
-                });
-
+        builder.setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_card, null));
         return builder.create();
     }
 
@@ -143,12 +126,20 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         if (dialog == null)
             return;
 
-        // override default on-click listener not to dismiss automatically
-        Button sendButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        Button sendButton = (Button) dialog.findViewById(R.id.button_sumbmit);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendCardInfoToWebPay();
+            }
+        });
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.button_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                mListener.onCancelled(mLastException);
             }
         });
 

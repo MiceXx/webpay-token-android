@@ -122,6 +122,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp">
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="14sp"
+                android:textColor="#80000000"
+                android:background="@drawable/abc_item_background_holo_light"
+                android:text="@string/card_cancel" />
+
+            <Button
+                android:id="@+id/button_sumbmit"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="14sp"
+                android:text="@string/card_send" />
+         </LinearLayout>
     </LinearLayout>
 </ScrollView>
 
