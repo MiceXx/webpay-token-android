@@ -27,7 +27,9 @@ android {
 }
 
 dependencies {
+    //noinspection GradleDynamicVersion
     compile 'com.android.support:appcompat-v7:21.0.+'
+    //noinspection GradleDynamicVersion
     compile 'com.android.support:support-v4:21.0.+'
 
     androidTestCompile('org.robolectric:robolectric:2.4') {
