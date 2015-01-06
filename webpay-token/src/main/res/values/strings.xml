@@ -16,6 +16,7 @@
     <string name="field_expiry_hint">MM / YYYY</string>
     <string name="field_name_hint">TARO YAMADA</string>
     <string name="field_number_hint">1234 5678 9012 3456</string>
+    <string name="field_cvc_hint">123</string>
 
     <string name="token_fragment_open_dialog">Pay with card</string>
     <string name="token_fragment_token_generated">Payment info provided</string>

@@ -6,6 +6,7 @@ import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 
+import jp.webpay.android.R;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.validator.CvcValidator;
 
@@ -32,7 +33,8 @@ public class CvcField extends BaseCardField {
         setInputType(InputType.TYPE_CLASS_NUMBER);
         // TYPE_NUMBER_VARIATION_PASSWORD is unavailable in SDK 8 to 10
         setTransformationMethod(PasswordTransformationMethod.getInstance());
-        setFilters(new InputFilter[] {new InputFilter.LengthFilter(MAX_LENGTH)});
+        setHint(R.string.field_cvc_hint);
+        setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_LENGTH)});
     }
 
     @Override
