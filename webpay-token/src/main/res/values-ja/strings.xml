@@ -13,7 +13,7 @@
     <string name="card_we_accept">対応ブランド</string>
 
     <string name="field_error_default">カードを再度ご確認ください。</string>
-    <string name="field_expiry_hint">MM / YYYY</string>
+    <string name="field_expiry_hint">月 / 年</string>
     <string name="field_name_hint">TARO YAMADA</string>
     <string name="field_number_hint">1234 5678 9012 3456</string>
 
