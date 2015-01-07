@@ -104,11 +104,11 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         mWebPay = new WebPay(publishableKey);
 
         String typeNames[] = arguments.getStringArray(ARG_SUPPORTED_CARD_TYPES);
-        mSupportedCardTypes = new ArrayList<CardType>();
+
         if (typeNames == null) {
-            // allow all brands if no specification
-            mSupportedCardTypes.addAll(Arrays.asList(CardType.values()));
+            mSupportedCardTypes = null;
         } else {
+            mSupportedCardTypes = new ArrayList<CardType>();
             for (String name : typeNames) {
                 mSupportedCardTypes.add(CardType.valueOf(name));
             }
@@ -152,7 +152,12 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
 
         NumberField numberField = (NumberField) dialog.findViewById(R.id.cardNumberField);
         numberField.setOnCardTypeChangeListener(this);
-        numberField.setCardTypesSupported(mSupportedCardTypes);
+
+        // allow all brands if no specification
+        if (mSupportedCardTypes == null)
+            numberField.setCardTypesSupported(Arrays.asList(CardType.values()));
+        else
+            numberField.setCardTypesSupported(mSupportedCardTypes);
         if (numberField.getText().toString().equals("")) {
             onCardTypeChange(null); // initialize
         }
@@ -207,15 +212,23 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     }
 
     private void showAvailableCardTypes() {
+        View label = getDialog().findViewById(R.id.cardTypeLabel);
         LinearLayout iconList = (LinearLayout)getDialog().findViewById(R.id.cardTypeIconList);
         iconList.removeAllViews();
-        for (CardType cardType : mSupportedCardTypes) {
-            ImageView view = new ImageView(getActivity());
-            view.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, 0, 5, 0);
-            view.setLayoutParams(lp);
-            iconList.addView(view);
+        if (mSupportedCardTypes == null) {
+            label.setVisibility(View.GONE);
+            iconList.setVisibility(View.GONE);
+        } else {
+            label.setVisibility(View.VISIBLE);
+            iconList.setVisibility(View.VISIBLE);
+            for (CardType cardType : mSupportedCardTypes) {
+                ImageView view = new ImageView(getActivity());
+                view.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(0, 0, 5, 0);
+                view.setLayoutParams(lp);
+                iconList.addView(view);
+            }
         }
     }
 
