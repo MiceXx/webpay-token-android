@@ -8,14 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="20dp">
+        android:padding="20dp">
 
         <TextView
             style="@style/card_label"
             android:id="@+id/cardTypeLabel"
-            android:layout_marginTop="18dp"
             android:layout_alignParentTop="true"
             android:text="@string/card_we_accept"/>
 
@@ -30,7 +27,6 @@
         <TextView
             style="@style/card_label"
             android:id="@+id/cardNumberLabel"
-            android:layout_marginTop="8dp"
             android:layout_below="@id/cardTypeIconList"
             android:text="@string/card_number"/>
 
@@ -38,8 +34,6 @@
             style="@style/card_edit_text"
             android:id="@+id/cardNumberField"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:layout_below="@id/cardNumberLabel"/>
 
         <ImageView
@@ -56,8 +50,8 @@
             android:id="@+id/cardExpiryAndCvC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
             android:layout_below="@id/cardNumberField"
+            android:layout_marginBottom="8dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -73,15 +67,14 @@
                     style="@style/card_edit_text"
                     android:id="@+id/cardExpiryField"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"/>
+                    android:layout_marginBottom="0dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="12dp"
                 android:orientation="vertical">
                 <TextView
                     style="@style/card_label"
@@ -95,8 +88,7 @@
                         style="@style/card_edit_text"
                         android:id="@+id/cardCvcField"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"/>
+                        android:layout_marginBottom="0dp"/>
 
                     <ImageButton
                         android:id="@+id/cardCvcHelpButton"
@@ -117,7 +109,6 @@
         <TextView
             style="@style/card_label"
             android:id="@+id/cardNameLabel"
-            android:layout_marginTop="18dp"
             android:layout_below="@id/cardExpiryAndCvC"
             android:text="@string/card_name"/>
 
@@ -125,8 +116,6 @@
             style="@style/card_edit_text"
             android:id="@+id/cardNameField"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:layout_below="@id/cardNameLabel"/>
 
         <LinearLayout
