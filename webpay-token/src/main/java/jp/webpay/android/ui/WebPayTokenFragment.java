@@ -2,6 +2,7 @@ package jp.webpay.android.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,9 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
     private String mPublishableKey;
     private List<CardType> mCardTypesSupported;
     private Button mOpenButton;
+    private boolean mHaveToken = false;
+    private @StringRes int mOpenButtonTitle = R.string.token_fragment_open_dialog;
+    private @StringRes int mCardDialogSendButtonTitle = R.string.card_send;
 
     /**
      * Use this factory method to create a new instance of
@@ -51,6 +55,33 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
 
     public WebPayTokenFragment() {
         // Required empty public constructor
+    }
+
+    /**
+     * Set button title to open card information dialog.
+     * Default is {@code jp.webpay.android.R.string.token_fragment_open_dialog}, which is "Pay with card".
+     * This method works before and after fragment is created, but has no effect if token is generated.
+     *
+     * @param openButtonTitle    title res id
+     */
+    public void setOpenButtonTitle(@StringRes int openButtonTitle) {
+        mOpenButtonTitle = openButtonTitle;
+        if (mOpenButton != null && !mHaveToken) {
+            mOpenButton.setText(openButtonTitle);
+        }
+    }
+
+    /**
+     * Set send button title of card dialog created in this token fragment.
+     * Default is {@code jp.webpay.android.R.string.card_send}, which is "Pay with card".
+     * This is delegated to {@link jp.webpay.android.ui.CardDialogFragment#setSendButtonTitle(int)}
+     * on opening dialog.
+     * So call after dialog open does not effect current one.
+     *
+     * @param cardDialogSendButtonTitle    title res id
+     */
+    public void setCardDialogSendButtonTitle(@StringRes int cardDialogSendButtonTitle) {
+        this.mCardDialogSendButtonTitle = cardDialogSendButtonTitle;
     }
 
     @Override
@@ -77,9 +108,12 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
             public void onClick(View v) {
                 // cardTypesSupported is best-effort. Continue even if null.
                 CardDialogFragment fragment = CardDialogFragment.newInstance(mPublishableKey, mCardTypesSupported);
+                fragment.setSendButtonTitle(mCardDialogSendButtonTitle);
                 fragment.show(getChildFragmentManager(), CARD_DIALOG_FRAGMENT_TAG);
             }
         });
+        if (!mHaveToken)
+            mOpenButton.setText(mOpenButtonTitle);
 
         return view;
     }
@@ -106,6 +140,7 @@ public class WebPayTokenFragment extends Fragment implements WebPayTokenComplete
     @Override
     public void onTokenCreated(Token token) {
         mListener.onTokenCreated(token);
+        mHaveToken = true;
         mOpenButton.setText(R.string.token_fragment_token_generated);
     }
 

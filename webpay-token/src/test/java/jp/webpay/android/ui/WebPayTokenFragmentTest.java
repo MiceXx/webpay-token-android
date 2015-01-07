@@ -61,6 +61,10 @@ public class WebPayTokenFragmentTest {
     public void testFragmentPlacesPayButtonOnActivity() throws Exception {
         assertNotNull(fragment);
         assertEquals(getString(R.string.token_fragment_open_dialog), openDialogButton.getText());
+
+        // adding stub resource from test is difficult, substitute with indifferent string
+        fragment.setOpenButtonTitle(R.string.app_name);
+        assertEquals(getString(R.string.app_name), openDialogButton.getText());
     }
 
     @Test
@@ -72,6 +76,21 @@ public class WebPayTokenFragmentTest {
         assertEquals("GET", request.getRequestLine().getMethod());
         assertEquals("https://api.webpay.jp/v1/account/availability", request.getRequestLine().getUri());
         assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
+    }
+
+    @Test
+    public void testFragmentSetCardDialogSendButtonTextAfterReopen() throws Exception {
+        fragment.setCardDialogSendButtonTitle(R.string.app_name);
+        assertEquals(getString(R.string.card_send), ((Button)dialog.findViewById(R.id.button_submit)).getText());
+
+        dialog.findViewById(R.id.button_cancel).performClick();
+        assertFalse(dialog.isShowing());
+
+        openDialogButton.performClick();
+        Robolectric.runUiThreadTasks();
+        CardDialogFragment cardDialog = (CardDialogFragment) fragment.getChildFragmentManager().findFragmentByTag("card_dialog");
+        assertEquals(getString(R.string.app_name),
+                ((Button) cardDialog.getDialog().findViewById(R.id.button_submit)).getText());
     }
 
     @Test
