@@ -16,6 +16,7 @@
     <string name="field_expiry_hint">月 / 年</string>
     <string name="field_name_hint">TARO YAMADA</string>
     <string name="field_number_hint">1234 5678 9012 3456</string>
+    <string name="field_cvc_hint">123</string>
 
     <string name="token_fragment_open_dialog">カードで支払う</string>
     <string name="token_fragment_token_generated">支払い情報入力済み</string>
