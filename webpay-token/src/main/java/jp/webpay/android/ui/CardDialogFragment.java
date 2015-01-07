@@ -196,22 +196,34 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
             return;
         }
         Log.v(TAG, card.toJson().toString());
-
+        switchIndicatorVisibility(true);
         updateRequestLanguage();
         mWebPay.createToken(card, new WebPayListener<Token>() {
             @Override
             public void onCreate(Token result) {
+                switchIndicatorVisibility(false);
                 mListener.onTokenCreated(result);
                 getDialog().dismiss();
             }
 
             @Override
             public void onException(Throwable cause) {
+                switchIndicatorVisibility(false);
                 mLastException = cause;
                 Log.i(TAG, "exception while creating a token", cause);
                 showWebPayErrorAlert(cause);
             }
         });
+    }
+
+    private void switchIndicatorVisibility(boolean visible) {
+        if (visible) {
+            getDialog().findViewById(R.id.progress).setVisibility(View.VISIBLE);
+            getDialog().findViewById(R.id.buttons).setVisibility(View.GONE);
+        } else {
+            getDialog().findViewById(R.id.progress).setVisibility(View.GONE);
+            getDialog().findViewById(R.id.buttons).setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateRequestLanguage() {
