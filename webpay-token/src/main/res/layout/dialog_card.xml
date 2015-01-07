@@ -34,7 +34,8 @@
             style="@style/card_edit_text"
             android:id="@+id/cardNumberField"
             android:layout_width="match_parent"
-            android:layout_below="@id/cardNumberLabel"/>
+            android:layout_below="@id/cardNumberLabel"
+            android:nextFocusDown="@+id/cardExpiryField"/>
 
         <ImageView
             android:id="@+id/cardNumberTypeIcon"
@@ -68,7 +69,8 @@
                     style="@style/card_edit_text"
                     android:id="@+id/cardExpiryField"
                     android:layout_width="match_parent"
-                    android:layout_marginBottom="0dp"/>
+                    android:layout_marginBottom="0dp"
+                    android:nextFocusDown="@+id/cardCvcField"/>
             </LinearLayout>
 
             <LinearLayout
@@ -92,7 +94,8 @@
                         android:id="@+id/cardCvcField"
                         android:layout_width="match_parent"
                         android:layout_below="@id/cardCvcLabel"
-                        android:layout_marginBottom="0dp"/>
+                        android:layout_marginBottom="0dp"
+                        android:nextFocusDown="@+id/cardNameField"/>
 
                     <ImageButton
                         android:id="@+id/cardCvcHelpButton"
@@ -118,7 +121,8 @@
             style="@style/card_edit_text"
             android:id="@+id/cardNameField"
             android:layout_width="match_parent"
-            android:layout_below="@id/cardNameLabel"/>
+            android:layout_below="@id/cardNameLabel"
+            android:imeOptions="actionSend"/>
 
         <LinearLayout
             android:id="@+id/buttons"

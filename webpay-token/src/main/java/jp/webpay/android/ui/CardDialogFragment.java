@@ -4,15 +4,21 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +35,7 @@ import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.Token;
 import jp.webpay.android.ui.field.BaseCardField;
+import jp.webpay.android.ui.field.NameField;
 import jp.webpay.android.ui.field.NumberField;
 
 /**
@@ -148,6 +155,18 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         numberField.setCardTypesSupported(mSupportedCardTypes);
         onCardTypeChange(null); // initialize
 
+        NameField nameField = (NameField) dialog.findViewById(R.id.cardNameField);
+        nameField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    hideSoftKeyboard();
+                    sendCardInfoToWebPay();
+                    return true;
+                }
+                return false;
+            }
+        });
         showAvailableCardTypes();
     }
 
@@ -175,6 +194,14 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void hideSoftKeyboard() {
+        View currentFocus = getDialog().getCurrentFocus();
+        if(currentFocus !=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+        }
     }
 
     private void showAvailableCardTypes() {
