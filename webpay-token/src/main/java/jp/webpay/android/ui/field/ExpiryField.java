@@ -3,6 +3,7 @@ package jp.webpay.android.ui.field;
 import android.content.Context;
 import android.text.InputType;
 import android.util.AttributeSet;
+import android.view.View;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,9 +43,6 @@ public class ExpiryField extends MultiColumnCardField {
         String month = pair[0];
         String year = pair[1];
 
-        if (year.equals("20")) {
-            setText(month + "/ 2020");
-        }
         try {
             mValidMonth = Integer.valueOf(month);
             mValidYear = Integer.valueOf(year);
@@ -64,15 +62,16 @@ public class ExpiryField extends MultiColumnCardField {
     }
 
     @Override
-    public boolean validate() {
+    public void onFocusChange(View v, boolean hasFocus) {
         String pair[] = parseToPair(getText().toString());
         String month = pair[0];
         String year = pair[1];
 
-        if (year.equals("20")) {
+        if (month != null && year != null && month.length() == 2 && year.equals("20")) {
             setText(month + "/ 2020");
         }
-        return super.validate();
+
+        super.onFocusChange(v, hasFocus);
     }
 
     @Override
