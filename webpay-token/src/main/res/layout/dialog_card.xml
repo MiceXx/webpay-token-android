@@ -39,10 +39,10 @@
         <ImageView
             android:id="@+id/cardNumberTypeIcon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignRight="@id/cardNumberField"
-            android:layout_below="@id/cardNumberLabel"
+            android:layout_height="48dp"
             android:layout_centerVertical="true"
+            android:layout_below="@id/cardNumberLabel"
+            android:layout_alignRight="@id/cardNumberField"
             android:layout_marginRight="4dp"
             android:contentDescription="@string/card_number_type_icon_description"/>
 
@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
                 <TextView
                     style="@style/card_label"
                     android:text="@string/card_expiry"/>
@@ -76,32 +77,33 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="12dp"
                 android:orientation="vertical">
-                <TextView
-                    style="@style/card_label"
-                    android:text="@string/card_cvc"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <TextView
+                        style="@style/card_label"
+                        android:id="@+id/cardCvcLabel"
+                        android:text="@string/card_cvc"/>
+
                     <jp.webpay.android.ui.field.CvcField
                         style="@style/card_edit_text"
                         android:id="@+id/cardCvcField"
                         android:layout_width="match_parent"
+                        android:layout_below="@id/cardCvcLabel"
                         android:layout_marginBottom="0dp"/>
 
                     <ImageButton
                         android:id="@+id/cardCvcHelpButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_below="@id/cardCvcLabel"
                         android:layout_alignRight="@id/cardCvcField"
-                        android:layout_centerVertical="true"
                         android:layout_marginRight="4dp"
-                        android:clickable="false"
                         android:src="@drawable/cvc_help_button"
-                        android:background="@android:color/transparent"
+                        android:background="@drawable/abc_item_background_holo_light"
                         android:contentDescription="@string/card_cvc_help_description"/>
-
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
