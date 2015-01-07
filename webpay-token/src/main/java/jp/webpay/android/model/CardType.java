@@ -1,5 +1,8 @@
 package jp.webpay.android.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * This enum represents card types (brands) that WebPay supports.
  * Changing the name breaks compatibility, be careful.
@@ -26,5 +29,13 @@ public enum CardType {
             if (type.getName().equals(name))
                 return type;
         throw new IllegalArgumentException("No constant with name " + name + " found");
+    }
+
+    public static List<CardType> VM() {
+        return Arrays.asList(VISA, MASTERCARD);
+    }
+
+    public static List<CardType> All() {
+        return Arrays.asList(values());
     }
 }
