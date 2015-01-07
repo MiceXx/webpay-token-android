@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@android:color/white">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -14,75 +14,78 @@
 
         <TextView
             style="@style/card_label"
+            android:id="@+id/cardTypeLabel"
             android:layout_marginTop="18dp"
-            android:text="@string/card_we_accept" />
+            android:layout_alignParentTop="true"
+            android:text="@string/card_we_accept"/>
 
         <LinearLayout
             android:id="@+id/cardTypeIconList"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cardTypeLabel"
+            android:orientation="horizontal">
         </LinearLayout>
 
         <TextView
             style="@style/card_label"
+            android:id="@+id/cardNumberLabel"
             android:layout_marginTop="8dp"
-            android:text="@string/card_number" />
+            android:layout_below="@id/cardTypeIconList"
+            android:text="@string/card_number"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <jp.webpay.android.ui.field.NumberField
-                style="@style/card_edit_text"
-                android:id="@+id/cardNumberField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp" />
-
-            <ImageView
-                android:id="@+id/cardNumberTypeIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/cardNumberField"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="4dp"
-                android:contentDescription="@string/card_number_type_icon_description" />
-        </RelativeLayout>
-
-        <LinearLayout
+        <jp.webpay.android.ui.field.NumberField
+            style="@style/card_edit_text"
+            android:id="@+id/cardNumberField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_below="@id/cardNumberLabel"/>
+
+        <ImageView
+            android:id="@+id/cardNumberTypeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/cardNumberField"
+            android:layout_below="@id/cardNumberLabel"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="4dp"
+            android:contentDescription="@string/card_number_type_icon_description"/>
+
+        <LinearLayout
+            android:id="@+id/cardExpiryAndCvC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_below="@id/cardNumberField"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
                 <TextView
                     style="@style/card_label"
-                    android:layout_marginTop="18dp"
-                    android:text="@string/card_expiry" />
+                    android:text="@string/card_expiry"/>
 
                 <jp.webpay.android.ui.field.ExpiryField
                     style="@style/card_edit_text"
                     android:id="@+id/cardExpiryField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp" />
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_weight="1"
-                android:layout_marginLeft="20dp">
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
                 <TextView
                     style="@style/card_label"
-                    android:layout_marginTop="18dp"
-                    android:text="@string/card_cvc" />
+                    android:text="@string/card_cvc"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -93,19 +96,19 @@
                         android:id="@+id/cardCvcField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp" />
+                        android:layout_marginTop="4dp"/>
 
                     <ImageButton
+                        android:id="@+id/cardCvcHelpButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@id/cardCvcField"
-                        android:id="@+id/cardCvcHelpButton"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="4dp"
                         android:clickable="false"
                         android:src="@drawable/cvc_help_button"
                         android:background="@android:color/transparent"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="4dp"
-                        android:contentDescription="@string/card_cvc_help_description" />
+                        android:contentDescription="@string/card_cvc_help_description"/>
 
                 </RelativeLayout>
             </LinearLayout>
@@ -113,41 +116,43 @@
 
         <TextView
             style="@style/card_label"
+            android:id="@+id/cardNameLabel"
             android:layout_marginTop="18dp"
-            android:text="@string/card_name" />
+            android:layout_below="@id/cardExpiryAndCvC"
+            android:text="@string/card_name"/>
 
         <jp.webpay.android.ui.field.NameField
             style="@style/card_edit_text"
             android:id="@+id/cardNameField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="4dp"
+            android:layout_below="@id/cardNameLabel"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="24dp"
+            android:layout_below="@id/cardNameField"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/button_cancel"
-                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:textSize="14sp"
                 android:textColor="#80000000"
                 android:background="@drawable/abc_item_background_holo_light"
-                android:text="@string/card_cancel" />
+                android:text="@string/card_cancel"/>
 
             <Button
                 android:id="@+id/button_sumbmit"
-                android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:textSize="14sp"
-                android:text="@string/card_send" />
+                android:text="@string/card_send"/>
          </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </ScrollView>
-
-
