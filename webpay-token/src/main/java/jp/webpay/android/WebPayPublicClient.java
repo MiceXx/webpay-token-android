@@ -1,6 +1,7 @@
 package jp.webpay.android;
 
 import android.net.Uri;
+import android.os.Build;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -54,6 +55,7 @@ class WebPayPublicClient {
         }
         request.setHeader("Accept-Language", language);
         request.setHeader("Authorization", "Bearer " + apiKey);
+        request.setHeader("User-Agent", "WebPayTokenAndroid/" + WebPay.VERSION_NAME + " Android/" + Build.VERSION.RELEASE);
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
 
