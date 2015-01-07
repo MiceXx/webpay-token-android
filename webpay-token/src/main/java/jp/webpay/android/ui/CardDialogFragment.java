@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -61,6 +62,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     private WebPayTokenCompleteListener mListener;
     private Throwable mLastException;
     private ArrayList<CardType> mSupportedCardTypes;
+    private @StringRes int mSendButtonTitle = R.string.card_send;
 
     /**
      * Use this factory method to create a new instance of this fragment
@@ -94,6 +96,24 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
 
     public CardDialogFragment() {
 
+    }
+
+    /**
+     * Set send button title string resource id.
+     * Default is {@code jp.webpay.android.R.string.card_send}, which is "Pay with card".
+     * This method works before and after dialog is created.
+     *
+     * @param sendButtonTitle    send button title res id
+     */
+    public void setSendButtonTitle(@StringRes int sendButtonTitle) {
+        this.mSendButtonTitle = sendButtonTitle;
+        Dialog dialog = getDialog();
+        if (dialog == null)
+            return;
+        Button sendButton = (Button) dialog.findViewById(R.id.button_submit);
+        if (sendButton == null)
+            return;
+        sendButton.setText(sendButtonTitle);
     }
 
     @Override
@@ -140,6 +160,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
                 sendCardInfoToWebPay();
             }
         });
+        sendButton.setText(mSendButtonTitle);
 
         Button cancelButton = (Button) dialog.findViewById(R.id.button_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
