@@ -133,7 +133,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         if (dialog == null)
             return;
 
-        Button sendButton = (Button) dialog.findViewById(R.id.button_sumbmit);
+        Button sendButton = (Button) dialog.findViewById(R.id.button_submit);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

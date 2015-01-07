@@ -1,7 +1,6 @@
 package jp.webpay.android.ui;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -189,7 +188,7 @@ public class WebPayTokenFragmentTest {
         ((EditText) dialog.findViewById(R.id.cardCvcField)).setText("012");
         ((EditText) dialog.findViewById(R.id.cardExpiryField)).setText("07 / " + (currentYear + 1));
 
-        dialog.findViewById(R.id.button_sumbmit).performClick();
+        dialog.findViewById(R.id.button_submit).performClick();
         latch.await(1, TimeUnit.SECONDS);
     }
 }
