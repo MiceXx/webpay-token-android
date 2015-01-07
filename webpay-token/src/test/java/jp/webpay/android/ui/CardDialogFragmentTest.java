@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 // This test is to check that Activities can directly use CardDialogFragment.
 // Test logic and other behaviors in WebPayTokenFragmentTest.
-@Config(manifest = "./src/main/AndroidManifest.xml", emulateSdk = 18)
+@Config(manifest = "./src/main/AndroidManifestTest.xml", emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class CardDialogFragmentTest {
     private CardDialogActivity activity;

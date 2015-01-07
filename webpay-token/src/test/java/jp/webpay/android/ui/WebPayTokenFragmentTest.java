@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
 
-@Config(manifest = "./src/main/AndroidManifest.xml", emulateSdk = 18)
+@Config(manifest = "./src/main/AndroidManifestTest.xml", emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class WebPayTokenFragmentTest {
     private FragmentContainerActivity activity;
@@ -156,7 +156,6 @@ public class WebPayTokenFragmentTest {
         assertTrue(dialog.isShowing());
 
         ShadowAlertDialog errorDialog = shadowOf(ShadowAlertDialog.getLatestAlertDialog());
-        assertEquals(getString(R.string.tokenize_error_title), errorDialog.getTitle());
         assertEquals("The security code provided is invalid. " +
                         "For Visa, MasterCard, JCB, and Diners Club, enter the last 3 digits on the back of your card. " +
                         "For American Express, enter the 4 digits printed above your number.",

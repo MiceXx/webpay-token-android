@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
-@Config(manifest = "./src/main/AndroidManifest.xml", emulateSdk = 18)
+@Config(manifest = "./src/main/AndroidManifestTest.xml", emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class WebPayTest {
     private WebPay webpay;
