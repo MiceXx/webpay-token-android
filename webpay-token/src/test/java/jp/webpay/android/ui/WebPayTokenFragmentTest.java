@@ -29,11 +29,7 @@ import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.ui.field.NumberField;
 
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.robolectric.Robolectric.shadowOf;
 
 @Config(manifest = "./src/main/AndroidManifestTest.xml", emulateSdk = 18)
@@ -85,16 +81,19 @@ public class WebPayTokenFragmentTest {
         assertEquals(2, layout.getChildCount());
 
         NumberField numberField = (NumberField) dialog.findViewById(R.id.cardNumberField);
+        int errorTextColor = activity.getResources().getColor(R.color.error_text);
 
+        numberField.requestFocus();
         numberField.setText("4242424242424242"); // Visa is ok
         numberField.clearFocus();
         assertEquals("4242 4242 4242 4242", numberField.getText().toString());
-        assertEquals(numberField.getCurrentTextColor(), activity.getResources().getColor(android.R.color.black));
+        assertNotEquals(numberField.getCurrentTextColor(), errorTextColor);
 
+        numberField.requestFocus();
         numberField.setText("378282246310005"); // amex is unacceptable
         numberField.clearFocus();
         assertEquals("3782 822463 10005", numberField.getText().toString());
-        assertEquals(numberField.getCurrentTextColor(), activity.getResources().getColor(R.color.error_text));
+        assertEquals(numberField.getCurrentTextColor(), errorTextColor);
     }
 
     @Test
@@ -167,7 +166,7 @@ public class WebPayTokenFragmentTest {
         Robolectric.addPendingHttpResponse(ApiSample.cardErrorResponse);
 
         generateTokenFromForm();
-        dialog.getButton(Dialog.BUTTON_NEGATIVE).performClick();
+        dialog.findViewById(R.id.button_cancel).performClick();
         assertFalse(dialog.isShowing());
 
         Throwable throwable = activity.getLastThrowable();
@@ -190,8 +189,7 @@ public class WebPayTokenFragmentTest {
         ((EditText) dialog.findViewById(R.id.cardCvcField)).setText("012");
         ((EditText) dialog.findViewById(R.id.cardExpiryField)).setText("07 / " + (currentYear + 1));
 
-        Button sendButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
-        sendButton.performClick();
+        dialog.findViewById(R.id.button_sumbmit).performClick();
         latch.await(1, TimeUnit.SECONDS);
     }
 }

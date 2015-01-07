@@ -48,7 +48,7 @@ public class CardDialogFragmentTest {
         assertFalse(activity.isCancelled());
         assertTrue(dialogFragment.isAdded());
         assertTrue(dialog.isShowing());
-        dialog.getButton(Dialog.BUTTON_NEGATIVE).performClick();
+        dialog.findViewById(R.id.button_cancel).performClick();
         assertTrue(activity.isCancelled());
         assertFalse(dialog.isShowing());
     }
