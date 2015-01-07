@@ -153,7 +153,9 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         NumberField numberField = (NumberField) dialog.findViewById(R.id.cardNumberField);
         numberField.setOnCardTypeChangeListener(this);
         numberField.setCardTypesSupported(mSupportedCardTypes);
-        onCardTypeChange(null); // initialize
+        if (numberField.getText().toString().equals("")) {
+            onCardTypeChange(null); // initialize
+        }
 
         NameField nameField = (NameField) dialog.findViewById(R.id.cardNameField);
         nameField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
