@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/cardNumberField"
             android:layout_marginBottom="8dp"
+            android:baselineAligned="false"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -73,42 +74,36 @@
                     android:nextFocusDown="@+id/cardCvcField"/>
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginLeft="12dp"
-                android:orientation="vertical">
+                android:layout_marginLeft="12dp">
 
-                <RelativeLayout
+                <TextView
+                    style="@style/card_label"
+                    android:id="@+id/cardCvcLabel"
+                    android:text="@string/card_cvc"/>
+
+                <jp.webpay.android.ui.field.CvcField
+                    style="@style/card_edit_text"
+                    android:id="@+id/cardCvcField"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_below="@id/cardCvcLabel"
+                    android:layout_marginBottom="0dp"
+                    android:nextFocusDown="@+id/cardNameField"/>
 
-                    <TextView
-                        style="@style/card_label"
-                        android:id="@+id/cardCvcLabel"
-                        android:text="@string/card_cvc"/>
-
-                    <jp.webpay.android.ui.field.CvcField
-                        style="@style/card_edit_text"
-                        android:id="@+id/cardCvcField"
-                        android:layout_width="match_parent"
-                        android:layout_below="@id/cardCvcLabel"
-                        android:layout_marginBottom="0dp"
-                        android:nextFocusDown="@+id/cardNameField"/>
-
-                    <ImageButton
-                        android:id="@+id/cardCvcHelpButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_below="@id/cardCvcLabel"
-                        android:layout_alignRight="@id/cardCvcField"
-                        android:layout_marginRight="4dp"
-                        android:src="@drawable/cvc_help_button"
-                        android:background="@drawable/abc_item_background_holo_light"
-                        android:contentDescription="@string/card_cvc_help_description"/>
-                </RelativeLayout>
-            </LinearLayout>
+                <ImageButton
+                    android:id="@+id/cardCvcHelpButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/cardCvcLabel"
+                    android:layout_alignRight="@id/cardCvcField"
+                    android:layout_marginRight="4dp"
+                    android:src="@drawable/cvc_help_button"
+                    android:background="@drawable/abc_item_background_holo_light"
+                    android:contentDescription="@string/card_cvc_help_description"/>
+            </RelativeLayout>
         </LinearLayout>
 
         <TextView
