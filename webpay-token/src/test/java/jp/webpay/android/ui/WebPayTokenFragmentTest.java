@@ -1,8 +1,13 @@
 package jp.webpay.android.ui;
 
 import android.app.AlertDialog;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.apache.http.HttpRequest;
@@ -24,6 +29,7 @@ import jp.webpay.android.ApiSample;
 import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
 import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.ui.field.CvcField;
 import jp.webpay.android.ui.field.NumberField;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -31,6 +37,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
@@ -95,6 +102,42 @@ public class WebPayTokenFragmentTest {
         CardDialogFragment cardDialog = (CardDialogFragment) fragment.getChildFragmentManager().findFragmentByTag("card_dialog");
         assertEquals(getString(R.string.field_name_hint),
                 ((Button) cardDialog.getDialog().findViewById(R.id.button_submit)).getText());
+    }
+
+    @Test
+    public void testFragmentApplyDetectedCardBrandToIconAndCvcHelp() throws Exception {
+        NumberField numberField = (NumberField) dialog.findViewById(R.id.cardNumberField);
+        CvcField cvcField = (CvcField) dialog.findViewById(R.id.cardCvcField);
+
+        assertNull(numberField.getCompoundDrawables()[2]);
+
+        numberField.requestFocus();
+        numberField.setText("4242"); // starting of Visa
+        numberField.clearFocus();
+
+        BitmapDrawable drawable = (BitmapDrawable)numberField.getCompoundDrawables()[2];
+        assertNotNull(drawable);
+        assertTrue(shadowOf(drawable.getBitmap()).toString().
+                contains("resource:jp.webpay.android:drawable/card_visa"));
+
+        numberField.requestFocus();
+        numberField.setText("3782"); // amex
+        numberField.clearFocus();
+        assertTrue(shadowOf(((BitmapDrawable)numberField.getCompoundDrawables()[2]).getBitmap()).toString().
+                contains("resource:jp.webpay.android:drawable/card_amex"));
+
+        // press CVC buttonp
+        int [] location = {0,0};
+        cvcField.getLocationOnScreen(location);
+        cvcField.onTouchEvent(MotionEvent.obtain(1, 1, MotionEvent.ACTION_UP,
+                location[0] + cvcField.getWidth() - 10,
+                location[1] + cvcField.getHeight() / 2,
+                0));
+
+        ShadowAlertDialog helpDialog = shadowOf(ShadowAlertDialog.getLatestAlertDialog());
+        drawable = (BitmapDrawable)((ImageView)helpDialog.getView().findViewById(R.id.cvc_help)).getDrawable();
+        assertTrue(shadowOf(drawable.getBitmap()).toString().
+                contains("resource:jp.webpay.android:drawable/cvc_amex"));
     }
 
     @Test

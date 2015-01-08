@@ -35,6 +35,7 @@ import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.Token;
 import jp.webpay.android.ui.field.BaseCardField;
+import jp.webpay.android.ui.field.CvcField;
 import jp.webpay.android.ui.field.NameField;
 import jp.webpay.android.ui.field.NumberField;
 
@@ -340,12 +341,9 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         int iconDrawableId = (cardType == null) ? 0 : CARD_TYPE_TO_DRAWABLE.get(cardType).intValue();
         numberFiled.setCompoundDrawablesWithIntrinsicBounds(0, 0, iconDrawableId, 0);
 
-        /* ImageButton helpButton = (ImageButton) getDialog().findViewById(R.id.cardCvcHelpButton);
-        if (CardType.AMERICAN_EXPRESS.equals(cardType)) {
-            helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc_amex));
-        } else {
-            helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc));
-        }*/
+        CvcField cvcField = (CvcField) getDialog().findViewById(R.id.cardCvcField);
+        int drawableId = CardType.AMERICAN_EXPRESS.equals(cardType) ? R.drawable.cvc_amex : R.drawable.cvc;
+        cvcField.setOnHelpIconClickListener(cvcHelpListener(drawableId));
     }
 
     @SuppressLint("InflateParams") // using "null" for inflate is correct

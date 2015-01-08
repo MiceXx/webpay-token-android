@@ -1,10 +1,13 @@
 package jp.webpay.android.ui.field;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 
 import jp.webpay.android.R;
 import jp.webpay.android.model.RawCard;
@@ -13,6 +16,7 @@ import jp.webpay.android.validator.CvcValidator;
 public class CvcField extends BaseCardField {
     public static final int MAX_LENGTH = 4;
     private String mValidCvc;
+    private View.OnClickListener mOnHelpIconClickListener;
 
     public CvcField(Context context) {
         super(context);
@@ -59,5 +63,31 @@ public class CvcField extends BaseCardField {
      */
     public String getValidCvc() {
         return mValidCvc;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP
+                && mOnHelpIconClickListener != null) {
+            // 2 is for right
+            Drawable rightDrawable = getCompoundDrawables()[2];
+            if (rightDrawable != null) {
+                int[] screenLocation = new int[2];
+                getLocationOnScreen(screenLocation);
+                int iconStartX = screenLocation[0] + getWidth() - getPaddingRight()
+                        - rightDrawable.getBounds().width();
+
+                if (event.getRawX() >= iconStartX){
+                    playSoundEffect(android.view.SoundEffectConstants.CLICK);
+                    mOnHelpIconClickListener.onClick(this);
+                    return true;
+                }
+            }
+        }
+        return super.onTouchEvent(event);
+    }
+
+    public void setOnHelpIconClickListener(OnClickListener onHelpIconClickListener) {
+        this.mOnHelpIconClickListener = onHelpIconClickListener;
     }
 }
