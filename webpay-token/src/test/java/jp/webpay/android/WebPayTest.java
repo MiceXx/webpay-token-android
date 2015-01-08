@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.tester.org.apache.http.HttpResponseStub;
 import org.robolectric.tester.org.apache.http.TestHttpResponse;
@@ -29,7 +28,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 @Config(manifest = "./src/main/AndroidManifestTest.xml", emulateSdk = 18)
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricTestRunnerWithDummyResources.class)
 public class WebPayTest {
     private WebPay webpay;
 
