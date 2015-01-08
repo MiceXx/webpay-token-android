@@ -56,7 +56,7 @@ class WebPayPublicClient {
         }
         request.setHeader("Accept-Language", language);
         request.setHeader("Authorization", "Bearer " + apiKey);
-        request.setHeader("User-Agent", "WebPayTokenAndroid/" + WebPay.VERSION_NAME + " Android/" + Build.VERSION.RELEASE);
+        request.setHeader("User-Agent", "WebPayTokenAndroid/" + BuildConfig.VERSION_NAME + " Android/" + Build.VERSION.RELEASE);
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
 

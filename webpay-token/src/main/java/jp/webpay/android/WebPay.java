@@ -16,7 +16,6 @@ import jp.webpay.android.model.Token;
 public class WebPay {
 
     private static final Uri BASE_URI = Uri.parse("https://api.webpay.jp/v1");
-    public static final String VERSION_NAME = "1.0";
     private final WebPayPublicClient client;
 
     public WebPay(String publishableKey) {

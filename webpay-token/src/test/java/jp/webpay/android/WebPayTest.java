@@ -87,7 +87,7 @@ public class WebPayTest {
         assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
         assertEquals("application/json", request.getFirstHeader("Content-Type").getValue());
         assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
-        assertEquals("WebPayTokenAndroid/" + WebPay.VERSION_NAME + " Android/unknown", request.getFirstHeader("User-Agent").getValue());
+        assertEquals("WebPayTokenAndroid/" + BuildConfig.VERSION_NAME + " Android/unknown", request.getFirstHeader("User-Agent").getValue());
         String requestBody = IOUtil.toString(((HttpPost) request).getEntity().getContent(), "UTF-8");
         assertEquals(rawCardBodyString, requestBody);
     }
