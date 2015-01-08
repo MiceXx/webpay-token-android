@@ -352,6 +352,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         }
     }
 
+    @SuppressLint("InflateParams") // using "null" for inflate is correct
     private View.OnClickListener cvcHelpListener(final int drawableId) {
         return new View.OnClickListener() {
             @Override

@@ -67,8 +67,8 @@ public class WebPayTokenFragmentTest {
         assertEquals(getString(R.string.token_fragment_open_dialog), openDialogButton.getText());
 
         // adding stub resource from test is difficult, substitute with indifferent string
-        fragment.setOpenButtonTitle(R.string.app_name);
-        assertEquals(getString(R.string.app_name), openDialogButton.getText());
+        fragment.setOpenButtonTitle(R.string.field_name_hint);
+        assertEquals(getString(R.string.field_name_hint), openDialogButton.getText());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class WebPayTokenFragmentTest {
 
     @Test
     public void testFragmentSetCardDialogSendButtonTextAfterReopen() throws Exception {
-        fragment.setCardDialogSendButtonTitle(R.string.app_name);
+        fragment.setCardDialogSendButtonTitle(R.string.field_name_hint);
         assertEquals(getString(R.string.card_send), ((Button)dialog.findViewById(R.id.button_submit)).getText());
 
         dialog.findViewById(R.id.button_cancel).performClick();
@@ -93,7 +93,7 @@ public class WebPayTokenFragmentTest {
         openDialogButton.performClick();
         Robolectric.runUiThreadTasks();
         CardDialogFragment cardDialog = (CardDialogFragment) fragment.getChildFragmentManager().findFragmentByTag("card_dialog");
-        assertEquals(getString(R.string.app_name),
+        assertEquals(getString(R.string.field_name_hint),
                 ((Button) cardDialog.getDialog().findViewById(R.id.button_submit)).getText());
     }
 

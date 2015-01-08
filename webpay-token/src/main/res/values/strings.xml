@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">webpay-token-android</string>
-
     <!-- dialog_card layout -->
     <string name="card_cancel">Cancel</string>
     <string name="card_cvc">CVC</string>

@@ -60,10 +60,10 @@ public class CardDialogFragmentTest {
     public void testSetSendButtonTextBeforeFragmentIsCreated() throws Exception {
         CardDialogFragment fragment = CardDialogFragment.newInstance(dummyKey, CardType.VM());
         // adding stub resource from test is difficult, substitute with indifferent string
-        fragment.setSendButtonTitle(R.string.app_name);
+        fragment.setSendButtonTitle(R.string.field_name_hint);
         prepareActivity(fragment);
 
-        assertEquals("webpay-token-android", ((Button) dialog.findViewById(R.id.button_submit)).getText().toString());
+        assertEquals(activity.getString(R.string.field_name_hint), ((Button) dialog.findViewById(R.id.button_submit)).getText().toString());
     }
 
     @Test
@@ -74,8 +74,8 @@ public class CardDialogFragmentTest {
         Button button = (Button) dialog.findViewById(R.id.button_submit);
         assertEquals(activity.getString(R.string.card_send), button.getText().toString());
 
-        fragment.setSendButtonTitle(R.string.app_name);
-        assertEquals("webpay-token-android", button.getText().toString());
+        fragment.setSendButtonTitle(R.string.field_name_hint);
+        assertEquals(activity.getString(R.string.field_name_hint), button.getText().toString());
     }
 
     @Test
