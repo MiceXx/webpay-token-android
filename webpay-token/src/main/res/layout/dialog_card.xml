@@ -37,16 +37,6 @@
             android:layout_below="@id/cardNumberLabel"
             android:nextFocusDown="@+id/cardExpiryField"/>
 
-        <ImageView
-            android:id="@+id/cardNumberTypeIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:layout_below="@id/cardNumberLabel"
-            android:layout_alignRight="@id/cardNumberField"
-            android:layout_marginRight="4dp"
-            android:contentDescription="@string/card_number_type_icon_description"/>
-
         <LinearLayout
             android:id="@+id/cardExpiryAndCvC"
             android:layout_width="match_parent"
@@ -96,7 +86,7 @@
                 <ImageButton
                     android:id="@+id/cardCvcHelpButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/cardCvcLabel"
                     android:layout_alignRight="@id/cardCvcField"
                     android:layout_marginRight="4dp"

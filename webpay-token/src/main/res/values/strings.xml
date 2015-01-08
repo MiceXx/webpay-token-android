@@ -6,7 +6,6 @@
     <string name="card_expiry">Expiry</string>
     <string name="card_name">Name</string>
     <string name="card_number">Number</string>
-    <string name="card_number_type_icon_description">Brand of this number</string>
     <string name="card_send">Pay with card</string>
     <string name="card_we_accept">We accept</string>
 

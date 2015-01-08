@@ -337,12 +337,9 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
 
     @Override
     public void onCardTypeChange(CardType cardType) {
-        ImageView icon = (ImageView) getDialog().findViewById(R.id.cardNumberTypeIcon);
-        if (cardType == null) {
-            icon.setImageDrawable(null);
-        } else {
-            icon.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
-        }
+        NumberField numberFiled = (NumberField) getDialog().findViewById(R.id.cardNumberField);
+        int iconDrawableId = (cardType == null) ? 0 : CARD_TYPE_TO_DRAWABLE.get(cardType).intValue();
+        numberFiled.setCompoundDrawablesWithIntrinsicBounds(0, 0, iconDrawableId, 0);
 
         ImageButton helpButton = (ImageButton) getDialog().findViewById(R.id.cardCvcHelpButton);
         if (CardType.AMERICAN_EXPRESS.equals(cardType)) {
