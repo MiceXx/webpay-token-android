@@ -18,6 +18,7 @@ android {
     }
     lintOptions {
         disable 'IconMissingDensityFolder' // decided not to provide
+        warningsAsErrors true
     }
 }
 

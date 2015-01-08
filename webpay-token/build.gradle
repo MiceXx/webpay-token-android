@@ -28,6 +28,7 @@ android {
     lintOptions {
         disable 'RtlHardcoded', 'RtlEnabled', // supports 8+, which does not provide RTL
                 'IconMissingDensityFolder' // decided not to provide
+        warningsAsErrors true
     }
 }
 
