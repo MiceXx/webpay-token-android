@@ -16,7 +16,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -341,12 +340,12 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         int iconDrawableId = (cardType == null) ? 0 : CARD_TYPE_TO_DRAWABLE.get(cardType).intValue();
         numberFiled.setCompoundDrawablesWithIntrinsicBounds(0, 0, iconDrawableId, 0);
 
-        ImageButton helpButton = (ImageButton) getDialog().findViewById(R.id.cardCvcHelpButton);
+        /* ImageButton helpButton = (ImageButton) getDialog().findViewById(R.id.cardCvcHelpButton);
         if (CardType.AMERICAN_EXPRESS.equals(cardType)) {
             helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc_amex));
         } else {
             helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc));
-        }
+        }*/
     }
 
     @SuppressLint("InflateParams") // using "null" for inflate is correct

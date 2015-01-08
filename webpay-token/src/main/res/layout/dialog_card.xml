@@ -81,18 +81,9 @@
                     android:layout_width="match_parent"
                     android:layout_below="@id/cardCvcLabel"
                     android:layout_marginBottom="0dp"
-                    android:nextFocusDown="@+id/cardNameField"/>
+                    android:nextFocusDown="@+id/cardNameField"
+                    android:drawableRight="@drawable/cvc_help_button"/>
 
-                <ImageButton
-                    android:id="@+id/cardCvcHelpButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/cardCvcLabel"
-                    android:layout_alignRight="@id/cardCvcField"
-                    android:layout_marginRight="4dp"
-                    android:src="@drawable/cvc_help_button"
-                    android:background="@drawable/abc_item_background_holo_light"
-                    android:contentDescription="@string/card_cvc_help_description"/>
             </RelativeLayout>
         </LinearLayout>
 
