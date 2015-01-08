@@ -84,6 +84,7 @@ public class ExpiryField extends MultiColumnCardField {
     protected String formatVisibleText(String current) {
         // "0" -> "0" (for 08)
         // "1 -> "1" (for 12)
+        // "13" -> "1"
         // "12" -> "12 / "
         // "209 / " -> "02 / "
         // "8" -> "08 / " (add 0 to 1-digit month)
@@ -108,10 +109,15 @@ public class ExpiryField extends MultiColumnCardField {
         }
 
         if (year == null) {
-            if (month.length() == 2)
-                return month + SEPARATOR;
-            else
+            if (month.length() == 2) {
+                if (month.charAt(0) == '1' && month.charAt(1) >= '3') {
+                    return month.substring(0, 1);
+                } else {
+                    return month + SEPARATOR;
+                }
+            } else {
                 return month;
+            }
         }
 
         if (year.length() > 0 && year.charAt(0) != '2') {
