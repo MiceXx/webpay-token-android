@@ -2,6 +2,7 @@ package jp.webpay.android;
 
 import android.net.Uri;
 import android.os.Build;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;

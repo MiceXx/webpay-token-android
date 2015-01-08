@@ -1,6 +1,5 @@
 package jp.webpay.android;
 
-import jp.webpay.android.model.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpPost;
@@ -24,8 +23,19 @@ import java.io.InputStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import jp.webpay.android.model.AccountAvailability;
+import jp.webpay.android.model.CardType;
+import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.model.RawCard;
+import jp.webpay.android.model.StoredCard;
+import jp.webpay.android.model.Token;
+import jp.webpay.android.ui.RobolectricTestRunnerWithDummyResources;
+
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 @Config(manifest = "./src/main/AndroidManifestTest.xml", emulateSdk = 18)
 @RunWith(RobolectricTestRunnerWithDummyResources.class)

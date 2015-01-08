@@ -2,14 +2,16 @@ package jp.webpay.android;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import jp.webpay.android.model.AccountAvailability;
-import jp.webpay.android.model.ErrorResponse;
-import jp.webpay.android.model.RawCard;
-import jp.webpay.android.model.Token;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
+import jp.webpay.android.model.AccountAvailability;
+import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.model.RawCard;
+import jp.webpay.android.model.Token;
 
 public class WebPay {
 

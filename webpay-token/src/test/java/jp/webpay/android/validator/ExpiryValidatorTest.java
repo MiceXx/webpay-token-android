@@ -5,7 +5,8 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ExpiryValidatorTest {
     private final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));

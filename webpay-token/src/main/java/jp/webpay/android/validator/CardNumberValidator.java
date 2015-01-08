@@ -1,12 +1,12 @@
 package jp.webpay.android.validator;
 
-import jp.webpay.android.model.CardType;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import jp.webpay.android.model.CardType;
 
 /**
  * Static class validates card numbers.

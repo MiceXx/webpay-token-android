@@ -27,7 +27,12 @@ import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.ui.field.NumberField;
 
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
 
 @Config(manifest = "./src/main/AndroidManifestTest.xml", emulateSdk = 18)

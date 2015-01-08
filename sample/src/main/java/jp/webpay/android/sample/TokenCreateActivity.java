@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
 import jp.webpay.android.model.Token;
 import jp.webpay.android.ui.WebPayTokenCompleteListener;
 import jp.webpay.android.ui.WebPayTokenFragment;

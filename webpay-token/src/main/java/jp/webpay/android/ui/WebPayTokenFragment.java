@@ -8,14 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import java.util.List;
+
 import jp.webpay.android.R;
 import jp.webpay.android.WebPay;
 import jp.webpay.android.WebPayListener;
 import jp.webpay.android.model.AccountAvailability;
 import jp.webpay.android.model.CardType;
 import jp.webpay.android.model.Token;
-
-import java.util.List;
 
 /**
  * A fragment to create WebPay client-side token.

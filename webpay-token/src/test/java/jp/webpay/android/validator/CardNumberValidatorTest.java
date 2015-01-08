@@ -1,6 +1,5 @@
 package jp.webpay.android.validator;
 
-import jp.webpay.android.model.CardType;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -8,9 +7,15 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.webpay.android.model.CardType;
+
+import static jp.webpay.android.model.CardType.AMERICAN_EXPRESS;
+import static jp.webpay.android.model.CardType.DINERS_CLUB;
+import static jp.webpay.android.model.CardType.JCB;
+import static jp.webpay.android.model.CardType.MASTERCARD;
+import static jp.webpay.android.model.CardType.VISA;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static jp.webpay.android.model.CardType.*;
 
 public class CardNumberValidatorTest {
 
