@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.View;
@@ -258,7 +257,6 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
             return;
         }
         hideSoftKeyboard();
-        Log.v(TAG, card.toJson().toString());
         switchIndicatorVisibility(true);
         updateRequestLanguage();
         mWebPay.createToken(card, new WebPayListener<Token>() {
@@ -273,7 +271,6 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
             public void onException(Throwable cause) {
                 switchIndicatorVisibility(false);
                 mLastException = cause;
-                Log.i(TAG, "exception while creating a token", cause);
                 showWebPayErrorAlert(cause);
             }
         });
