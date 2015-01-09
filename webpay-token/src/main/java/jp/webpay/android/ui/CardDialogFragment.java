@@ -188,7 +188,6 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    hideSoftKeyboard();
                     sendCardInfoToWebPay();
                     return true;
                 }
@@ -258,6 +257,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         if (card == null) {
             return;
         }
+        hideSoftKeyboard();
         Log.v(TAG, card.toJson().toString());
         switchIndicatorVisibility(true);
         updateRequestLanguage();
