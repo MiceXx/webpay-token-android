@@ -2,9 +2,10 @@ package jp.webpay.android.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import jp.webpay.android.model.Token;
 
 import java.util.concurrent.CountDownLatch;
+
+import jp.webpay.android.model.Token;
 
 public class FragmentContainerActivity extends FragmentActivity
         implements WebPayTokenCompleteListener {

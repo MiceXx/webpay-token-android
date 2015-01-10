@@ -1,13 +1,12 @@
 package jp.webpay.android;
 
-import jp.webpay.android.model.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.message.BasicHeader;
+import org.apache.maven.artifact.ant.shaded.IOUtil;
 import org.apache.tools.ant.filters.StringInputStream;
-import org.codehaus.plexus.util.IOUtil;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,7 +14,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.tester.org.apache.http.HttpResponseStub;
 import org.robolectric.tester.org.apache.http.TestHttpResponse;
@@ -25,11 +23,22 @@ import java.io.InputStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import jp.webpay.android.model.AccountAvailability;
+import jp.webpay.android.model.CardType;
+import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.model.RawCard;
+import jp.webpay.android.model.StoredCard;
+import jp.webpay.android.model.Token;
+import jp.webpay.android.ui.RobolectricTestRunnerWithDummyResources;
 
-@Config(manifest = "./src/main/AndroidManifest.xml", emulateSdk = 18)
-@RunWith(RobolectricTestRunner.class)
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+@Config(manifest = "./src/main/AndroidManifestTest.xml", emulateSdk = 18)
+@RunWith(RobolectricTestRunnerWithDummyResources.class)
 public class WebPayTest {
     private WebPay webpay;
 
@@ -78,6 +87,7 @@ public class WebPayTest {
         assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
         assertEquals("application/json", request.getFirstHeader("Content-Type").getValue());
         assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
+        assertEquals("WebPayTokenAndroid/" + BuildConfig.VERSION_NAME + " Android/unknown", request.getFirstHeader("User-Agent").getValue());
         String requestBody = IOUtil.toString(((HttpPost) request).getEntity().getContent(), "UTF-8");
         assertEquals(rawCardBodyString, requestBody);
     }

@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">webpay-token-android</string>
-
     <!-- dialog_card layout -->
     <string name="card_cancel">Cancel</string>
     <string name="card_cvc">CVC</string>
@@ -8,8 +6,6 @@
     <string name="card_expiry">Expiry</string>
     <string name="card_name">Name</string>
     <string name="card_number">Number</string>
-    <string name="card_number_type_icon_description">Brand of this number</string>
-    <string name="card_payment_info_title">Payment info</string>
     <string name="card_send">Pay with card</string>
     <string name="card_we_accept">We accept</string>
 
@@ -17,9 +13,9 @@
     <string name="field_expiry_hint">MM / YYYY</string>
     <string name="field_name_hint">TARO YAMADA</string>
     <string name="field_number_hint">1234 5678 9012 3456</string>
+    <string name="field_cvc_hint">123</string>
 
     <string name="token_fragment_open_dialog">Pay with card</string>
     <string name="token_fragment_token_generated">Payment info provided</string>
-    <string name="tokenize_error_title">Failed to register payment information</string>
     <string name="tokenize_error_message">This application unexpectedly failed to save your payment information. Please retry and contact the developer if still fails.</string>
 </resources>

@@ -4,16 +4,27 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import jp.webpay.android.ErrorResponseException;
 import jp.webpay.android.R;
 import jp.webpay.android.WebPay;
@@ -23,9 +34,9 @@ import jp.webpay.android.model.ErrorResponse;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.model.Token;
 import jp.webpay.android.ui.field.BaseCardField;
+import jp.webpay.android.ui.field.CvcField;
+import jp.webpay.android.ui.field.NameField;
 import jp.webpay.android.ui.field.NumberField;
-
-import java.util.*;
 
 /**
  * This class is to create tokens from users input. WebPayTokenFragment is recommended for most users, but
@@ -50,6 +61,7 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     private WebPayTokenCompleteListener mListener;
     private Throwable mLastException;
     private ArrayList<CardType> mSupportedCardTypes;
+    private @StringRes int mSendButtonTitle = R.string.card_send;
 
     /**
      * Use this factory method to create a new instance of this fragment
@@ -85,6 +97,24 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
 
     }
 
+    /**
+     * Set send button title string resource id.
+     * Default is {@code jp.webpay.android.R.string.card_send}, which is "Pay with card".
+     * This method works before and after dialog is created.
+     *
+     * @param sendButtonTitle    send button title res id
+     */
+    public void setSendButtonTitle(@StringRes int sendButtonTitle) {
+        this.mSendButtonTitle = sendButtonTitle;
+        Dialog dialog = getDialog();
+        if (dialog == null)
+            return;
+        Button sendButton = (Button) dialog.findViewById(R.id.button_submit);
+        if (sendButton == null)
+            return;
+        sendButton.setText(sendButtonTitle);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,11 +123,11 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         mWebPay = new WebPay(publishableKey);
 
         String typeNames[] = arguments.getStringArray(ARG_SUPPORTED_CARD_TYPES);
-        mSupportedCardTypes = new ArrayList<CardType>();
+
         if (typeNames == null) {
-            // allow all brands if no specification
-            mSupportedCardTypes.addAll(Arrays.asList(CardType.values()));
+            mSupportedCardTypes = null;
         } else {
+            mSupportedCardTypes = new ArrayList<CardType>();
             for (String name : typeNames) {
                 mSupportedCardTypes.add(CardType.valueOf(name));
             }
@@ -109,27 +139,8 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
     @SuppressLint("InflateParams")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        builder.setView(inflater.inflate(R.layout.dialog_card, null))
-                .setTitle(R.string.card_payment_info_title)
-                .setPositiveButton(R.string.card_send, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // This is placeholder.
-                        // Do nothing here and override button's onClick listener
-                        // so that the dialog does not dismiss until a token is
-                        // successfully generated.
-                        // See AlertController.mButtonHandler
-                        // http://stackoverflow.com/questions/13746412/prevent-dialogfragment-from-dismissing-when-button-is-clicked
-                    }
-                })
-                .setNegativeButton(R.string.card_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onCancelled(mLastException);
-                    }
-                });
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.WebPayDialogTheme));
+        builder.setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_card, null));
         return builder.create();
     }
 
@@ -141,20 +152,47 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         if (dialog == null)
             return;
 
-        // override default on-click listener not to dismiss automatically
-        Button sendButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        Button sendButton = (Button) dialog.findViewById(R.id.button_submit);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendCardInfoToWebPay();
             }
         });
+        sendButton.setText(mSendButtonTitle);
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.button_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                mListener.onCancelled(mLastException);
+            }
+        });
 
         NumberField numberField = (NumberField) dialog.findViewById(R.id.cardNumberField);
         numberField.setOnCardTypeChangeListener(this);
-        numberField.setCardTypesSupported(mSupportedCardTypes);
-        onCardTypeChange(null); // initialize
 
+        // allow all brands if no specification
+        if (mSupportedCardTypes == null)
+            numberField.setCardTypesSupported(Arrays.asList(CardType.values()));
+        else
+            numberField.setCardTypesSupported(mSupportedCardTypes);
+        if (numberField.getText().toString().equals("")) {
+            onCardTypeChange(null); // initialize
+        }
+
+        NameField nameField = (NameField) dialog.findViewById(R.id.cardNameField);
+        nameField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    sendCardInfoToWebPay();
+                    return true;
+                }
+                return false;
+            }
+        });
         showAvailableCardTypes();
     }
 
@@ -184,12 +222,32 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         mListener = null;
     }
 
+    private void hideSoftKeyboard() {
+        View currentFocus = getDialog().getCurrentFocus();
+        if(currentFocus !=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+        }
+    }
+
     private void showAvailableCardTypes() {
+        View label = getDialog().findViewById(R.id.cardTypeLabel);
         LinearLayout iconList = (LinearLayout)getDialog().findViewById(R.id.cardTypeIconList);
-        for (CardType cardType : mSupportedCardTypes) {
-            ImageView view = new ImageView(getActivity());
-            view.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
-            iconList.addView(view);
+        iconList.removeAllViews();
+        if (mSupportedCardTypes == null) {
+            label.setVisibility(View.GONE);
+            iconList.setVisibility(View.GONE);
+        } else {
+            label.setVisibility(View.VISIBLE);
+            iconList.setVisibility(View.VISIBLE);
+            for (CardType cardType : mSupportedCardTypes) {
+                ImageView view = new ImageView(getActivity());
+                view.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(0, 0, 5, 0);
+                view.setLayoutParams(lp);
+                iconList.addView(view);
+            }
         }
     }
 
@@ -198,23 +256,34 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         if (card == null) {
             return;
         }
-        Log.v(TAG, card.toJson().toString());
-
+        hideSoftKeyboard();
+        switchIndicatorVisibility(true);
         updateRequestLanguage();
         mWebPay.createToken(card, new WebPayListener<Token>() {
             @Override
             public void onCreate(Token result) {
+                switchIndicatorVisibility(false);
                 mListener.onTokenCreated(result);
                 getDialog().dismiss();
             }
 
             @Override
             public void onException(Throwable cause) {
+                switchIndicatorVisibility(false);
                 mLastException = cause;
-                Log.i(TAG, "exception while creating a token", cause);
                 showWebPayErrorAlert(cause);
             }
         });
+    }
+
+    private void switchIndicatorVisibility(boolean visible) {
+        if (visible) {
+            getDialog().findViewById(R.id.progress).setVisibility(View.VISIBLE);
+            getDialog().findViewById(R.id.buttons).setVisibility(View.GONE);
+        } else {
+            getDialog().findViewById(R.id.progress).setVisibility(View.GONE);
+            getDialog().findViewById(R.id.buttons).setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateRequestLanguage() {
@@ -258,40 +327,31 @@ public class CardDialogFragment extends DialogFragment implements NumberField.On
         }
 
         new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.tokenize_error_title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.yes, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
 
     @Override
     public void onCardTypeChange(CardType cardType) {
-        ImageView icon = (ImageView) getDialog().findViewById(R.id.cardNumberTypeIcon);
-        if (cardType == null) {
-            icon.setImageDrawable(null);
-        } else {
-            icon.setImageDrawable(getResources().getDrawable(CARD_TYPE_TO_DRAWABLE.get(cardType)));
-        }
+        NumberField numberFiled = (NumberField) getDialog().findViewById(R.id.cardNumberField);
+        int iconDrawableId = (cardType == null) ? 0 : CARD_TYPE_TO_DRAWABLE.get(cardType).intValue();
+        numberFiled.setCompoundDrawablesWithIntrinsicBounds(0, 0, iconDrawableId, 0);
 
-        ImageButton helpButton = (ImageButton) getDialog().findViewById(R.id.cardCvcHelpButton);
-        if (CardType.AMERICAN_EXPRESS.equals(cardType)) {
-            helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc_amex));
-        } else {
-            helpButton.setOnClickListener(cvcHelpListener(R.drawable.cvc));
-        }
+        CvcField cvcField = (CvcField) getDialog().findViewById(R.id.cardCvcField);
+        int drawableId = CardType.AMERICAN_EXPRESS.equals(cardType) ? R.drawable.cvc_amex : R.drawable.cvc;
+        cvcField.setOnHelpIconClickListener(cvcHelpListener(drawableId));
     }
 
+    @SuppressLint("InflateParams") // using "null" for inflate is correct
     private View.OnClickListener cvcHelpListener(final int drawableId) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageView descriptionImageView = new ImageView(getActivity());
-                descriptionImageView.setImageDrawable(getResources().getDrawable(drawableId));
-                new AlertDialog.Builder(getActivity())
-                        .setView(descriptionImageView)
-                        .setPositiveButton(android.R.string.yes, null)
-                        .setIcon(android.R.drawable.ic_dialog_info)
+                View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_cvc_help, null);
+                ((ImageView) view.findViewById(R.id.cvc_help)).setImageDrawable(getResources().getDrawable(drawableId));
+                new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.WebPayDialogTheme))
+                        .setView(view)
                         .show();
             }
         };

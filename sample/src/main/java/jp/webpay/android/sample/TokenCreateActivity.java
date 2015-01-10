@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
 import jp.webpay.android.WebPay;
@@ -23,7 +24,7 @@ import jp.webpay.android.ui.WebPayTokenFragment;
 
 public class TokenCreateActivity extends FragmentActivity implements WebPayTokenCompleteListener {
     public static final String TAG = "TokenCreateActivity";
-    private static final String WEBPAY_PUBLISHABLE_KEY = "test_secret_eHn4TTgsGguBcW764a2KA8Yd";
+    private static final String WEBPAY_PUBLISHABLE_KEY = "test_public_19DdUs78k2lV8PO8ZCaYX3JT";
     private static int CARD_IO_SCAN_REQUEST_CODE = 100; // arbitrary int
 
     @Override

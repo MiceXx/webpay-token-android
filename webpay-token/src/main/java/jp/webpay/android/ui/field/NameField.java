@@ -5,11 +5,12 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+
+import java.util.Locale;
+
 import jp.webpay.android.R;
 import jp.webpay.android.model.RawCard;
 import jp.webpay.android.validator.NameValidator;
-
-import java.util.Locale;
 
 public class NameField extends BaseCardField implements TextWatcher {
     private String mValidName;

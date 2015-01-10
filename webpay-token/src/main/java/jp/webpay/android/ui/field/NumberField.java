@@ -3,14 +3,15 @@ package jp.webpay.android.ui.field;
 import android.content.Context;
 import android.text.InputType;
 import android.util.AttributeSet;
-import jp.webpay.android.R;
-import jp.webpay.android.model.CardType;
-import jp.webpay.android.model.RawCard;
-import jp.webpay.android.validator.CardNumberValidator;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import jp.webpay.android.R;
+import jp.webpay.android.model.CardType;
+import jp.webpay.android.model.RawCard;
+import jp.webpay.android.validator.CardNumberValidator;
 
 public class NumberField extends MultiColumnCardField {
     public static final String SEPARATOR = " ";

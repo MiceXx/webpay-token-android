@@ -1,13 +1,14 @@
 package jp.webpay.android.model;
 
-import jp.webpay.android.validator.CardNumberValidator;
-import jp.webpay.android.validator.CvcValidator;
-import jp.webpay.android.validator.ExpiryValidator;
-import jp.webpay.android.validator.NameValidator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+
+import jp.webpay.android.validator.CardNumberValidator;
+import jp.webpay.android.validator.CvcValidator;
+import jp.webpay.android.validator.ExpiryValidator;
+import jp.webpay.android.validator.NameValidator;
 
 public class RawCard {
 

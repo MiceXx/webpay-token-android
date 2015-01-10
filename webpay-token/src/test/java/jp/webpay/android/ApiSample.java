@@ -1,9 +1,10 @@
 package jp.webpay.android;
 
-import jp.webpay.android.model.RawCard;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicHeader;
 import org.robolectric.tester.org.apache.http.TestHttpResponse;
+
+import jp.webpay.android.model.RawCard;
 
 public class ApiSample {
     public static final RawCard testCard = new RawCard()

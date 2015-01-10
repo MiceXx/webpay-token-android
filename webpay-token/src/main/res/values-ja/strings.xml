@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">webpay-token-android</string>
     <!-- dialog_card layout -->
     <string name="card_cancel">キャンセル</string>
     <string name="card_cvc">CVC</string>
@@ -8,19 +7,17 @@
     <string name="card_expiry">有効期限</string>
     <string name="card_name">カード名義</string>
     <string name="card_number">カード番号</string>
-    <string name="card_number_type_icon_description">このカード番号のブランド</string>
-    <string name="card_payment_info_title">支払い情報</string>
     <string name="card_send">カードで支払う</string>
     <string name="card_we_accept">対応ブランド</string>
 
     <string name="field_error_default">カードを再度ご確認ください。</string>
-    <string name="field_expiry_hint">MM / YYYY</string>
+    <string name="field_expiry_hint">月 / 年</string>
     <string name="field_name_hint">TARO YAMADA</string>
     <string name="field_number_hint">1234 5678 9012 3456</string>
+    <string name="field_cvc_hint">123</string>
 
     <string name="token_fragment_open_dialog">カードで支払う</string>
     <string name="token_fragment_token_generated">支払い情報入力済み</string>
-    <string name="tokenize_error_title">支払い情報が登録できませんでした</string>
     <string name="tokenize_error_message">
         支払い情報が予期しない理由で保存できませんでした。もう一度試して、なお失敗する場合は開発者にお問い合わせください。
     </string>

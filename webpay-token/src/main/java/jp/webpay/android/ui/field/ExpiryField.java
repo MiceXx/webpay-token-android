@@ -3,12 +3,14 @@ package jp.webpay.android.ui.field;
 import android.content.Context;
 import android.text.InputType;
 import android.util.AttributeSet;
-import jp.webpay.android.R;
-import jp.webpay.android.model.RawCard;
-import jp.webpay.android.validator.ExpiryValidator;
+import android.view.View;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import jp.webpay.android.R;
+import jp.webpay.android.model.RawCard;
+import jp.webpay.android.validator.ExpiryValidator;
 
 public class ExpiryField extends MultiColumnCardField {
     public static final String SEPARATOR = " / ";
@@ -60,6 +62,19 @@ public class ExpiryField extends MultiColumnCardField {
     }
 
     @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        String pair[] = parseToPair(getText().toString());
+        String month = pair[0];
+        String year = pair[1];
+
+        if (month != null && year != null && month.length() == 2 && year.equals("20")) {
+            setText(month + "/ 2020");
+        }
+
+        super.onFocusChange(v, hasFocus);
+    }
+
+    @Override
     public void updateCard(RawCard card) {
         card.expMonth(mValidMonth);
         card.expYear(mValidYear);
@@ -69,11 +84,13 @@ public class ExpiryField extends MultiColumnCardField {
     protected String formatVisibleText(String current) {
         // "0" -> "0" (for 08)
         // "1 -> "1" (for 12)
+        // "13" -> "1"
         // "12" -> "12 / "
         // "209 / " -> "02 / "
         // "8" -> "08 / " (add 0 to 1-digit month)
         // "08 / 2" -> "08 / 2" (as is)
         // "08 / 1" -> "08 / 201" (other than 2)
+        // "08 / 21" -> "08 / 2021"
         // "08 / 2014" -> "08 / 2014" (as is)
         // "08 / 12014" -> "08 / 2012"
         String pair[] = parseToPair(current);
@@ -92,13 +109,22 @@ public class ExpiryField extends MultiColumnCardField {
         }
 
         if (year == null) {
-            if (month.length() == 2)
-                return month + SEPARATOR;
-            else
+            if (month.length() == 2) {
+                if (month.charAt(0) == '1' && month.charAt(1) >= '3') {
+                    return month.substring(0, 1);
+                } else {
+                    return month + SEPARATOR;
+                }
+            } else {
                 return month;
+            }
         }
 
         if (year.length() > 0 && year.charAt(0) != '2') {
+            year = "20" + year;
+        }
+
+        if (year.length() == 2 && year.charAt(1) != '0') {
             year = "20" + year;
         }
 
