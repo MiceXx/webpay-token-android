@@ -1,10 +1,8 @@
 package jp.webpay.android.sample;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,6 +24,7 @@ public class CardIoIntegrationActivity extends BaseFragmentActivity implements W
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_io_integration);
+        onStartCardIo(null);
     }
 
     @Override
@@ -48,7 +47,8 @@ public class CardIoIntegrationActivity extends BaseFragmentActivity implements W
 
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, true);
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, true);
-        scanIntent.putExtra(CardIOActivity.EXTRA_SUPPRESS_MANUAL_ENTRY, false); // default: false
+        scanIntent.putExtra(CardIOActivity.EXTRA_SUPPRESS_MANUAL_ENTRY, true);
+        scanIntent.putExtra(CardIOActivity.EXTRA_SUPPRESS_CONFIRMATION, true);
 
         startActivityForResult(scanIntent, CARD_IO_SCAN_REQUEST_CODE);
     }
@@ -61,51 +61,48 @@ public class CardIoIntegrationActivity extends BaseFragmentActivity implements W
             return;
 
         if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
-            CreditCard scanResult = data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
-            askNameForCardIo(scanResult);
+            setScanResult((CreditCard) data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT));
         } else {
             setStatusMessage(getResources().getString(R.string.card_io_cancelled));
         }
     }
 
-    private void askNameForCardIo(CreditCard scanResult) {
+    private void setScanResult(CreditCard scanResult) {
+        if (!TextUtils.isEmpty(scanResult.cardNumber))
+            ((EditText) findViewById(R.id.cardNumberField)).setText(scanResult.cardNumber);
+        if (scanResult.expiryMonth > 0)
+            ((EditText) findViewById(R.id.cardExpiryMonth)).setText(scanResult.expiryMonth);
+        if (scanResult.expiryYear > 0)
+            ((EditText) findViewById(R.id.cardExpiryYear)).setText(scanResult.expiryYear);
+        if (!TextUtils.isEmpty(scanResult.cvv))
+            ((EditText) findViewById(R.id.cardCvcField)).setText(scanResult.cvv);
+    }
+
+    public void createToken(View view) {
+        EditText cardNumberField = ((EditText) findViewById(R.id.cardNumberField));
+        EditText cardExpiryMonthField = ((EditText) findViewById(R.id.cardExpiryMonth));
+        EditText cardExpiryYearField = ((EditText) findViewById(R.id.cardExpiryYear));
+        EditText cardCvcField = ((EditText) findViewById(R.id.cardCvcField));
+        EditText cardNameField = ((EditText) findViewById(R.id.cardNameField));
+
+
         final RawCard rawCard = new RawCard()
-                .number(scanResult.cardNumber)
-                .expMonth(scanResult.expiryMonth)
-                .expYear(scanResult.expiryYear)
-                .cvc(scanResult.cvv);
+                .number(cardNumberField.getText().toString())
+                .expMonth(Integer.valueOf(cardExpiryMonthField.getText().toString()))
+                .expYear(Integer.valueOf(cardExpiryYearField.getText().toString()))
+                .cvc(cardCvcField.getText().toString())
+                .name(cardNameField.getText().toString());
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Card holder name");
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        new WebPay(WEBPAY_PUBLISHABLE_KEY).createToken(rawCard, new WebPayListener<Token>() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                rawCard.name(input.getText().toString());
-                new WebPay(WEBPAY_PUBLISHABLE_KEY).createToken(rawCard, new WebPayListener<Token>() {
-                    @Override
-                    public void onCreate(Token result) {
-                        onTokenCreated(result);
-                    }
+            public void onCreate(Token result) {
+                onTokenCreated(result);
+            }
 
-                    @Override
-                    public void onException(Throwable cause) {
-                        onCancelled(cause);
-                    }
-                });
+            @Override
+            public void onException(Throwable cause) {
+                onCancelled(cause);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
     }
 }

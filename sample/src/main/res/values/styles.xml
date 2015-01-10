@@ -4,7 +4,6 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">#325d72</item>
         <item name="colorPrimaryDark">#204b60</item>
-        <item name="android:textColorPrimary">#eeeeee</item>
     </style>
 
 </resources>

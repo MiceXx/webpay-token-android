@@ -1,23 +1,88 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin">
 
     <TextView
+        android:id="@+id/statusTextView"
         android:text="@string/no_token"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/statusTextView"/>
+        android:layout_marginBottom="20dp"/>
 
-    <Button
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/cardNumberAndCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/cardNumberField"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/use_card_io"
-            android:layout_below="@+id/statusTextView"
+            android:layout_weight="8"
+            android:inputType="number"
+            android:nextFocusDown="@+id/cardExpiryField"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:src="@android:drawable/ic_menu_camera"
             android:id="@+id/start_card_io_button"
             android:onClick="onStartCardIo"/>
+    </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/cardExpiryAndCvC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <EditText
+            android:id="@+id/cardExpiryMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:nextFocusDown="@+id/cardCvcField"/>
+
+        <EditText
+            android:id="@+id/cardExpiryYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:nextFocusDown="@+id/cardCvcField"/>
+
+        <EditText
+            android:id="@+id/cardCvcField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:nextFocusDown="@+id/cardNameField"/>
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cardNameField"
+        android:imeOptions="actionSend"/>
+
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:text="Create Token"
+        android:layout_marginTop="20dp"
+        android:onClick="createToken"/>
+</LinearLayout>
