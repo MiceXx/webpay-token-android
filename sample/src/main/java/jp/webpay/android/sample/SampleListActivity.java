@@ -1,6 +1,5 @@
 package jp.webpay.android.sample;
 
-import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +7,9 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,34 +18,54 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class SampleListActivity extends ListActivity {
+public class SampleListActivity extends BaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<ActivityInfo> items = new ArrayList<>();
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES);
-            ActivityInfo[] aInfos = pInfo.activities;
-
-            String selfName = getClass().getName();
-            for (ActivityInfo aInfo : aInfos) {
-                if (aInfo.name.startsWith(pInfo.packageName) && !aInfo.name.equals(selfName)) {
-                    items.add(aInfo);
-                }
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        setListAdapter(new SampleAdapter(this, items));
+        setContentView(R.layout.activity_sample_list);
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        ActivityInfo info = (ActivityInfo) l.getItemAtPosition(position);
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName(this, info.name));
-        startActivity(intent);
+    public static class SampleListFragment extends ListFragment {
+
+        public SampleListFragment() {
+
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setListAdapter(new SampleAdapter(getActivity(), getActivityInfoArray()));
+        }
+
+        private ArrayList<ActivityInfo> getActivityInfoArray() {
+            ArrayList<ActivityInfo> items = new ArrayList<>();
+            FragmentActivity activity = getActivity();
+
+            try {
+                PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(
+                        activity.getPackageName(), PackageManager.GET_ACTIVITIES);
+                ActivityInfo[] activities = packageInfo.activities;
+
+                String selfName = getActivity().getLocalClassName();
+                for (ActivityInfo aInfo : activities) {
+                    if (aInfo.name.startsWith(packageInfo.packageName) && !aInfo.name.endsWith(selfName)) {
+                        items.add(aInfo);
+                    }
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            return items;
+        }
+
+        @Override
+        public void onListItemClick(ListView l, View v, int position, long id) {
+            ActivityInfo info = (ActivityInfo) l.getItemAtPosition(position);
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName(getActivity(), info.name));
+            startActivity(intent);
+        }
     }
 
     private static class SampleAdapter extends BaseAdapter {
@@ -55,8 +73,8 @@ public class SampleListActivity extends ListActivity {
         private final ArrayList<ActivityInfo> items;
         private final LayoutInflater inflater;
 
-        public SampleAdapter(Context context, ArrayList<ActivityInfo> activities) {
-            this.items = activities;
+        public SampleAdapter(Context context, ArrayList<ActivityInfo> items) {
+            this.items = items;
             this.inflater = LayoutInflater.from(context);
         }
 
@@ -81,32 +99,8 @@ public class SampleListActivity extends ListActivity {
             if (tv == null) {
                 tv = (TextView) inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
             }
-            ActivityInfo item = getItem(position);
-            if (!TextUtils.isEmpty(item.nonLocalizedLabel)) {
-                tv.setText(item.nonLocalizedLabel);
-            } else {
-                tv.setText(item.labelRes);
-            }
+            tv.setText(getItem(position).labelRes);
             return tv;
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.token_create, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
