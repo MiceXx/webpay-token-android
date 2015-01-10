@@ -9,8 +9,22 @@
     tools:context="jp.webpay.android.sample.TokenCreateActivity">
 
     <TextView
-        android:text="@string/hello_world"
+        android:text="@string/no_token"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/statusTextView"/>
+
+    <!--
+        This FrameLayout is a placeholder for the WebPay token button and will be provided
+        by a fragment at runtime.
+    -->
+    <FrameLayout
+            android:id="@+id/webpay_token_button_fragment"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/statusTextView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

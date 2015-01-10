@@ -1,38 +1,47 @@
-apply plugin: 'android-library'
-apply plugin: 'android-test'
+apply plugin: 'com.android.library'
+apply plugin: 'robolectric'
 
 android {
-    compileSdkVersion 18
-    buildToolsVersion "19.0.1"
+    compileSdkVersion 21
+    buildToolsVersion '21.1.2'
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 18
+        targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
     }
 
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 
     sourceSets {
-        instrumentTest.setRoot('src/test')
+        androidTest {
+            setRoot('src/test')
+        }
+    }
+
+    lintOptions {
+        disable 'RtlHardcoded', 'RtlEnabled', // supports 8+, which does not provide RTL
+                'IconMissingDensityFolder' // decided not to provide
+        warningsAsErrors true
     }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:+'
-    compile 'jp.webpay:webpay-java:1.1.2'
-    compile 'org.projectlombok:lombok:1.12.6'
+    //noinspection GradleDynamicVersion
+    compile 'com.android.support:appcompat-v7:21.0.+'
+    //noinspection GradleDynamicVersion
+    compile 'com.android.support:support-v4:21.0.+'
 
-    testCompile 'junit:junit:4.11'
-    testCompile 'org.robolectric:robolectric:2.3-SNAPSHOT'
-    testCompile 'com.squareup:fest-android:1.0.+'
-    instrumentTestCompile 'junit:junit:4.11'
-    instrumentTestCompile 'org.robolectric:robolectric:2.3-SNAPSHOT'
-    instrumentTestCompile 'com.squareup:fest-android:1.0.+'
+    androidTestCompile('org.robolectric:robolectric:2.4') {
+      exclude group: 'commons-logging', module: 'commons-logging'
+      exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }
+    androidTestCompile 'junit:junit:4.11'
+    androidTestCompile 'org.hamcrest:hamcrest-all:1.3'
 }

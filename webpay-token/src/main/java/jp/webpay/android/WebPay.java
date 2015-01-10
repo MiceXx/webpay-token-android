@@ -1,85 +1,144 @@
 package jp.webpay.android;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 
-import jp.webpay.android.model.Card;
-import jp.webpay.api.WebPayClient;
-import jp.webpay.model.Token;
-import jp.webpay.request.CardRequest;
-import jp.webpay.exception.*;
-import lombok.Setter;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import jp.webpay.android.model.AccountAvailability;
+import jp.webpay.android.model.ErrorResponse;
+import jp.webpay.android.model.RawCard;
+import jp.webpay.android.model.Token;
 
 public class WebPay {
 
-    @Setter private String publishableKey;
-    @Setter private Card card;
-    @Setter private WebPayListener listener;
-
-    public WebPay() {}
-
-    public WebPay(WebPayListener listener) {
-        this.setListener(listener);
-    }
-
-    public WebPay(WebPayListener listener, String publishableKey) {
-        this.setListener(listener);
-        this.setPublishableKey(publishableKey);
-    }
+    private static final Uri BASE_URI = Uri.parse("https://api.webpay.jp/v1");
+    private final WebPayPublicClient client;
 
     public WebPay(String publishableKey) {
-        this.setPublishableKey(publishableKey);
+        client = new WebPayPublicClient(BASE_URI, publishableKey);
     }
 
-    public void createToken() {
-        new CreateTokenTask().execute();
+    public void setLanguage(String language) {
+        client.setLanguage(language);
     }
 
-    public void createToken(Card card, WebPayListener listener) {
-        this.setCard(card);
-        this.setListener(listener);
-        createToken();
+    public void createToken(final RawCard rawCard, WebPayListener<Token> listener) {
+        if (rawCard == null) {
+            throw new IllegalArgumentException("rawCard must not be null");
+        }
+        new RequestTask<Token>(listener) {
+            @Override
+            WebPayPublicClient.Result sendRequest() throws IOException {
+                return client.request("POST", "tokens", rawCard.toJson().toString());
+            }
+
+            @Override
+            Token parseResponse(JSONObject json) throws JSONException {
+                return Token.fromJson(json);
+            }
+        }.execute();
     }
 
+    public void retrieveAvailability(WebPayListener<AccountAvailability> listener) {
+        new RequestTask<AccountAvailability>(listener) {
+            @Override
+            WebPayPublicClient.Result sendRequest() throws IOException {
+                return client.request("GET", "account/availability", null);
+            }
 
-    public class CreateTokenTask extends AsyncTask<Void, Void, Token> {
+            @Override
+            AccountAvailability parseResponse(JSONObject json) throws JSONException {
+                return AccountAvailability.fromJson(json);
+            }
+        }.execute();
+    }
 
-        @Override
-        protected void onPreExecute() {
+    private abstract static class RequestTask<T> extends AsyncTask<Void, Void, TaskResult<T>> {
+        private final WebPayListener<T> listener;
+
+        private RequestTask(WebPayListener<T> listener) {
+            if (listener == null) {
+                throw new IllegalArgumentException("listener must not be null");
+            }
+            this.listener = listener;
         }
 
+        abstract WebPayPublicClient.Result sendRequest() throws IOException;
+
+        abstract T parseResponse(JSONObject json) throws JSONException;
+
         @Override
-        protected Token doInBackground(Void... params) {
-            WebPayClient client = new WebPayClient(publishableKey);
-            CardRequest request = new CardRequest().number(card.getNumber()).expMonth(card.getExpMonth()).expYear(card.getExpYear()).cvc(Integer.valueOf(card.getCvc())).name(card.getName());
+        protected TaskResult<T> doInBackground(Void... params) {
             try {
-                return client.tokens.create(request);
+                WebPayPublicClient.Result result;
+                try {
+                    result = sendRequest();
+                } catch (IOException e) {
+                    return new TaskResult<T>(e);
+                }
+                if (result.statusCode >= 200 && result.statusCode < 300) {
+                    try {
+                        return new TaskResult<T>(parseResponse(new JSONObject(result.responseBody)));
+                    } catch (JSONException e) {
+                        return new TaskResult<T>(e);
+                    }
+                } else {
+                    try {
+                        ErrorResponse error = ErrorResponse.fromJson(result.statusCode, new JSONObject(result.responseBody));
+                        return new TaskResult<T>(error);
+                    } catch (JSONException e) {
+                        return new TaskResult<T>(e);
+                    }
+                }
+            } catch (RuntimeException e) {
+                return new TaskResult<T>(e);
             }
-            catch (CardException e) {
-                listener.onErrorCreatingToken();
-            }
-            catch (AuthenticationException e) {
-                listener.onErrorCreatingToken();
-            }
-            catch (ApiConnectionException e) {
-                listener.onErrorCreatingToken();
-            }
-            catch (InvalidRequestException e) {
-                listener.onErrorCreatingToken();
-            }
-            catch (APIException e) {
-                listener.onErrorCreatingToken();
-            }
-            return null;
         }
 
         @Override
         protected void onCancelled() {
-            listener.onErrorCreatingToken();
+            listener.onException(new RuntimeException("Communication task is not expected to be cancelled"));
         }
 
         @Override
-        protected void onPostExecute(Token token) {
-            listener.onCreateToken(null);
+        protected void onPostExecute(TaskResult<T> result) {
+            if (result.model != null) {
+                listener.onCreate(result.model);
+            } else if (result.error != null) {
+                listener.onException(new ErrorResponseException(result.error));
+            } else if (result.cause != null) {
+                listener.onException(result.cause);
+            } else {
+                throw new AssertionError("Incomplete result");
+            }
+        }
+    }
+
+    private static class TaskResult<T> {
+        private final T model;
+        private final ErrorResponse error;
+        private final Throwable cause;
+
+        private TaskResult(T model) {
+            this.model = model;
+            this.error = null;
+            this.cause = null;
+        }
+
+        private TaskResult(ErrorResponse error) {
+            this.model = null;
+            this.error = error;
+            this.cause = null;
+        }
+
+        private TaskResult(Throwable cause) {
+            this.model = null;
+            this.error = null;
+            this.cause = cause;
         }
     }
 }
