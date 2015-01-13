@@ -6,7 +6,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +39,7 @@ public abstract class BaseFragmentActivity extends ActionBarActivity {
     }
 
     private void showInformationDialog() {
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_information, null);
+        View view = View.inflate(this, R.layout.dialog_information, null);
         TextView tv = (TextView) view.findViewById(R.id.dialog_information_content);
         tv.setText(Html.fromHtml(getString(R.string.information_content)));
         tv.setMovementMethod(new LinkMovementMethod());
