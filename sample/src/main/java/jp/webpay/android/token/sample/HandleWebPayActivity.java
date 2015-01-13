@@ -19,11 +19,11 @@ public class HandleWebPayActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_handle_webpay);
     }
 
-    public void onTokenCreated(Token token) {
+    private void onTokenCreated(Token token) {
         setStatusMessage(String.format(getResources().getString(R.string.token_generated), token.id));
     }
 
-    public void onCancelled(Throwable lastException) {
+    private void onCancelled(Throwable lastException) {
         String message = lastException == null ? "(not set)" : lastException.getMessage();
         setStatusMessage(String.format(getResources().getString(R.string.token_cancelled), message));
     }
