@@ -6,36 +6,35 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:orientation="vertical"
-        android:padding="20dp"
-        android:background="@android:color/white">
+        android:padding="20dp">
 
         <TextView
-            style="@style/card_label"
             android:id="@+id/cardTypeLabel"
+            style="@style/card_label"
             android:layout_alignParentTop="true"
-            android:text="@string/card_we_accept"/>
+            android:text="@string/card_we_accept" />
 
         <LinearLayout
             android:id="@+id/cardTypeIconList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/cardTypeLabel"
-            android:orientation="horizontal">
-        </LinearLayout>
+            android:orientation="horizontal"></LinearLayout>
 
         <TextView
-            style="@style/card_label"
             android:id="@+id/cardNumberLabel"
+            style="@style/card_label"
             android:layout_below="@id/cardTypeIconList"
-            android:text="@string/card_number"/>
+            android:text="@string/card_number" />
 
         <jp.webpay.android.token.ui.field.NumberField
-            style="@style/card_edit_text"
             android:id="@+id/cardNumberField"
+            style="@style/card_edit_text"
             android:layout_width="match_parent"
             android:layout_below="@id/cardNumberLabel"
-            android:nextFocusDown="@+id/cardExpiryField"/>
+            android:nextFocusDown="@+id/cardExpiryField" />
 
         <LinearLayout
             android:id="@+id/cardExpiryAndCvC"
@@ -54,58 +53,58 @@
 
                 <TextView
                     style="@style/card_label"
-                    android:text="@string/card_expiry"/>
+                    android:text="@string/card_expiry" />
 
                 <jp.webpay.android.token.ui.field.ExpiryField
-                    style="@style/card_edit_text"
                     android:id="@+id/cardExpiryField"
+                    style="@style/card_edit_text"
                     android:layout_width="match_parent"
                     android:layout_marginBottom="0dp"
-                    android:nextFocusDown="@+id/cardCvcField"/>
+                    android:nextFocusDown="@+id/cardCvcField" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="12dp">
+                android:layout_marginLeft="12dp"
+                android:layout_weight="1">
 
                 <TextView
-                    style="@style/card_label"
                     android:id="@+id/cardCvcLabel"
-                    android:text="@string/card_cvc"/>
+                    style="@style/card_label"
+                    android:text="@string/card_cvc" />
 
                 <jp.webpay.android.token.ui.field.CvcField
-                    style="@style/card_edit_text"
                     android:id="@+id/cardCvcField"
+                    style="@style/card_edit_text"
                     android:layout_width="match_parent"
                     android:layout_below="@id/cardCvcLabel"
                     android:layout_marginBottom="0dp"
-                    android:nextFocusDown="@+id/cardNameField"
-                    android:drawableRight="@drawable/cvc_help_button"/>
+                    android:drawableRight="@drawable/cvc_help_button"
+                    android:nextFocusDown="@+id/cardNameField" />
 
             </RelativeLayout>
         </LinearLayout>
 
         <TextView
-            style="@style/card_label"
             android:id="@+id/cardNameLabel"
+            style="@style/card_label"
             android:layout_below="@id/cardExpiryAndCvC"
-            android:text="@string/card_name"/>
+            android:text="@string/card_name" />
 
         <jp.webpay.android.token.ui.field.NameField
-            style="@style/card_edit_text"
             android:id="@+id/cardNameField"
+            style="@style/card_edit_text"
             android:layout_width="match_parent"
             android:layout_below="@id/cardNameLabel"
-            android:imeOptions="actionSend"/>
+            android:imeOptions="actionSend" />
 
         <LinearLayout
             android:id="@+id/buttons"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
             android:layout_below="@id/cardNameField"
+            android:layout_marginTop="24dp"
             android:orientation="horizontal">
 
             <Button
@@ -113,32 +112,34 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:textColor="#80000000"
                 android:background="@drawable/abc_item_background_holo_light"
-                android:text="@string/card_cancel"/>
+                android:text="@string/card_cancel"
+                android:textColor="#80000000"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/button_submit"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:textSize="14sp"
-                android:text="@string/card_send"/>
-         </LinearLayout>
+                android:text="@string/card_send"
+                android:textSize="14sp" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
             android:layout_below="@id/cardNameField"
-            android:orientation="horizontal"
+            android:layout_marginTop="24dp"
             android:gravity="center"
+            android:orientation="horizontal"
             android:visibility="gone">
+
             <ProgressBar
                 style="?android:attr/progressBarStyle"
                 android:layout_width="40dp"
-                android:layout_height="40dp"/>
+                android:layout_height="40dp" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

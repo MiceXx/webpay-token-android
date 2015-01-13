@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <fragment
-        android:tag="sample_list_fragment"
         android:name="jp.webpay.android.token.sample.SampleListActivity$SampleListFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:tag="sample_list_fragment" />
 
 </LinearLayout>

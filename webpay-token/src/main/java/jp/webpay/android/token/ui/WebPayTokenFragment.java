@@ -11,12 +11,12 @@ import android.widget.Button;
 
 import java.util.List;
 
+import jp.webpay.android.token.R;
 import jp.webpay.android.token.WebPay;
 import jp.webpay.android.token.WebPayListener;
 import jp.webpay.android.token.model.AccountAvailability;
 import jp.webpay.android.token.model.CardType;
 import jp.webpay.android.token.model.Token;
-import jp.webpay.android.token.R;
 
 /**
  * A fragment to create WebPay client-side token.

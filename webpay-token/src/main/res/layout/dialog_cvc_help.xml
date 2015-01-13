@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:padding="30dp"
         android:background="@android:color/white"
-        android:contentDescription="@string/card_cvc_help_description"/>
+        android:contentDescription="@string/card_cvc_help_description"
+        android:padding="30dp" />
 </RelativeLayout>

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import jp.webpay.android.token.ErrorResponseException;
+import jp.webpay.android.token.R;
 import jp.webpay.android.token.WebPay;
 import jp.webpay.android.token.WebPayListener;
 import jp.webpay.android.token.model.CardType;
@@ -36,7 +37,6 @@ import jp.webpay.android.token.ui.field.BaseCardField;
 import jp.webpay.android.token.ui.field.CvcField;
 import jp.webpay.android.token.ui.field.NameField;
 import jp.webpay.android.token.ui.field.NumberField;
-import jp.webpay.android.token.R;
 
 /**
  * This class is to create tokens from users input. WebPayTokenFragment is recommended for most users, but
