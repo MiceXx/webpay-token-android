@@ -22,18 +22,21 @@ android {
         warningsAsErrors true
     }
 
-    signingConfigs {
-        releaseConfig {
-            storeFile=file(project.properties.storeFile)
-            storePassword=project.properties.storePassword
-            keyAlias=project.properties.keyAlias
-            keyPassword=project.properties.keyPassword
+    if (project.properties.containsKey("storeFile")) {
+        signingConfigs {
+            releaseConfig {
+                // if you are a release manager, set these properties in gradle.properties
+                storeFile = file(project.properties.storeFile)
+                storePassword = project.properties.storePassword
+                keyAlias = project.properties.keyAlias
+                keyPassword = project.properties.keyPassword
+            }
         }
-    }
 
-    buildTypes {
-        release {
-            signingConfig signingConfigs.releaseConfig
+        buildTypes {
+            release {
+                signingConfig signingConfigs.releaseConfig
+            }
         }
     }
 }
