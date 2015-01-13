@@ -11,7 +11,7 @@ public abstract class BaseFragmentActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.token_create, menu);
+        getMenuInflater().inflate(R.menu.webpay_token_sample, menu);
         super.onCreateOptionsMenu(menu);
         return true;
     }
