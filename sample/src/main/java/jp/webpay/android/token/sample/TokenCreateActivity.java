@@ -1,4 +1,4 @@
-package jp.webpay.android.sample;
+package jp.webpay.android.token.sample;
 
 import android.os.Bundle;
 import android.widget.TextView;

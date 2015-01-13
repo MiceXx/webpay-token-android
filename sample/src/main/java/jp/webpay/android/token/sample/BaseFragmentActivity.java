@@ -1,4 +1,4 @@
-package jp.webpay.android.sample;
+package jp.webpay.android.token.sample;
 
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;

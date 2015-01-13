@@ -5,6 +5,7 @@ android {
     buildToolsVersion '21.1.2'
 
     defaultConfig {
+        applicationId "jp.webpay.android.token.sample"
         minSdkVersion 8
         targetSdkVersion 21
         versionCode 1

@@ -6,7 +6,7 @@
 
     <fragment
         android:tag="sample_list_fragment"
-        android:name="jp.webpay.android.sample.SampleListActivity$SampleListFragment"
+        android:name="jp.webpay.android.token.sample.SampleListActivity$SampleListFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
