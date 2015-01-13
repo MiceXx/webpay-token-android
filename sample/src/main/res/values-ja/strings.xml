@@ -16,7 +16,6 @@
     <string name="token_generated">トークンが作成されました: %1$s</string>
     <string name="token_cancelled">トークンの作成がキャンセルされました: %1$s</string>
     <string name="action_info">アプリケーションの情報</string>
-    <string name="use_card_io">card.ioを使用する</string>
     <string name="launch_card_io">card.ioを起動する</string>
     <string name="card_io_cancelled">card.ioの使用がキャンセルされました</string>
     <string name="card_info_submit">トークンを作成する</string>

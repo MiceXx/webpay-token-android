@@ -22,7 +22,6 @@
     <string name="token_generated">Generated token id: %1$s</string>
     <string name="token_cancelled">You cancelled purchasing: %1$s</string>
     <string name="action_info">Information</string>
-    <string name="use_card_io">Use Card.io instead</string>
     <string name="launch_card_io">Launch Card.io</string>
     <string name="card_io_cancelled">You cancelled card.io, try WebPay\'s UI.</string>
     <string name="card_info_submit">Create Token</string>
