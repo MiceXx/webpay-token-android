@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'robolectric'
 
 description = 'Android Library for creating a WebPay token from a credit-card'
-group = 'jp.webpay'
+group = 'jp.webpay.android'
 version = '1.0.0'
 
 android {
