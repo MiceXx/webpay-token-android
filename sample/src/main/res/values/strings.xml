@@ -12,6 +12,12 @@
     <string name="button_own">Button implemented by you</string>
     <string name="button_submit">Complete to input your payment</string>
 
+    <string name="hint_number">4242424242424242</string>
+    <string name="hint_expiry_month">12</string>
+    <string name="hint_expiry_year">2018</string>
+    <string name="hint_cvc">123</string>
+    <string name="hint_name">TARO YAMADA</string>
+
     <string name="no_token">Token is not generated yet</string>
     <string name="token_generated">Generated token id: %1$s</string>
     <string name="token_cancelled">You cancelled purchasing: %1$s</string>

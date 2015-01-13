@@ -22,6 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="8"
+            android:hint="@string/hint_number"
             android:inputType="number"
             android:nextFocusDown="@+id/cardExpiryField" />
 
@@ -39,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:hint="@string/hint_expiry_month"
             android:inputType="number"
             android:nextFocusDown="@+id/cardCvcField" />
 
@@ -47,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:hint="@string/hint_expiry_year"
             android:inputType="number"
             android:nextFocusDown="@+id/cardCvcField" />
 
@@ -55,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:hint="@string/hint_cvc"
             android:inputType="number"
             android:nextFocusDown="@+id/cardNameField" />
     </LinearLayout>
@@ -63,6 +67,7 @@
         android:id="@+id/cardNameField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/hint_name"
         android:imeOptions="actionSend"
         android:inputType="text" />
 
