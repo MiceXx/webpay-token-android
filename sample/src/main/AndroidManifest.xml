@@ -36,6 +36,10 @@
             android:label="@string/label_token_create" />
 
         <activity
+            android:name=".CardDialogActivity"
+            android:label="@string/label_card_dialog" />
+
+        <activity
             android:name=".CardIoIntegrationActivity"
             android:label="@string/label_card_io_integration" />
 

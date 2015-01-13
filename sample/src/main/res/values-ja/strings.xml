@@ -5,7 +5,11 @@
 
     <string name="label_sample_list">Samples using webpay-token</string>
     <string name="label_token_create">決済フォームとボタンを埋め込む</string>
+    <string name="label_card_dialog">決済フォームのみ利用する</string>
     <string name="label_card_io_integration">card.ioと組み合わせる</string>
+
+    <string name="button_own">独自に実装したボタン</string>
+    <string name="button_submit">カード情報の入力を完了する</string>
 
     <string name="no_token">トークンは作成されていません</string>
     <string name="token_generated">トークンが作成されました: %1$s</string>
