@@ -116,13 +116,13 @@ public class WebPayTokenFragmentTest {
         BitmapDrawable drawable = (BitmapDrawable)numberField.getCompoundDrawables()[2];
         assertNotNull(drawable);
         assertTrue(shadowOf(drawable.getBitmap()).toString().
-                contains("resource:jp.webpay.android:drawable/card_visa"));
+                contains("resource:jp.webpay.android.token:drawable/card_visa"));
 
         numberField.requestFocus();
         numberField.setText("3782"); // amex
         numberField.clearFocus();
         assertTrue(shadowOf(((BitmapDrawable)numberField.getCompoundDrawables()[2]).getBitmap()).toString().
-                contains("resource:jp.webpay.android:drawable/card_amex"));
+                contains("resource:jp.webpay.android.token:drawable/card_amex"));
 
         // press CVC buttonp
         int [] location = {0,0};
@@ -135,7 +135,7 @@ public class WebPayTokenFragmentTest {
         ShadowAlertDialog helpDialog = shadowOf(ShadowAlertDialog.getLatestAlertDialog());
         drawable = (BitmapDrawable)((ImageView)helpDialog.getView().findViewById(R.id.cvc_help)).getDrawable();
         assertTrue(shadowOf(drawable.getBitmap()).toString().
-                contains("resource:jp.webpay.android:drawable/cvc_amex"));
+                contains("resource:jp.webpay.android.token:drawable/cvc_amex"));
     }
 
     @Test
