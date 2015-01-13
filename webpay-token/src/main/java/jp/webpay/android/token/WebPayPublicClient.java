@@ -14,8 +14,6 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 
-import jp.webpay.android.token.BuildConfig;
-
 /**
  * Communicate with WebPay server using Apache HTTP client
   */
