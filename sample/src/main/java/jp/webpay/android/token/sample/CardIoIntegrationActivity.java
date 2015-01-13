@@ -13,10 +13,9 @@ import jp.webpay.android.token.WebPay;
 import jp.webpay.android.token.WebPayListener;
 import jp.webpay.android.token.model.RawCard;
 import jp.webpay.android.token.model.Token;
-import jp.webpay.android.token.ui.WebPayTokenCompleteListener;
 
 
-public class CardIoIntegrationActivity extends BaseSampleActivity implements WebPayTokenCompleteListener {
+public class CardIoIntegrationActivity extends BaseSampleActivity {
 
     private static int CARD_IO_SCAN_REQUEST_CODE = 100; // arbitrary int
 
@@ -27,13 +26,11 @@ public class CardIoIntegrationActivity extends BaseSampleActivity implements Web
         onStartCardIo(null);
     }
 
-    @Override
-    public void onTokenCreated(Token token) {
+    private void onTokenCreated(Token token) {
         setStatusMessage(String.format(getResources().getString(R.string.token_generated), token.id));
     }
 
-    @Override
-    public void onCancelled(Throwable lastException) {
+    private void onCancelled(Throwable lastException) {
         String message = lastException == null ? "(not set)" : lastException.getMessage();
         setStatusMessage(String.format(getResources().getString(R.string.token_cancelled), message));
     }
