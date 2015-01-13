@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import jp.webpay.android.BuildConfig;
 import jp.webpay.android.token.model.AccountAvailability;
 import jp.webpay.android.token.model.CardType;
 import jp.webpay.android.token.model.ErrorResponse;

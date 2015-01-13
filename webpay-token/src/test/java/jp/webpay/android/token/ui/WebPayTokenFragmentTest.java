@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import jp.webpay.android.token.ApiSample;
 import jp.webpay.android.token.ErrorResponseException;
-import jp.webpay.android.R;
+import jp.webpay.android.token.R;
 import jp.webpay.android.token.model.ErrorResponse;
 import jp.webpay.android.token.ui.field.CvcField;
 import jp.webpay.android.token.ui.field.NumberField;

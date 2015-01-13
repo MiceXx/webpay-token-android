@@ -13,7 +13,7 @@ import org.robolectric.util.ActivityController;
 
 import java.util.Arrays;
 
-import jp.webpay.android.R;
+import jp.webpay.android.token.R;
 import jp.webpay.android.token.model.CardType;
 import jp.webpay.android.token.ui.field.NumberField;
 
