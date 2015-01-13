@@ -21,6 +21,21 @@ android {
         disable 'IconMissingDensityFolder' // decided not to provide
         warningsAsErrors true
     }
+
+    signingConfigs {
+        releaseConfig {
+            storeFile=file(project.properties.storeFile)
+            storePassword=project.properties.storePassword
+            keyAlias=project.properties.keyAlias
+            keyPassword=project.properties.keyPassword
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.releaseConfig
+        }
+    }
 }
 
 dependencies {
