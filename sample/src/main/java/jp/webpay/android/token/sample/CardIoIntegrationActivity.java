@@ -85,7 +85,6 @@ public class CardIoIntegrationActivity extends BaseFragmentActivity implements W
         EditText cardCvcField = ((EditText) findViewById(R.id.cardCvcField));
         EditText cardNameField = ((EditText) findViewById(R.id.cardNameField));
 
-
         final RawCard rawCard = new RawCard()
                 .number(cardNumberField.getText().toString())
                 .expMonth(Integer.valueOf(cardExpiryMonthField.getText().toString()))

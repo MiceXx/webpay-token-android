@@ -39,7 +39,6 @@ public class HandleWebPayActivity extends BaseFragmentActivity {
         EditText cardCvcField = ((EditText) findViewById(R.id.cardCvcField));
         EditText cardNameField = ((EditText) findViewById(R.id.cardNameField));
 
-
         final RawCard rawCard = new RawCard()
                 .number(cardNumberField.getText().toString())
                 .expMonth(Integer.valueOf(cardExpiryMonthField.getText().toString()))
