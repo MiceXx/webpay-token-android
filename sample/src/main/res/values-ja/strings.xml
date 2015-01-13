@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Samples using webpay-token</string>
-
-    <string name="label_sample_list">Samples using webpay-token</string>
     <string name="label_token_create">決済フォームとボタンを埋め込む</string>
     <string name="label_card_dialog">決済フォームのみ利用する</string>
     <string name="label_handle_webpay">通信ライブラリのみ利用する</string>

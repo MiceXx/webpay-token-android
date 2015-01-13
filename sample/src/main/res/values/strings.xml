@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Samples using webpay-token</string>
+    <string name="app_name" translatable="false">webpay-token samples</string>
 
-    <string name="label_sample_list">Samples using webpay-token</string>
     <string name="label_token_create">Use form and button</string>
     <string name="label_card_dialog">Use only form</string>
     <string name="label_handle_webpay">Use only client library</string>
