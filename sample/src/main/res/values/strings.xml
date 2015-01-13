@@ -12,11 +12,11 @@
     <string name="button_own">Button implemented by you</string>
     <string name="button_submit">Add payment</string>
 
-    <string name="hint_number">4242424242424242</string>
-    <string name="hint_expiry_month">12</string>
-    <string name="hint_expiry_year">2018</string>
-    <string name="hint_cvc">123</string>
-    <string name="hint_name">TARO YAMADA</string>
+    <string name="hint_number" translatable="false">4242424242424242</string>
+    <string name="hint_expiry_month" translatable="false">12</string>
+    <string name="hint_expiry_year" translatable="false">2018</string>
+    <string name="hint_cvc" translatable="false">123</string>
+    <string name="hint_name" translatable="false">TARO YAMADA</string>
 
     <string name="no_token">Token is not generated yet</string>
     <string name="token_generated">Generated token id: %1$s</string>
@@ -28,7 +28,7 @@
     <string name="card_info_submit">Create Token</string>
 
     <string name="dialog_dismiss">Dismiss</string>
-    <string name="information_content"><![CDATA[
+    <string name="information_content" translatable="false"><![CDATA[
         <a href=\'https://webpay.jp/\'>WebPay</a>,&nbsp;
         <a href=\'https://github.com/webpay/webpay-token-android/\'>Source</a>
         <h5>webpay-token-android</h5>
