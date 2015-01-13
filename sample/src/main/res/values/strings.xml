@@ -10,7 +10,7 @@
     <string name="label_card_io_integration">Integrate card.io with client library</string>
 
     <string name="button_own">Button implemented by you</string>
-    <string name="button_submit">Complete to input your payment</string>
+    <string name="button_submit">Add payment</string>
 
     <string name="hint_number">4242424242424242</string>
     <string name="hint_expiry_month">12</string>
