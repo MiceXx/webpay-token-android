@@ -1,9 +1,16 @@
 package jp.webpay.android.token.sample;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public abstract class BaseFragmentActivity extends ActionBarActivity {
 
@@ -25,6 +32,7 @@ public abstract class BaseFragmentActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_info:
+                showInformationDialog();
                 return true;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
@@ -36,5 +44,22 @@ public abstract class BaseFragmentActivity extends ActionBarActivity {
 
     protected boolean enableBackOnActionBar() {
         return true;
+    }
+
+    private void showInformationDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_information, null);
+        TextView tv = (TextView) view.findViewById(R.id.dialog_information_content);
+        tv.setText(Html.fromHtml(getString(R.string.information_content)));
+        tv.setMovementMethod(new LinkMovementMethod());
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.app_name)
+                .setPositiveButton(R.string.dialog_dismiss, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setView(view)
+                .show();
     }
 }

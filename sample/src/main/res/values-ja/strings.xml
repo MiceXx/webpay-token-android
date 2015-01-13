@@ -21,4 +21,5 @@
     <string name="card_io_cancelled">card.ioの使用がキャンセルされました</string>
     <string name="card_info_submit">トークンを作成する</string>
 
+    <string name="dialog_dismiss">閉じる</string>
 </resources>

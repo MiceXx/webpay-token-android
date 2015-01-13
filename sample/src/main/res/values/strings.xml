@@ -27,4 +27,17 @@
     <string name="card_io_cancelled">You cancelled card.io, try WebPay\'s UI.</string>
     <string name="card_info_submit">Create Token</string>
 
+    <string name="dialog_dismiss">Dismiss</string>
+    <string name="information_content"><![CDATA[
+        <a href=\'https://webpay.jp/\'>WebPay</a>,&nbsp;
+        <a href=\'https://github.com/webpay/webpay-token-android/\'>Source</a>
+        <h5>webpay-token-android</h5>
+        <p>Copyright (c) 2015 WebPay</p>
+        <p>Released under the MIT license</p>
+        <a href=\'https://github.com/webpay/webpay-token-android/LICENSE.md\'>https://github.com/webpay/webpay-token-android/blob/master/LICENSE.md</a>
+        <h5>card.io-Android-SDK</h5>
+        <p>Copyright (c) 2013-2014 PayPal</p>
+        <p>Released under the MIT license</p>
+        <a href=\'https://github.com/card-io/card.io-Android-SDK/blob/master/LICENSE.md\'>https://github.com/card-io/card.io-Android-SDK/blob/master/LICENSE.md</a>
+    ]]></string>
 </resources>
