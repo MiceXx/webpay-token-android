@@ -8,7 +8,6 @@ import org.apache.http.message.BasicHeader;
 import org.apache.maven.artifact.ant.shaded.IOUtil;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.json.JSONException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -88,7 +87,7 @@ public class WebPayTest {
         assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
         assertEquals("application/json", request.getFirstHeader("Content-Type").getValue());
         assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
-        Assert.assertEquals("WebPayTokenAndroid/" + BuildConfig.VERSION_NAME + " Android/unknown", request.getFirstHeader("User-Agent").getValue());
+        assertEquals("WebPayTokenAndroid/" + BuildConfig.VERSION_NAME + " Android/unknown", request.getFirstHeader("User-Agent").getValue());
         String requestBody = IOUtil.toString(((HttpPost) request).getEntity().getContent(), "UTF-8");
         assertEquals(rawCardBodyString, requestBody);
     }
