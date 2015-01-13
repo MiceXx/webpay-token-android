@@ -26,11 +26,6 @@ public class SampleListActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_sample_list);
     }
 
-    @Override
-    protected boolean enableBackOnActionBar() {
-        return false;
-    }
-
     public static class SampleListFragment extends ListFragment {
 
         public SampleListFragment() {

@@ -8,7 +8,7 @@ import jp.webpay.android.token.ui.WebPayTokenCompleteListener;
 import jp.webpay.android.token.ui.WebPayTokenFragment;
 
 
-public class TokenCreateActivity extends BaseFragmentActivity implements WebPayTokenCompleteListener {
+public class TokenCreateActivity extends BaseSampleActivity implements WebPayTokenCompleteListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

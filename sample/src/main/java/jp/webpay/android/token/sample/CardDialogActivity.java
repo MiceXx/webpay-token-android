@@ -12,7 +12,7 @@ import jp.webpay.android.token.ui.CardDialogFragment;
 import jp.webpay.android.token.ui.WebPayTokenCompleteListener;
 
 
-public class CardDialogActivity extends BaseFragmentActivity implements WebPayTokenCompleteListener {
+public class CardDialogActivity extends BaseSampleActivity implements WebPayTokenCompleteListener {
 
     private final static String CARD_DIALOG_FRAGMENT_TAG = "card_dialog";
 

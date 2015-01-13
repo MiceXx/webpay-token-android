@@ -16,7 +16,7 @@ import jp.webpay.android.token.model.Token;
 import jp.webpay.android.token.ui.WebPayTokenCompleteListener;
 
 
-public class CardIoIntegrationActivity extends BaseFragmentActivity implements WebPayTokenCompleteListener {
+public class CardIoIntegrationActivity extends BaseSampleActivity implements WebPayTokenCompleteListener {
 
     private static int CARD_IO_SCAN_REQUEST_CODE = 100; // arbitrary int
 

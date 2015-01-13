@@ -11,7 +11,7 @@ import jp.webpay.android.token.model.RawCard;
 import jp.webpay.android.token.model.Token;
 
 
-public class HandleWebPayActivity extends BaseFragmentActivity {
+public class HandleWebPayActivity extends BaseSampleActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

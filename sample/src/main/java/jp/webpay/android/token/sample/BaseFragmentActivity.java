@@ -14,14 +14,11 @@ import android.widget.TextView;
 
 public abstract class BaseFragmentActivity extends ActionBarActivity {
 
-    protected static final String WEBPAY_PUBLISHABLE_KEY = "test_public_19DdUs78k2lV8PO8ZCaYX3JT";
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.webpay_token_sample, menu);
         super.onCreateOptionsMenu(menu);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(enableBackOnActionBar());
         return true;
     }
 
@@ -40,10 +37,6 @@ public abstract class BaseFragmentActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    protected boolean enableBackOnActionBar() {
-        return true;
     }
 
     private void showInformationDialog() {
