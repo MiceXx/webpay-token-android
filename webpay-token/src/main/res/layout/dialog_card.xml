@@ -30,7 +30,7 @@
             android:layout_below="@id/cardTypeIconList"
             android:text="@string/card_number"/>
 
-        <jp.webpay.android.ui.field.NumberField
+        <jp.webpay.android.token.ui.field.NumberField
             style="@style/card_edit_text"
             android:id="@+id/cardNumberField"
             android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                     style="@style/card_label"
                     android:text="@string/card_expiry"/>
 
-                <jp.webpay.android.ui.field.ExpiryField
+                <jp.webpay.android.token.ui.field.ExpiryField
                     style="@style/card_edit_text"
                     android:id="@+id/cardExpiryField"
                     android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                     android:id="@+id/cardCvcLabel"
                     android:text="@string/card_cvc"/>
 
-                <jp.webpay.android.ui.field.CvcField
+                <jp.webpay.android.token.ui.field.CvcField
                     style="@style/card_edit_text"
                     android:id="@+id/cardCvcField"
                     android:layout_width="match_parent"
@@ -93,7 +93,7 @@
             android:layout_below="@id/cardExpiryAndCvC"
             android:text="@string/card_name"/>
 
-        <jp.webpay.android.ui.field.NameField
+        <jp.webpay.android.token.ui.field.NameField
             style="@style/card_edit_text"
             android:id="@+id/cardNameField"
             android:layout_width="match_parent"

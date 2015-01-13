@@ -6,7 +6,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="jp.webpay.android.sample.TokenCreateActivity">
+    tools:context="jp.webpay.android.token.sample.TokenCreateActivity">
 
     <TextView
         android:text="@string/no_token"
