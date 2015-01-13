@@ -40,6 +40,10 @@
             android:label="@string/label_card_dialog" />
 
         <activity
+            android:name=".HandleWebPayActivity"
+            android:label="@string/label_handle_webpay" />
+
+        <activity
             android:name=".CardIoIntegrationActivity"
             android:label="@string/label_card_io_integration" />
 

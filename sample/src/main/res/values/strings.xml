@@ -6,7 +6,8 @@
     <string name="label_sample_list">Samples using webpay-token</string>
     <string name="label_token_create">Use form and button</string>
     <string name="label_card_dialog">Use only form</string>
-    <string name="label_card_io_integration">Integrate with card.io</string>
+    <string name="label_handle_webpay">Use only client library</string>
+    <string name="label_card_io_integration">Integrate card.io with client library</string>
 
     <string name="button_own">Button implemented by you</string>
     <string name="button_submit">Complete to input your payment</string>
