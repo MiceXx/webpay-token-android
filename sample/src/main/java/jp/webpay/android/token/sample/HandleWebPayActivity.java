@@ -39,6 +39,15 @@ public class HandleWebPayActivity extends BaseSampleActivity {
         EditText cardCvcField = ((EditText) findViewById(R.id.cardCvcField));
         EditText cardNameField = ((EditText) findViewById(R.id.cardNameField));
 
+        if (cardNumberField.getText().length() < 15 ||
+                cardExpiryMonthField.getText().length() != 2 ||
+                cardExpiryYearField.getText().length() != 4 ||
+                cardCvcField.getText().length() < 3 ||
+                cardNameField.getText().length() == 0 ) {
+            showMessage(R.string.invalid_input);
+            return;
+        }
+
         final RawCard rawCard = new RawCard()
                 .number(cardNumberField.getText().toString())
                 .expMonth(Integer.valueOf(cardExpiryMonthField.getText().toString()))
@@ -46,6 +55,7 @@ public class HandleWebPayActivity extends BaseSampleActivity {
                 .cvc(cardCvcField.getText().toString())
                 .name(cardNameField.getText().toString());
 
+        showMessage(R.string.creating_token);
         new WebPay(WEBPAY_PUBLISHABLE_KEY).createToken(rawCard, new WebPayListener<Token>() {
             @Override
             public void onCreate(Token result) {

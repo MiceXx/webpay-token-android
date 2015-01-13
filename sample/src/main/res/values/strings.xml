@@ -40,4 +40,7 @@
         <p>Released under the MIT license</p>
         <a href=\'https://github.com/card-io/card.io-Android-SDK/blob/master/LICENSE.md\'>https://github.com/card-io/card.io-Android-SDK/blob/master/LICENSE.md</a>
     ]]></string>
+
+    <string name="creating_token">Requesting to create token</string>
+    <string name="invalid_input">Invalid information provided</string>
 </resources>

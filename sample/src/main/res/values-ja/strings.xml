@@ -21,5 +21,8 @@
     <string name="card_io_cancelled">card.ioの使用がキャンセルされました</string>
     <string name="card_info_submit">トークンを作成する</string>
 
+    <string name="creating_token">トークン作成をリクエストしています</string>
+    <string name="invalid_input">入力項目が不十分です</string>
+
     <string name="dialog_dismiss">閉じる</string>
 </resources>
