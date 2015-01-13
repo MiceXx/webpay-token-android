@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">webpay-token-android</string>
+    <string name="app_name">Samples using webpay-token</string>
+
+    <string name="label_sample_list">Samples using webpay-token</string>
+    <string name="label_token_create">Use form and button</string>
+    <string name="label_card_io_integration">Integrate with card.io</string>
+
     <string name="no_token">Token is not generated yet</string>
     <string name="token_generated">Generated token id: %1$s</string>
     <string name="token_cancelled">You cancelled purchasing: %1$s</string>
