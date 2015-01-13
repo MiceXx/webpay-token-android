@@ -36,6 +36,7 @@
             android:layout_weight="2"
             android:src="@android:drawable/ic_menu_camera"
             android:id="@+id/start_card_io_button"
+            android:contentDescription="@string/launch_card_io"
             android:onClick="onStartCardIo"/>
     </LinearLayout>
 
@@ -75,6 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cardNameField"
+        android:inputType="text"
         android:imeOptions="actionSend"/>
 
     <Button
@@ -82,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:text="Create Token"
+        android:text="@string/card_info_submit"
         android:layout_marginTop="20dp"
         android:onClick="createToken"/>
 </LinearLayout>
