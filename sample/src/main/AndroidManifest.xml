@@ -33,19 +33,35 @@
 
         <activity
             android:name=".TokenCreateActivity"
-            android:label="@string/label_token_create" />
+            android:label="@string/label_token_create">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SampleListActivity" />
+        </activity>
 
         <activity
             android:name=".CardDialogActivity"
-            android:label="@string/label_card_dialog" />
+            android:label="@string/label_card_dialog">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SampleListActivity" />
+        </activity>
 
         <activity
             android:name=".HandleWebPayActivity"
-            android:label="@string/label_handle_webpay" />
+            android:label="@string/label_handle_webpay">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SampleListActivity" />
+        </activity>
 
         <activity
             android:name=".CardIoIntegrationActivity"
-            android:label="@string/label_card_io_integration" />
+            android:label="@string/label_card_io_integration">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SampleListActivity" />
+        </activity>
 
         <!-- Card.io -->
         <activity android:name="io.card.payment.CardIOActivity" android:configChanges="keyboardHidden|orientation" />
