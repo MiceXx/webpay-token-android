@@ -3,9 +3,9 @@ package jp.webpay.android.sample;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import jp.webpay.android.model.Token;
-import jp.webpay.android.ui.WebPayTokenCompleteListener;
-import jp.webpay.android.ui.WebPayTokenFragment;
+import jp.webpay.android.token.model.Token;
+import jp.webpay.android.token.ui.WebPayTokenCompleteListener;
+import jp.webpay.android.token.ui.WebPayTokenFragment;
 
 
 public class TokenCreateActivity extends BaseFragmentActivity implements WebPayTokenCompleteListener {

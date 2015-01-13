@@ -9,11 +9,11 @@ import android.widget.TextView;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
-import jp.webpay.android.WebPay;
-import jp.webpay.android.WebPayListener;
-import jp.webpay.android.model.RawCard;
-import jp.webpay.android.model.Token;
-import jp.webpay.android.ui.WebPayTokenCompleteListener;
+import jp.webpay.android.token.WebPay;
+import jp.webpay.android.token.WebPayListener;
+import jp.webpay.android.token.model.RawCard;
+import jp.webpay.android.token.model.Token;
+import jp.webpay.android.token.ui.WebPayTokenCompleteListener;
 
 
 public class CardIoIntegrationActivity extends BaseFragmentActivity implements WebPayTokenCompleteListener {
