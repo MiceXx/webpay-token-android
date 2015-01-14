@@ -37,42 +37,38 @@ You can use one from the above that fits your need.
 
 ### Button and payment form
 
+
 1. Implement WebPayTokenCompleteListener in your Activity
-
-```diff
-+ public class MyFragmentActivity implements WebPayTokenCompleteListener {
-- public class MyFragmentActivity {
-```
-
-```java
-@Override
-public void onTokenCreated(Token token) {
-    // called when Token created
-}
-
-@Override
-public void onCancelled(Throwable lastException) {
-    // called when error raised
-}
-```
-
+    ```diff
+    + public class MyFragmentActivity implements WebPayTokenCompleteListener {
+    - public class MyFragmentActivity {
+    ```
+    ```java
+    @Override
+    public void onTokenCreated(Token token) {
+        // called when Token created
+    }
+    
+    @Override
+    public void onCancelled(Throwable lastException) {
+        // called when error raised
+    }
+    ```
 2. Add FrameLayout to position button that opens dialog
-
-```xml
-<FrameLayout
-    android:id="@+id/webpay_token_button_fragment"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-```
-
+    ```xml
+    <FrameLayout
+        android:id="@+id/webpay_token_button_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    ```
 3. Call `replace()` to replace id of the FrameLayout in 2. with WebPayTokenFragment
 
-```java
-WebPayTokenFragment tokenFragment = WebPayTokenFragment.newInstance(WEBPAY_PUBLISHABLE_KEY);
-getFragmentManager().beginTransaction()
-    .replace(R.id.webpay_token_button_fragment, tokenFragment)
-    .commit();
-```
+    ```java
+    WebPayTokenFragment tokenFragment = WebPayTokenFragment.newInstance(WEBPAY_PUBLISHABLE_KEY);
+    getFragmentManager().beginTransaction()
+        .replace(R.id.webpay_token_button_fragment, tokenFragment)
+        .commit();
+    ```
 
 See also: [sample/TokenCreateActivity](https://github.com/webpay/webpay-token-android/blob/master/sample/src/main/java/jp/webpay/android/token/sample/TokenCreateActivity.java)
 
@@ -81,34 +77,30 @@ See also: [sample/TokenCreateActivity](https://github.com/webpay/webpay-token-an
 You can call the form creating Token directly.
 
 1. Implement WebPayTokenCompleteListener in your Activity
-
-```diff
-+ public class MyFragmentActivity implements WebPayTokenCompleteListener {
-- public class MyFragmentActivity {
-```
-
-```java
-@Override
-public void onTokenCreated(Token token) {
-    // called when Token created
-}
-
-@Override
-public void onCancelled(Throwable lastException) {
-    // called when error raised
-}
-```
-
+    ```diff
+    + public class MyFragmentActivity implements WebPayTokenCompleteListener {
+    - public class MyFragmentActivity {
+    ```
+    ```java
+    @Override
+    public void onTokenCreated(Token token) {
+        // called when Token created
+    }
+    
+    @Override
+    public void onCancelled(Throwable lastException) {
+        // called when error raised
+    }
+    ```
 2. Call CardDialogFragment directly
-
-```java
-// You can specify supporting card types manually
-List<CardType> supportedCardTypes = CardType.VM();
-
-CardDialogFragment fragment = CardDialogFragment.newInstance(WEBPAY_PUBLISHABLE_KEY, supportedCardTypes);
-fragment.setSendButtonTitle(R.string.your_button_title);
-fragment.show(getFragmentManager(), CARD_DIALOG_FRAGMENT_TAG);
-```
+    ```java
+    // You can specify supporting card types manually
+    List<CardType> supportedCardTypes = CardType.VM();
+    
+    CardDialogFragment fragment = CardDialogFragment.newInstance(WEBPAY_PUBLISHABLE_KEY,     supportedCardTypes);
+    fragment.setSendButtonTitle(R.string.your_button_title);
+    fragment.show(getFragmentManager(), CARD_DIALOG_FRAGMENT_TAG);
+    ```
 
 See also: [sample/CardDialogActivity](https://github.com/webpay/webpay-token-android/blob/master/sample/src/main/java/jp/webpay/android/token/sample/CardDialogActivity.java)
 
