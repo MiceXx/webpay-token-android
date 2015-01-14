@@ -65,7 +65,7 @@ public void onCancelled(Throwable lastException) {
     android:layout_height="wrap_content" />
 ```
 
-3. Call to replace id of above FrameLayout with WebPayTokenFragment
+3. Call `replace()` to replace id of the FrameLayout in 2. with WebPayTokenFragment
 
 ```java
 WebPayTokenFragment tokenFragment = WebPayTokenFragment.newInstance(WEBPAY_PUBLISHABLE_KEY);
