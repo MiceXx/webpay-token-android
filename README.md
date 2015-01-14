@@ -29,7 +29,7 @@ It includes a sample for integration with [card.io](https://www.card.io/).
 
 webpay-token provides:
 
-- Button switching by result of creating token
+- Button whose appearance changes depending on the result of token creation
 - User interface filling in user's credit card details
 - Client for creating token
 
