@@ -2,6 +2,8 @@
 
 webpay-token-android is an Android library for creating a WebPay token from a credit card.
 
+<img src="https://raw.github.com/webpay/webpay-token-android/screenshot/screenshots/card_dialog.png" width="300px;" />
+
 ## Requirements
 
 Android 2.2(API Level 8) and above
