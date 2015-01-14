@@ -13,9 +13,9 @@ Retrieving from `mavenCentral()` repository.
 In your Android project's `build.gradle` file:
 
 
-```
+```groovy
 dependencies {
-  compile 'jp.webpay.android:webpay-token:1.0.0@aar'`
+  compile 'jp.webpay.android:webpay-token:1.0.0@aar'
 }
 ```
 
