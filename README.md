@@ -79,7 +79,6 @@ See also: [sample/TokenCreateActivity](https://github.com/webpay/webpay-token-an
 ### Payment form
 
 You can call the form creating Token directly.
-So, you need to implement the trigger calling this form on your own.
 
 1. Implement WebPayTokenCompleteListener in your Activity
 
@@ -116,7 +115,7 @@ See also: [sample/CardDialogActivity](https://github.com/webpay/webpay-token-and
 ### Client library
 
 You can also create Token using WebPay class directly.
-But it's necessary to implement user interface by your own.
+But you need to implement the user interface by yourself.
 
 ```java
 RawCard rawCard = new RawCard()
