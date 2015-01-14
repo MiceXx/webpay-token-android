@@ -55,14 +55,16 @@ You can use one from the above that fits your need.
     }
     ```
 2. Add FrameLayout to position button that opens dialog
+
     ```xml
     <FrameLayout
         android:id="@+id/webpay_token_button_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     ```
-3. Call `replace()` to replace id of the FrameLayout in 2. with WebPayTokenFragment
 
+3. Call `replace()` to replace id of the FrameLayout in 2. with WebPayTokenFragment
+  
     ```java
     WebPayTokenFragment tokenFragment = WebPayTokenFragment.newInstance(WEBPAY_PUBLISHABLE_KEY);
     getFragmentManager().beginTransaction()
