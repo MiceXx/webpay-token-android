@@ -56,7 +56,7 @@ public void onCancelled(Throwable lastException) {
 }
 ```
 
-2. Add FrameLayout to place of indicating button
+2. Add FrameLayout to position button that opens dialog
 
 ```xml
 <FrameLayout
