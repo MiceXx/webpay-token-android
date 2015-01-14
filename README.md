@@ -23,7 +23,7 @@ dependencies {
 
 You can try a sample application downloading from Google Play: https://play.google.com/store/apps/details?id=jp.webpay.android.token.sample
 
-It's including a sample for integration with [card.io](https://www.card.io/).
+It includes a sample for integration with [card.io](https://www.card.io/).
 
 ## How to use
 
