@@ -47,12 +47,12 @@ You can use one from the above that fits your need.
 ```java
 @Override
 public void onTokenCreated(Token token) {
-    // do when Token created
+    // called when Token created
 }
 
 @Override
 public void onCancelled(Throwable lastException) {
-    // do when error raised
+    // called when error raised
 }
 ```
 
@@ -91,12 +91,12 @@ So, you need to implement the trigger calling this form on your own.
 ```java
 @Override
 public void onTokenCreated(Token token) {
-    // do when Token created
+    // called when Token created
 }
 
 @Override
 public void onCancelled(Throwable lastException) {
-    // do when error raised
+    // called when error raised
 }
 ```
 
