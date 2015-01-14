@@ -33,7 +33,7 @@ webpay-token provides:
 - User interface filling in user's credit card details
 - Client for creating token
 
-You can use whichever of them by your application as necessary.
+You can use one from the above that fits your need.
 
 ### Button and payment form
 
