@@ -115,16 +115,16 @@ See also: [sample/CardDialogActivity](https://github.com/webpay/webpay-token-and
 
 ### Client library
 
-You can also create Token using  WebPay class directly.
+You can also create Token using WebPay class directly.
 But it's necessary to implement user interface by your own.
 
 ```java
-
-RawCard rawCard = new RawCard().number(cardNumber)
-  .expMonth(cardExpMonth)
-  .expYear(cardExpYear)
-  .cvc(cardCvc)
-  .name(cardName);
+RawCard rawCard = new RawCard()
+    .number(cardNumber)
+    .expMonth(cardExpMonth)
+    .expYear(cardExpYear)
+    .cvc(cardCvc)
+    .name(cardName);
 
 
 new WebPay(WEBPAY_PUBLISHABLE_KEY).createToken(rawCard, new WebPayListener<Token>() {
