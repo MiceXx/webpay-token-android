@@ -6,7 +6,7 @@ webpay-token-android is an Android library for creating a WebPay token from a cr
 
 ## Requirements
 
-Android 2.2(API Level 8) and above
+Android 2.2 (API level 8) and above
 
 ## Installation
 
