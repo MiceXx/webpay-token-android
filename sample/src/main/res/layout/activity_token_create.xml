@@ -1,30 +1,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="jp.webpay.android.token.sample.TokenCreateActivity">
+    style="@style/BaseLayout">
 
     <TextView
-        android:text="@string/no_token"
+        android:id="@+id/statusTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/statusTextView"/>
+        android:text="@string/no_token" />
 
     <!--
         This FrameLayout is a placeholder for the WebPay token button and will be provided
         by a fragment at runtime.
     -->
     <FrameLayout
-            android:id="@+id/webpay_token_button_fragment"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/statusTextView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+        android:id="@+id/webpay_token_button_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/statusTextView"
+        android:layout_gravity="center_horizontal" />
 
 </RelativeLayout>

@@ -1,0 +1,62 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+assert hasProperty('signing.keyId'),             'properties for signing must be provided'
+assert hasProperty('signing.secretKeyRingFile'), 'properties for signing must be provided'
+assert hasProperty('sonatypeUsername'),          'properties for publish must be provided'
+assert hasProperty('sonatypeFullname'),          'properties for publish must be provided'
+
+String askPassword(prompt) {
+  "${System.console().readPassword(prompt)}"
+}
+
+ext.'signing.password' = askPassword("Enter password for PGP key ${property('signing.keyId')}: ")
+ext.'sonatypePassword' = askPassword("Enter password for ${sonatypeUsername}@oss.sonatype.org: ")
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
+}
+
+signing {
+    required { gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories.mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+            authentication(userName: sonatypeUsername, password: sonatypePassword)
+        }
+
+        pom.project {
+            name project.name
+            packaging 'aar'
+            description project.description
+            url 'https://github.com/webpay/webpay-token-android'
+
+            scm {
+                url 'https://github.com/webpay/webpay-token-android'
+            }
+
+            licenses {
+                license {
+                    name 'MIT'
+                    url 'http://www.opensource.org/licenses/mit-license.php'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id sonatypeUsername
+                    name sonatypeFullname
+                }
+            }
+        }
+    }
+}

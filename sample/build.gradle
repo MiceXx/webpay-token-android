@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.1.2'
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId "jp.webpay.android.token.sample"
-        minSdkVersion 8
-        targetSdkVersion 21
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName '1.0'
     }
@@ -21,11 +21,33 @@ android {
         disable 'IconMissingDensityFolder' // decided not to provide
         warningsAsErrors true
     }
+
+    if (project.properties.containsKey("storeFile")) {
+        signingConfigs {
+            releaseConfig {
+                // if you are a release manager, set these properties in gradle.properties
+                storeFile = file(project.properties.storeFile)
+                storePassword = project.properties.storePassword
+                keyAlias = project.properties.keyAlias
+                keyPassword = project.properties.keyPassword
+            }
+        }
+
+        buildTypes {
+            release {
+                signingConfig signingConfigs.releaseConfig
+            }
+        }
+    }
 }
 
 dependencies {
     //noinspection GradleDynamicVersion
     compile 'com.android.support:appcompat-v7:21.0.+'
+
+    // Use this line on your own project instead of next line
+    // compile 'jp.webpay.android:webpay-token:1.0.0@aar'
     compile project(':webpay-token')
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

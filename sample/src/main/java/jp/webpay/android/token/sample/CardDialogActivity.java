@@ -1,24 +1,34 @@
 package jp.webpay.android.token.sample;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
+
+import jp.webpay.android.token.model.CardType;
 import jp.webpay.android.token.model.Token;
+import jp.webpay.android.token.ui.CardDialogFragment;
 import jp.webpay.android.token.ui.WebPayTokenCompleteListener;
-import jp.webpay.android.token.ui.WebPayTokenFragment;
 
 
-public class TokenCreateActivity extends BaseSampleActivity implements WebPayTokenCompleteListener {
+public class CardDialogActivity extends BaseSampleActivity implements WebPayTokenCompleteListener {
+
+    private final static String CARD_DIALOG_FRAGMENT_TAG = "card_dialog";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_token_create);
+        setContentView(R.layout.activity_card_dialog);
+    }
 
-        WebPayTokenFragment tokenFragment = WebPayTokenFragment.newInstance(WEBPAY_PUBLISHABLE_KEY);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.webpay_token_button_fragment, tokenFragment)
-                .commit();
+    public void onButtonClicked(View v) {
+        // You can specify supporting card types manually
+        List<CardType> supportedCardTypes = CardType.VM();
+        CardDialogFragment fragment = CardDialogFragment.newInstance(
+                WEBPAY_PUBLISHABLE_KEY, supportedCardTypes);
+        fragment.setSendButtonTitle(R.string.button_submit);
+        fragment.show(getSupportFragmentManager(), CARD_DIALOG_FRAGMENT_TAG);
     }
 
     @Override

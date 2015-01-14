@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">webpay-token-android</string>
+    <string name="app_name" translatable="false">webpay-token samples</string>
+
+    <string name="label_token_create">Use form and button</string>
+    <string name="label_card_dialog">Use only form</string>
+    <string name="label_handle_webpay">Use only client library</string>
+    <string name="label_card_io_integration">Integrate card.io with client library</string>
+
+    <string name="button_own">Button implemented by you</string>
+    <string name="button_submit">Add payment</string>
+
+    <string name="hint_number" translatable="false">4242424242424242</string>
+    <string name="hint_expiry_month" translatable="false">12</string>
+    <string name="hint_expiry_year" translatable="false">2018</string>
+    <string name="hint_cvc" translatable="false">123</string>
+    <string name="hint_name" translatable="false">TARO YAMADA</string>
+
     <string name="no_token">Token is not generated yet</string>
     <string name="token_generated">Generated token id: %1$s</string>
     <string name="token_cancelled">You cancelled purchasing: %1$s</string>
     <string name="action_info">Information</string>
-    <string name="use_card_io">Use Card.io instead</string>
     <string name="launch_card_io">Launch Card.io</string>
     <string name="card_io_cancelled">You cancelled card.io, try WebPay\'s UI.</string>
     <string name="card_info_submit">Create Token</string>
 
+    <string name="dialog_dismiss">Dismiss</string>
+    <string name="information_content" translatable="false"><![CDATA[
+        <a href=\'https://webpay.jp/\'>WebPay</a>,&nbsp;
+        <a href=\'https://github.com/webpay/webpay-token-android/\'>Source</a>
+        <h5>webpay-token-android</h5>
+        <p>Copyright &#169; 2015 WebPay</p>
+        <p>Released under the MIT license</p>
+        <a href=\'https://github.com/webpay/webpay-token-android/LICENSE.md\'>https://github.com/webpay/webpay-token-android/blob/master/LICENSE.md</a>
+        <h5>card.io-Android-SDK</h5>
+        <p>Copyright &#169; 2013-2014 PayPal</p>
+        <p>Released under the MIT license</p>
+        <a href=\'https://github.com/card-io/card.io-Android-SDK/blob/master/LICENSE.md\'>https://github.com/card-io/card.io-Android-SDK/blob/master/LICENSE.md</a>
+    ]]></string>
+
+    <string name="creating_token">Requesting to create token</string>
+    <string name="invalid_input">Invalid information provided</string>
 </resources>
