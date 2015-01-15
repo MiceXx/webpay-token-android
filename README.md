@@ -125,12 +125,12 @@ RawCard rawCard = new RawCard()
 new WebPay(WEBPAY_PUBLISHABLE_KEY).createToken(rawCard, new WebPayListener<Token>() {
     @Override
     public void onCreate(Token result) {
-        // do when Token created
+        // called when Token created
     }
 
     @Override
     public void onException(Throwable cause) {
-        // do when error raised
+        // called when error raised
     }
 });
 ```
