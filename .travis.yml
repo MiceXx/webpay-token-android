@@ -5,4 +5,5 @@ android:
     - android-21
     - extra-android-support
     - extra-android-m2repository
-script: "./gradlew build"
+install: "./gradlew assemble"
+script: "./gradlew build -i"
