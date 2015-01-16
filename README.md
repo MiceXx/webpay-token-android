@@ -1,4 +1,4 @@
-# webpay-token-android
+# webpay-token-android [![Build Status](https://travis-ci.org/webpay/webpay-token-android.svg?branch=master)](https://travis-ci.org/webpay/webpay-token-android)
 
 webpay-token-android is an Android library for creating a WebPay token from a credit card.
 

@@ -8,6 +8,8 @@ import org.apache.http.message.BasicHeader;
 import org.apache.maven.artifact.ant.shaded.IOUtil;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -74,22 +76,23 @@ public class WebPayTest {
     @Test
     public void createTokenSendCorrectRequest() throws Exception {
         Robolectric.addPendingHttpResponse(ApiSample.tokenResponse);
-        String rawCardBodyString = "{\"card\":{" +
-                "\"number\":\"4242-4242-4242-0123\"," +
-                "\"cvc\":\"012\"," +
-                "\"name\":\"TEST USER\"," +
-                "\"exp_month\":8," +
-                "\"exp_year\":2020" +
-                "}}";
         createToken(ApiSample.testCard);
+
         HttpRequest request = Robolectric.getSentHttpRequest(0);
         assertEquals("POST", request.getRequestLine().getMethod());
         assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
         assertEquals("application/json", request.getFirstHeader("Content-Type").getValue());
         assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
         assertEquals("WebPayTokenAndroid/" + BuildConfig.VERSION_NAME + " Android/unknown", request.getFirstHeader("User-Agent").getValue());
+
         String requestBody = IOUtil.toString(((HttpPost) request).getEntity().getContent(), "UTF-8");
-        assertEquals(rawCardBodyString, requestBody);
+        JSONObject value = (JSONObject) new JSONTokener(requestBody).nextValue();
+        JSONObject card = value.getJSONObject("card");
+        assertEquals("4242-4242-4242-0123", card.getString("number"));
+        assertEquals("012", card.getString("cvc"));
+        assertEquals("TEST USER", card.getString("name"));
+        assertEquals(8, card.getInt("exp_month"));
+        assertEquals(2020, card.getInt("exp_year"));
     }
 
     @Test

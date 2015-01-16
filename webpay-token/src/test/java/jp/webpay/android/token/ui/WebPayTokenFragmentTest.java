@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.maven.artifact.ant.shaded.IOUtil;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -178,21 +180,21 @@ public class WebPayTokenFragmentTest {
 
         generateTokenFromForm();
 
-        String rawCardBodyString = "{\"card\":{" +
-                "\"number\":\"4242424242424242\"," +
-                "\"cvc\":\"012\"," +
-                "\"name\":\"TEST USER\"," +
-                "\"exp_month\":7," +
-                "\"exp_year\":" + (currentYear + 1) +
-                "}}";
         HttpRequest request = Robolectric.getSentHttpRequest(1);
         assertEquals("POST", request.getRequestLine().getMethod());
         assertEquals("https://api.webpay.jp/v1/tokens", request.getRequestLine().getUri());
         assertEquals("application/json", request.getFirstHeader("Content-Type").getValue());
         assertEquals("Bearer test_public_dummykey", request.getFirstHeader("Authorization").getValue());
         assertEquals("en", request.getFirstHeader("Accept-Language").getValue());
+
         String requestBody = IOUtil.toString(((HttpPost) request).getEntity().getContent(), "UTF-8");
-        assertEquals(rawCardBodyString, requestBody);
+        JSONObject value = (JSONObject) new JSONTokener(requestBody).nextValue();
+        JSONObject card = value.getJSONObject("card");
+        assertEquals("4242424242424242", card.getString("number"));
+        assertEquals("012", card.getString("cvc"));
+        assertEquals("TEST USER", card.getString("name"));
+        assertEquals(7, card.getInt("exp_month"));
+        assertEquals(currentYear + 1, card.getInt("exp_year"));
     }
 
     @Test
