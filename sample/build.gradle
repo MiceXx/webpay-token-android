@@ -43,7 +43,7 @@ android {
 
 dependencies {
     //noinspection GradleDynamicVersion
-    compile 'com.android.support:appcompat-v7:21.0.+'
+    compile 'com.android.support:appcompat-v7:22.2.0'
 
     // Use this line on your own project instead of next line
     // compile 'jp.webpay.android:webpay-token:1.0.0@aar'

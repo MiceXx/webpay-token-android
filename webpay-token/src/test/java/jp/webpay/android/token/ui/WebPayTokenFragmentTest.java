@@ -1,7 +1,9 @@
 package jp.webpay.android.token.ui;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
@@ -174,9 +176,11 @@ public class WebPayTokenFragmentTest {
         assertEquals("tok_3ybc93ckR01qeKx", activity.getLastToken().id);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Test
     public void testFragmentSendsGivenCardData() throws Exception {
         Robolectric.addPendingHttpResponse(ApiSample.tokenResponse);
+        Robolectric.application.getResources().getConfiguration().setLocale(new Locale("en"));
 
         generateTokenFromForm();
 

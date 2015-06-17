@@ -6,7 +6,7 @@ android:
   - extra-android-support
   - extra-android-m2repository
 install: "./gradlew assemble"
-script: "./gradlew build -i"
+script: "./gradlew lint test build -i"
 notifications:
   webhooks:
     secure: CVVp6+eKXu7FALpPTXxo5nWhmS5au3rRC6697tCYWFxB+lTfiDfCthnwOyjqSxUkjdlLAuyeklSK7t+1EtOqqJX58UTSFuRIi4v2MXIAlIGeBz+0P5YJKTJnMBbCiFLfcuxswthwiYjM2XAfw+fniOLjY6tw1dsVn7+XdokO7DU=

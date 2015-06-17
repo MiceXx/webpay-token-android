@@ -38,7 +38,7 @@ android {
 
 dependencies {
     //noinspection GradleDependency
-    compile 'com.android.support:appcompat-v7:[21.0.0,)'
+    compile 'com.android.support:appcompat-v7:[22.0.0,)'
     //noinspection GradleDependency
     compile 'com.android.support:support-v4:[21.0.0,)'
 
