@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.Toast;
 
-public abstract class BaseSampleActivity extends BaseFragmentActivity {
+public abstract class BaseSampleActivity extends BaseAppCompatActivity {
 
     protected static final String WEBPAY_PUBLISHABLE_KEY = "test_public_19DdUs78k2lV8PO8ZCaYX3JT";
 

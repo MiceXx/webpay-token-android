@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'robolectric'
 
 description = 'Android library for creating a WebPay token from a credit card'
 group = 'jp.webpay.android'
@@ -38,16 +37,16 @@ android {
 
 dependencies {
     //noinspection GradleDependency
-    compile 'com.android.support:appcompat-v7:[21.0.0,)'
+    compile 'com.android.support:appcompat-v7:[22.0.0,)'
     //noinspection GradleDependency
     compile 'com.android.support:support-v4:[21.0.0,)'
 
-    androidTestCompile('org.robolectric:robolectric:2.4') {
+    testCompile('org.robolectric:robolectric:2.4') {
       exclude group: 'commons-logging', module: 'commons-logging'
       exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-    androidTestCompile 'junit:junit:4.11'
-    androidTestCompile 'org.hamcrest:hamcrest-all:1.3'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
 }
 
 if (gradle.startParameter.taskNames.contains('uploadArchives')) {
